@@ -12,18 +12,18 @@ options {
 program  	                    : statement*                                                                            #programAST;
 
 //-------------------------------------------------------------------------------------------------------------------
-statement  	                    : LET letStatement                                                                      #statement_LetAST
-                                | RETURN returnStatement                                                                #statement_returnAST
-                                | expressionStatement                                                                   #callExpressionStatementAST;
+statement  	                    : LET IDENT ASSIGN expression (PYCOMMA | )/*letStatement*/                              #statement_LetAST
+                                | RETURN expression (PYCOMMA | ) /*returnStatement*/                                    #statement_returnAST
+                                | expression (PYCOMMA | ) /*expressionStatement */                                      #callExpressionStatementAST;
 
 //-------------------------------------------------------------------------------------------------------------------
-letStatement                    : IDENT ASSIGN expression (PYCOMMA | )                                                  #letStatementAST;
+//letStatement                    : IDENT ASSIGN expression (PYCOMMA | )                                                  #letStatementAST;
 
 //-------------------------------------------------------------------------------------------------------------------
-returnStatement	                : expression (PYCOMMA | )                                                               #returnStatementAST;
+//returnStatement	                : expression (PYCOMMA | )                                                               #returnStatementAST;
 
 //-------------------------------------------------------------------------------------------------------------------
-expressionStatement             : expression (PYCOMMA | )                                                               #expressionStatementAST;
+//expressionStatement             : expression (PYCOMMA | )                                                               #expressionStatementAST;
 
 //-------------------------------------------------------------------------------------------------------------------
 expression                      : additionExpression comparison                                                         #expressionAST;
@@ -32,27 +32,27 @@ expression                      : additionExpression comparison                 
 comparison                      : ((LT|GT|LE|GE|EQUAL) additionExpression)*                                             #comparisonAST;
 
 //-------------------------------------------------------------------------------------------------------------------
-additionExpression	            : multiplicationExpression additionFactor                                               #additionExpressionAST;
+additionExpression	            : multiplicationExpression ((ADD|SUB) multiplicationExpression)*/*additionFactor*/      #additionExpressionAST;
 
 //-------------------------------------------------------------------------------------------------------------------
-additionFactor                  : ((ADD|SUB) multiplicationExpression)*                                                 #additionFactorAST;
+//additionFactor                  : ((ADD|SUB) multiplicationExpression)*                                                 #additionFactorAST;
 
 //-------------------------------------------------------------------------------------------------------------------
-multiplicationExpression        : elementExpression multiplicationFactor                                                #multiplicationExpressionAST;
+multiplicationExpression        : elementExpression ((MUL|DIV) elementExpression)*/*multiplicationFactor*/              #multiplicationExpressionAST;
 
 //-------------------------------------------------------------------------------------------------------------------
-multiplicationFactor            : ((MUL|DIV) elementExpression)*                                                        #multiplicationFactorAST;
+//multiplicationFactor            : ((MUL|DIV) elementExpression)*                                                        #multiplicationFactorAST;
 
 //-------------------------------------------------------------------------------------------------------------------
-elementExpression               : primitiveExpression (elementAccess | callExpression | )                               #elementExpressionAST;
+elementExpression               : primitiveExpression (L_BRACK expression R_BRACK | L_PAREN expressionList R_PAREN | )  #elementExpressionAST;
 
 //-------------------------------------------------------------------------------------------------------------------
 //[...]
-elementAccess                   : L_BRACK expression R_BRACK                                                            #elementAccessAST;
+//elementAccess                   : L_BRACK expression R_BRACK                                                            #elementAccessAST;
 
 //-------------------------------------------------------------------------------------------------------------------
 //(...)
-callExpression	                : L_PAREN expressionList R_PAREN                                                        #callExpressionAST;
+//callExpression	                : L_PAREN expressionList R_PAREN                                                        #callExpressionAST;
 
 //-------------------------------------------------------------------------------------------------------------------
 primitiveExpression	            : NUMBER                                                                                #primitiveExpression_numberAST
@@ -61,12 +61,12 @@ primitiveExpression	            : NUMBER                                        
                                 | TRUE                                                                                  #primitiveExpression_trueAST
                                 | FALSE                                                                                 #primitiveExpression_falseAST
                                 | L_PAREN expression R_PAREN                                                            #primitiveExpression_expressionAST
-                                | arrayLiteral                                                                          #primitiveExpression_literalAST
+                                | L_BRACK expressionList R_BRACK/*arrayLiteral*/                                        #primitiveExpression_literalAST
                                 | arrayFunctions L_PAREN expressionList R_PAREN                                         #primitiveExpression_ArrayFunctionsAST
-                                | functionLiteral                                                                       #primitiveExpression_FunctionLiteral_AST
-                                | hashLiteral                                                                           #primitiveExpression_HashLiteral_AST
-                                | printExpression                                                                       #primitiveExpression_PrintExpressionAST
-                                | ifExpression                                                                          #primitiveExpression_IfExpression;
+                                | FN L_PAREN IDENT (COMMA IDENT)* R_PAREN L_BRACE statement* R_BRACE                    #primitiveExpression_FunctionLiteral_AST
+                                | L_BRACE expression COLON expression  (COMMA expression COLON expression)*             #primitiveExpression_HashLiteral_AST
+                                | PUTS L_PAREN expression R_PAREN/*printExpression*/                                    #primitiveExpression_PrintExpressionAST
+                                | IF expression L_BRACE statement* R_BRACE (ELSE L_BRACE statement* R_BRACE| )          #primitiveExpression_IfExpression;
 
 //-------------------------------------------------------------------------------------------------------------------
 arrayFunctions	                : LEN                                                                                   #arrayFunctions_lenAST
@@ -77,26 +77,26 @@ arrayFunctions	                : LEN                                            
 
 //-------------------------------------------------------------------------------------------------------------------
 //[...]
-arrayLiteral                    : L_BRACK expressionList R_BRACK                                                        #arrayLiteralAST;
+//arrayLiteral                    : L_BRACK expressionList R_BRACK                                                        #arrayLiteralAST;
 
 //-------------------------------------------------------------------------------------------------------------------
 //fn (...){...}
-functionLiteral	                : FN L_PAREN functionParameters R_PAREN blockStatement                                  #functionLiteralAST;
+//	                : FN L_PAREN functionParameters R_PAREN blockStatement                                  #functionLiteralAST;
 
 //-------------------------------------------------------------------------------------------------------------------
 //
-functionParameters	            : IDENT (COMMA IDENT)* /*moreIdentifiers */                                             #functionParametersAST;
+//functionParameters	            : IDENT (COMMA IDENT)* /*moreIdentifiers */                                             #functionParametersAST;
 
 //-------------------------------------------------------------------------------------------------------------------
 //moreIdentifiers	                : (COMMA IDENT)*                                                                        #moreIdentifiersAST;
 
 //-------------------------------------------------------------------------------------------------------------------
 //{...}
-hashLiteral		                : L_BRACE hashContent  (COMMA hashContent)* /*moreHashContent*/ R_BRACE                 #hashLiteralAST;
+//hashLiteral		                : L_BRACE expression COLON expression  (COMMA expression COLON expression)* /*moreHashContent*/ R_BRACE                 #hashLiteralAST;
 
 //-------------------------------------------------------------------------------------------------------------------
 //
-hashContent	                    : expression COLON expression                                                           #hashContentAST;
+//hashContent	                    : expression COLON expression                                                           #hashContentAST;
 
 //-------------------------------------------------------------------------------------------------------------------
 
@@ -112,15 +112,15 @@ expressionList                  : expression (COMMA expression)* /*moreExpressio
 
 //-------------------------------------------------------------------------------------------------------------------
 //puts ( ... )
-printExpression                 : PUTS L_PAREN expression R_PAREN                                                       #printExpressionAST;
+//printExpression                 : PUTS L_PAREN expression R_PAREN                                                       #printExpressionAST;
 
 //-------------------------------------------------------------------------------------------------------------------
 //if
-ifExpression	                : IF expression blockStatement (ELSE blockStatement| )                                  #ifExpressionAST;
+//ifExpression	                : IF expression L_BRACE statement* R_BRACE (ELSE L_BRACE statement* R_BRACE| )                                  #ifExpressionAST;
 
 //-------------------------------------------------------------------------------------------------------------------
 //{ ... }
-blockStatement	                : L_BRACE statement* R_BRACE                                                            #blockStatementAST;
+//blockStatement	                : L_BRACE statement* R_BRACE                                                            #blockStatementAST;
 
 //-------------------------------------------------------------------------------------------------------------------
 

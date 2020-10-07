@@ -1,55 +1,26 @@
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.DefaultHighlighter;
-import javax.swing.text.Element;
-import javax.swing.text.Highlighter;
-
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileWriter;
-import java.util.Arrays;
-
-import generated.MonkeyParser;
-import generated.MonkeyScanner;
-
-import org.antlr.v4.gui.TreeViewer;
-import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
-public class Opener extends JFrame{
+import javax.swing.*;
+import java.awt.*;
+import java.io.File;
 
-    // -- JFrame Vars --
-    private JPanel panel;
-    private JTextArea textArea2;
-    private JMenu File;
-    private JMenu Run;
-    private JTextArea textArea1;
-    private JScrollPane jsp;
-
-
-    // -- Other Vars --
-
+public class Window extends JFrame {
+    private RSyntaxTextArea codeArea;
+    private JTextArea terminal;
+    public JMenu file;
+    public JMenu run;
     private File archive;
     private String ruta;
-    private CharStream input=null;
+    public JPanel panel;
     private JFileChooser fc = new JFileChooser();
-    private static JTextArea lines;
 
-    public Opener() {
-        // -- Frame Settings --
-        add(panel);
-        setSize(700,600);
-        setLocationRelativeTo(null);
-        setTitle("Editor");
-        Highlighter.HighlightPainter redPainter ; // higlight red
-
-        // -- Menu Bar Settings --
-
+    public Window() {
+        this.setLayout(new BorderLayout());
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+/*
         // File Options
         JMenuItem f1,f2,f3,f4,f5;
         f1 = new JMenuItem("New File");
@@ -57,55 +28,22 @@ public class Opener extends JFrame{
         f3 = new JMenuItem("Save File");
         f4 = new JMenuItem("Save File As");
         f5 = new JMenuItem("Close");
-        File.add(f1);File.add(f2); File.add(f3);File.add(f4);File.add(f5);
+        file = new JMenu();
+        file.add(f1);
+        file.add(f2);
+        file.add(f3);
+        file.add(f4);
+        file.add(f5);
 
-        /*
-        //Edit Options
-        JMenuItem e1;
-        e1 = new JMenuItem("Edit");
-        Edit.add(e1);
-        */
-
-        // Run Options
         JMenuItem r1,r2;
         r1 = new JMenuItem("Run");
         r2 = new JMenuItem("Generate Tree");
-        Run.add(r1);Run.add(r2);
+        run = new JMenu();
+        run.add(r1);
+        run.add(r2);
 
-        // -- RowHeader --
-
-        lines = new JTextArea("1");
-        lines.setBackground(Color.LIGHT_GRAY);
-        lines.setEditable(false);
-        textArea1.getDocument().addDocumentListener(new DocumentListener() {
-            public String getText() {
-                int caretPosition = textArea1.getDocument().getLength();
-                Element root = textArea1.getDocument().getDefaultRootElement();
-                String text = "1" + System.getProperty("line.separator");
-                for (int i = 2; i < root.getElementIndex(caretPosition) + 2; i++) {
-                    text += i + System.getProperty("line.separator");
-                }
-                return text;
-            }
-            @Override
-            public void changedUpdate(DocumentEvent de) {
-                lines.setText(getText());
-            }
-            @Override
-            public void insertUpdate(DocumentEvent de) {
-                lines.setText(getText());
-            }
-            @Override
-            public void removeUpdate(DocumentEvent de) {
-                lines.setText(getText());
-            }
-        });
-        jsp.getViewport().add(textArea1);
-        jsp.setRowHeaderView(lines);
-
-        redPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.red);
-
-
+        add(this.file);
+        add(this.run);
 
         // -- Action Listeners --
 
@@ -113,7 +51,7 @@ public class Opener extends JFrame{
         f1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                textArea1.setText("");
+                codeArea.setText("");
             }
         });
         // Open File
@@ -125,7 +63,7 @@ public class Opener extends JFrame{
                     archive = fc.getSelectedFile();
                     ruta = archive.getAbsolutePath();
                     try {
-                        textArea1.setText(CharStreams.fromFileName(ruta).toString());
+                        codeArea.setText(CharStreams.fromFileName(ruta).toString());
                     } catch(Exception e1){System.out.println("Error con Archivo");e1.printStackTrace();}
                 }
             }
@@ -135,7 +73,7 @@ public class Opener extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                String content = textArea1.getText();
+                String content = codeArea.getText();
                 try{
                     FileWriter fw = new FileWriter(ruta);
                     fw.write(content);
@@ -152,8 +90,8 @@ public class Opener extends JFrame{
                 fsave.setDialogTitle("Save File");
                 int result = fsave.showSaveDialog(null);
                 if(result == JFileChooser.APPROVE_OPTION){
-                    String content = textArea1.getText();
-                    File fi  = fsave.getSelectedFile();
+                    String content = codeArea.getText();
+                    java.io.File fi  = fsave.getSelectedFile();
                     try{
                         FileWriter fw = new FileWriter(fi.getPath());
                         fw.write(content);
@@ -187,7 +125,7 @@ public class Opener extends JFrame{
                     //pinta de rojo al correr
                     //textArea1.getHighlighter().addHighlight(1, 1, redPainter);
 
-                    input = CharStreams.fromString(textArea1.getText());
+                    input = CharStreams.fromString(codeArea.getText());
                     scanner  = new MonkeyScanner(input);
                     tokens  = new CommonTokenStream(scanner);
                     parser = new MonkeyParser(tokens);
@@ -200,13 +138,13 @@ public class Opener extends JFrame{
                     tree = parser.program();
 
                     if(errorListener.hasErrors()){
-                        textArea2.setForeground(Color.red);
+                        terminal.setForeground(Color.red);
                         String erros = errorListener.toString();
-                        textArea2.setText(erros + "\n\n=>Compilation: Failed");
+                        terminal.setText(erros + "\n\n=>Compilation: Failed");
                     }
                     else{
-                        textArea2.setForeground(Color.green);
-                        textArea2.setText("Tree: " + tree.toStringTree(parser) + "\n\n=>Compilation: Successful");
+                        terminal.setForeground(Color.green);
+                        terminal.setText("Tree: " + tree.toStringTree(parser) + "\n\n=>Compilation: Successful");
                     }
 
                 } catch(Exception e1){System.out.println("The file doesn't exist!");e1.printStackTrace();}
@@ -223,7 +161,7 @@ public class Opener extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    input = CharStreams.fromString(textArea1.getText());
+                    input = CharStreams.fromString(codeArea.getText());
                     scanner  = new MonkeyScanner(input);
                     tokens = new CommonTokenStream(scanner);
                     parser = new MonkeyParser(tokens);
@@ -235,5 +173,57 @@ public class Opener extends JFrame{
             }
         });
 
+
+ */
+
+
+        add(getPanels(), BorderLayout.CENTER);
+        this.setVisible(true);
+
+
+    }
+
+
+    //menu
+
+    //split panels
+    private JSplitPane getPanels() {
+
+        //JPanel jPanel = new JPanel();
+        //jPanel.add(file, run);
+
+        RSyntaxTextArea textArea = new RSyntaxTextArea(40, 220);
+        textArea.setMinimumSize(new Dimension(50, 300));
+        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+        textArea.setCodeFoldingEnabled(true);
+        textArea.setBackground(Color.DARK_GRAY);
+        textArea.setForeground(Color.GREEN);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        textArea.setMargin(new Insets(10,10,10,10));
+        this.codeArea = textArea;
+
+        RTextScrollPane sp = new RTextScrollPane(textArea);
+        sp.setLineNumbersEnabled(true);
+        sp.setFoldIndicatorEnabled(true);
+
+        //jPanel.add(sp);
+
+        //terminal
+        JTextArea terminal  = new JTextArea("Terminal");
+        terminal.setBackground(Color.black);
+        terminal.setForeground(Color.LIGHT_GRAY);
+        terminal.setMargin(new Insets(10,10,10,10));
+        this.terminal = terminal;
+
+        return new JSplitPane(JSplitPane.VERTICAL_SPLIT,  sp, terminal);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable(){
+            public void run() {
+                new Window();
+            }
+        });
     }
 }

@@ -1,4 +1,4 @@
-// Generated from C:/Users/Baxi/Desktop/Compiladores_P1/Proyecto Compi\MonkeyParser.g4 by ANTLR 4.8
+// Generated from C:/Users/Baxi/Desktop/Proyecto Compi\MonkeyParser.g4 by ANTLR 4.8
 package generated;
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -23,22 +23,14 @@ public class MonkeyParser extends Parser {
 		ASSIGN=26, ADD=27, SUB=28, MUL=29, DIV=30, TRUE=31, FALSE=32, NUMBER=33, 
 		ZERO=34, STRING=35, IDENT=36, WS=37, BLOCK_COMMENT=38, SINGLE_COMMENT=39;
 	public static final int
-		RULE_program = 0, RULE_statement = 1, RULE_letStatement = 2, RULE_returnStatement = 3, 
-		RULE_expressionStatement = 4, RULE_expression = 5, RULE_comparison = 6, 
-		RULE_additionExpression = 7, RULE_additionFactor = 8, RULE_multiplicationExpression = 9, 
-		RULE_multiplicationFactor = 10, RULE_elementExpression = 11, RULE_elementAccess = 12, 
-		RULE_callExpression = 13, RULE_primitiveExpression = 14, RULE_arrayFunctions = 15, 
-		RULE_arrayLiteral = 16, RULE_functionLiteral = 17, RULE_functionParameters = 18, 
-		RULE_hashLiteral = 19, RULE_hashContent = 20, RULE_expressionList = 21, 
-		RULE_printExpression = 22, RULE_ifExpression = 23, RULE_blockStatement = 24;
+		RULE_program = 0, RULE_statement = 1, RULE_expression = 2, RULE_comparison = 3, 
+		RULE_additionExpression = 4, RULE_multiplicationExpression = 5, RULE_elementExpression = 6, 
+		RULE_primitiveExpression = 7, RULE_arrayFunctions = 8, RULE_expressionList = 9;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"program", "statement", "letStatement", "returnStatement", "expressionStatement", 
-			"expression", "comparison", "additionExpression", "additionFactor", "multiplicationExpression", 
-			"multiplicationFactor", "elementExpression", "elementAccess", "callExpression", 
-			"primitiveExpression", "arrayFunctions", "arrayLiteral", "functionLiteral", 
-			"functionParameters", "hashLiteral", "hashContent", "expressionList", 
-			"printExpression", "ifExpression", "blockStatement"
+			"program", "statement", "expression", "comparison", "additionExpression", 
+			"multiplicationExpression", "elementExpression", "primitiveExpression", 
+			"arrayFunctions", "expressionList"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -141,17 +133,17 @@ public class MonkeyParser extends Parser {
 			_localctx = new ProgramASTContext(_localctx);
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(53);
+			setState(23);
 			_errHandler.sync(this);
 			_la = _input.LA(1);
 			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LET) | (1L << RETURN) | (1L << FN) | (1L << PUTS) | (1L << IF) | (1L << LEN) | (1L << FIRST) | (1L << LAST) | (1L << REST) | (1L << PUSH) | (1L << L_PAREN) | (1L << L_BRACE) | (1L << L_BRACK) | (1L << TRUE) | (1L << FALSE) | (1L << NUMBER) | (1L << STRING) | (1L << IDENT))) != 0)) {
 				{
 				{
-				setState(50);
+				setState(20);
 				statement();
 				}
 				}
-				setState(55);
+				setState(25);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
@@ -180,23 +172,28 @@ public class MonkeyParser extends Parser {
 		}
 	}
 	public static class CallExpressionStatementASTContext extends StatementContext {
-		public ExpressionStatementContext expressionStatement() {
-			return getRuleContext(ExpressionStatementContext.class,0);
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
 		}
+		public TerminalNode PYCOMMA() { return getToken(MonkeyParser.PYCOMMA, 0); }
 		public CallExpressionStatementASTContext(StatementContext ctx) { copyFrom(ctx); }
 	}
 	public static class Statement_LetASTContext extends StatementContext {
 		public TerminalNode LET() { return getToken(MonkeyParser.LET, 0); }
-		public LetStatementContext letStatement() {
-			return getRuleContext(LetStatementContext.class,0);
+		public TerminalNode IDENT() { return getToken(MonkeyParser.IDENT, 0); }
+		public TerminalNode ASSIGN() { return getToken(MonkeyParser.ASSIGN, 0); }
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
 		}
+		public TerminalNode PYCOMMA() { return getToken(MonkeyParser.PYCOMMA, 0); }
 		public Statement_LetASTContext(StatementContext ctx) { copyFrom(ctx); }
 	}
 	public static class Statement_returnASTContext extends StatementContext {
 		public TerminalNode RETURN() { return getToken(MonkeyParser.RETURN, 0); }
-		public ReturnStatementContext returnStatement() {
-			return getRuleContext(ReturnStatementContext.class,0);
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
 		}
+		public TerminalNode PYCOMMA() { return getToken(MonkeyParser.PYCOMMA, 0); }
 		public Statement_returnASTContext(StatementContext ctx) { copyFrom(ctx); }
 	}
 
@@ -204,27 +201,101 @@ public class MonkeyParser extends Parser {
 		StatementContext _localctx = new StatementContext(_ctx, getState());
 		enterRule(_localctx, 2, RULE_statement);
 		try {
-			setState(61);
+			setState(45);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case LET:
 				_localctx = new Statement_LetASTContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(56);
+				setState(26);
 				match(LET);
-				setState(57);
-				letStatement();
+				setState(27);
+				match(IDENT);
+				setState(28);
+				match(ASSIGN);
+				setState(29);
+				expression();
+				setState(32);
+				_errHandler.sync(this);
+				switch (_input.LA(1)) {
+				case PYCOMMA:
+					{
+					setState(30);
+					match(PYCOMMA);
+					}
+					break;
+				case EOF:
+				case LET:
+				case RETURN:
+				case FN:
+				case PUTS:
+				case IF:
+				case LEN:
+				case FIRST:
+				case LAST:
+				case REST:
+				case PUSH:
+				case L_PAREN:
+				case L_BRACE:
+				case R_BRACE:
+				case L_BRACK:
+				case TRUE:
+				case FALSE:
+				case NUMBER:
+				case STRING:
+				case IDENT:
+					{
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
+				}
 				}
 				break;
 			case RETURN:
 				_localctx = new Statement_returnASTContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(58);
+				setState(34);
 				match(RETURN);
-				setState(59);
-				returnStatement();
+				setState(35);
+				expression();
+				setState(38);
+				_errHandler.sync(this);
+				switch (_input.LA(1)) {
+				case PYCOMMA:
+					{
+					setState(36);
+					match(PYCOMMA);
+					}
+					break;
+				case EOF:
+				case LET:
+				case RETURN:
+				case FN:
+				case PUTS:
+				case IF:
+				case LEN:
+				case FIRST:
+				case LAST:
+				case REST:
+				case PUSH:
+				case L_PAREN:
+				case L_BRACE:
+				case R_BRACE:
+				case L_BRACK:
+				case TRUE:
+				case FALSE:
+				case NUMBER:
+				case STRING:
+				case IDENT:
+					{
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
+				}
 				}
 				break;
 			case FN:
@@ -246,246 +317,47 @@ public class MonkeyParser extends Parser {
 				_localctx = new CallExpressionStatementASTContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(60);
-				expressionStatement();
+				setState(40);
+				expression();
+				setState(43);
+				_errHandler.sync(this);
+				switch (_input.LA(1)) {
+				case PYCOMMA:
+					{
+					setState(41);
+					match(PYCOMMA);
+					}
+					break;
+				case EOF:
+				case LET:
+				case RETURN:
+				case FN:
+				case PUTS:
+				case IF:
+				case LEN:
+				case FIRST:
+				case LAST:
+				case REST:
+				case PUSH:
+				case L_PAREN:
+				case L_BRACE:
+				case R_BRACE:
+				case L_BRACK:
+				case TRUE:
+				case FALSE:
+				case NUMBER:
+				case STRING:
+				case IDENT:
+					{
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
+				}
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class LetStatementContext extends ParserRuleContext {
-		public LetStatementContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_letStatement; }
-	 
-		public LetStatementContext() { }
-		public void copyFrom(LetStatementContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class LetStatementASTContext extends LetStatementContext {
-		public TerminalNode IDENT() { return getToken(MonkeyParser.IDENT, 0); }
-		public TerminalNode ASSIGN() { return getToken(MonkeyParser.ASSIGN, 0); }
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
-		}
-		public TerminalNode PYCOMMA() { return getToken(MonkeyParser.PYCOMMA, 0); }
-		public LetStatementASTContext(LetStatementContext ctx) { copyFrom(ctx); }
-	}
-
-	public final LetStatementContext letStatement() throws RecognitionException {
-		LetStatementContext _localctx = new LetStatementContext(_ctx, getState());
-		enterRule(_localctx, 4, RULE_letStatement);
-		try {
-			_localctx = new LetStatementASTContext(_localctx);
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(63);
-			match(IDENT);
-			setState(64);
-			match(ASSIGN);
-			setState(65);
-			expression();
-			setState(68);
-			_errHandler.sync(this);
-			switch (_input.LA(1)) {
-			case PYCOMMA:
-				{
-				setState(66);
-				match(PYCOMMA);
-				}
-				break;
-			case EOF:
-			case LET:
-			case RETURN:
-			case FN:
-			case PUTS:
-			case IF:
-			case LEN:
-			case FIRST:
-			case LAST:
-			case REST:
-			case PUSH:
-			case L_PAREN:
-			case L_BRACE:
-			case R_BRACE:
-			case L_BRACK:
-			case TRUE:
-			case FALSE:
-			case NUMBER:
-			case STRING:
-			case IDENT:
-				{
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
-			}
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class ReturnStatementContext extends ParserRuleContext {
-		public ReturnStatementContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_returnStatement; }
-	 
-		public ReturnStatementContext() { }
-		public void copyFrom(ReturnStatementContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class ReturnStatementASTContext extends ReturnStatementContext {
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
-		}
-		public TerminalNode PYCOMMA() { return getToken(MonkeyParser.PYCOMMA, 0); }
-		public ReturnStatementASTContext(ReturnStatementContext ctx) { copyFrom(ctx); }
-	}
-
-	public final ReturnStatementContext returnStatement() throws RecognitionException {
-		ReturnStatementContext _localctx = new ReturnStatementContext(_ctx, getState());
-		enterRule(_localctx, 6, RULE_returnStatement);
-		try {
-			_localctx = new ReturnStatementASTContext(_localctx);
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(70);
-			expression();
-			setState(73);
-			_errHandler.sync(this);
-			switch (_input.LA(1)) {
-			case PYCOMMA:
-				{
-				setState(71);
-				match(PYCOMMA);
-				}
-				break;
-			case EOF:
-			case LET:
-			case RETURN:
-			case FN:
-			case PUTS:
-			case IF:
-			case LEN:
-			case FIRST:
-			case LAST:
-			case REST:
-			case PUSH:
-			case L_PAREN:
-			case L_BRACE:
-			case R_BRACE:
-			case L_BRACK:
-			case TRUE:
-			case FALSE:
-			case NUMBER:
-			case STRING:
-			case IDENT:
-				{
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
-			}
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class ExpressionStatementContext extends ParserRuleContext {
-		public ExpressionStatementContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_expressionStatement; }
-	 
-		public ExpressionStatementContext() { }
-		public void copyFrom(ExpressionStatementContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class ExpressionStatementASTContext extends ExpressionStatementContext {
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
-		}
-		public TerminalNode PYCOMMA() { return getToken(MonkeyParser.PYCOMMA, 0); }
-		public ExpressionStatementASTContext(ExpressionStatementContext ctx) { copyFrom(ctx); }
-	}
-
-	public final ExpressionStatementContext expressionStatement() throws RecognitionException {
-		ExpressionStatementContext _localctx = new ExpressionStatementContext(_ctx, getState());
-		enterRule(_localctx, 8, RULE_expressionStatement);
-		try {
-			_localctx = new ExpressionStatementASTContext(_localctx);
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(75);
-			expression();
-			setState(78);
-			_errHandler.sync(this);
-			switch (_input.LA(1)) {
-			case PYCOMMA:
-				{
-				setState(76);
-				match(PYCOMMA);
-				}
-				break;
-			case EOF:
-			case LET:
-			case RETURN:
-			case FN:
-			case PUTS:
-			case IF:
-			case LEN:
-			case FIRST:
-			case LAST:
-			case REST:
-			case PUSH:
-			case L_PAREN:
-			case L_BRACE:
-			case R_BRACE:
-			case L_BRACK:
-			case TRUE:
-			case FALSE:
-			case NUMBER:
-			case STRING:
-			case IDENT:
-				{
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
-			}
 			}
 		}
 		catch (RecognitionException re) {
@@ -522,14 +394,14 @@ public class MonkeyParser extends Parser {
 
 	public final ExpressionContext expression() throws RecognitionException {
 		ExpressionContext _localctx = new ExpressionContext(_ctx, getState());
-		enterRule(_localctx, 10, RULE_expression);
+		enterRule(_localctx, 4, RULE_expression);
 		try {
 			_localctx = new ExpressionASTContext(_localctx);
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(80);
+			setState(47);
 			additionExpression();
-			setState(81);
+			setState(48);
 			comparison();
 			}
 		}
@@ -587,35 +459,38 @@ public class MonkeyParser extends Parser {
 
 	public final ComparisonContext comparison() throws RecognitionException {
 		ComparisonContext _localctx = new ComparisonContext(_ctx, getState());
-		enterRule(_localctx, 12, RULE_comparison);
+		enterRule(_localctx, 6, RULE_comparison);
 		int _la;
 		try {
+			int _alt;
 			_localctx = new ComparisonASTContext(_localctx);
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(87);
+			setState(54);
 			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LE) | (1L << GE) | (1L << EQUAL) | (1L << GT) | (1L << LT))) != 0)) {
-				{
-				{
-				setState(83);
-				_la = _input.LA(1);
-				if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LE) | (1L << GE) | (1L << EQUAL) | (1L << GT) | (1L << LT))) != 0)) ) {
-				_errHandler.recoverInline(this);
+			_alt = getInterpreter().adaptivePredict(_input,5,_ctx);
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
+				if ( _alt==1 ) {
+					{
+					{
+					setState(50);
+					_la = _input.LA(1);
+					if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LE) | (1L << GE) | (1L << EQUAL) | (1L << GT) | (1L << LT))) != 0)) ) {
+					_errHandler.recoverInline(this);
+					}
+					else {
+						if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+						_errHandler.reportMatch(this);
+						consume();
+					}
+					setState(51);
+					additionExpression();
+					}
+					} 
 				}
-				else {
-					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-					_errHandler.reportMatch(this);
-					consume();
-				}
-				setState(84);
-				additionExpression();
-				}
-				}
-				setState(89);
+				setState(56);
 				_errHandler.sync(this);
-				_la = _input.LA(1);
+				_alt = getInterpreter().adaptivePredict(_input,5,_ctx);
 			}
 			}
 		}
@@ -642,51 +517,6 @@ public class MonkeyParser extends Parser {
 		}
 	}
 	public static class AdditionExpressionASTContext extends AdditionExpressionContext {
-		public MultiplicationExpressionContext multiplicationExpression() {
-			return getRuleContext(MultiplicationExpressionContext.class,0);
-		}
-		public AdditionFactorContext additionFactor() {
-			return getRuleContext(AdditionFactorContext.class,0);
-		}
-		public AdditionExpressionASTContext(AdditionExpressionContext ctx) { copyFrom(ctx); }
-	}
-
-	public final AdditionExpressionContext additionExpression() throws RecognitionException {
-		AdditionExpressionContext _localctx = new AdditionExpressionContext(_ctx, getState());
-		enterRule(_localctx, 14, RULE_additionExpression);
-		try {
-			_localctx = new AdditionExpressionASTContext(_localctx);
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(90);
-			multiplicationExpression();
-			setState(91);
-			additionFactor();
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class AdditionFactorContext extends ParserRuleContext {
-		public AdditionFactorContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_additionFactor; }
-	 
-		public AdditionFactorContext() { }
-		public void copyFrom(AdditionFactorContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class AdditionFactorASTContext extends AdditionFactorContext {
 		public List<MultiplicationExpressionContext> multiplicationExpression() {
 			return getRuleContexts(MultiplicationExpressionContext.class);
 		}
@@ -701,40 +531,45 @@ public class MonkeyParser extends Parser {
 		public TerminalNode SUB(int i) {
 			return getToken(MonkeyParser.SUB, i);
 		}
-		public AdditionFactorASTContext(AdditionFactorContext ctx) { copyFrom(ctx); }
+		public AdditionExpressionASTContext(AdditionExpressionContext ctx) { copyFrom(ctx); }
 	}
 
-	public final AdditionFactorContext additionFactor() throws RecognitionException {
-		AdditionFactorContext _localctx = new AdditionFactorContext(_ctx, getState());
-		enterRule(_localctx, 16, RULE_additionFactor);
+	public final AdditionExpressionContext additionExpression() throws RecognitionException {
+		AdditionExpressionContext _localctx = new AdditionExpressionContext(_ctx, getState());
+		enterRule(_localctx, 8, RULE_additionExpression);
 		int _la;
 		try {
-			_localctx = new AdditionFactorASTContext(_localctx);
+			int _alt;
+			_localctx = new AdditionExpressionASTContext(_localctx);
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(97);
+			setState(57);
+			multiplicationExpression();
+			setState(62);
 			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==ADD || _la==SUB) {
-				{
-				{
-				setState(93);
-				_la = _input.LA(1);
-				if ( !(_la==ADD || _la==SUB) ) {
-				_errHandler.recoverInline(this);
+			_alt = getInterpreter().adaptivePredict(_input,6,_ctx);
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
+				if ( _alt==1 ) {
+					{
+					{
+					setState(58);
+					_la = _input.LA(1);
+					if ( !(_la==ADD || _la==SUB) ) {
+					_errHandler.recoverInline(this);
+					}
+					else {
+						if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+						_errHandler.reportMatch(this);
+						consume();
+					}
+					setState(59);
+					multiplicationExpression();
+					}
+					} 
 				}
-				else {
-					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-					_errHandler.reportMatch(this);
-					consume();
-				}
-				setState(94);
-				multiplicationExpression();
-				}
-				}
-				setState(99);
+				setState(64);
 				_errHandler.sync(this);
-				_la = _input.LA(1);
+				_alt = getInterpreter().adaptivePredict(_input,6,_ctx);
 			}
 			}
 		}
@@ -761,51 +596,6 @@ public class MonkeyParser extends Parser {
 		}
 	}
 	public static class MultiplicationExpressionASTContext extends MultiplicationExpressionContext {
-		public ElementExpressionContext elementExpression() {
-			return getRuleContext(ElementExpressionContext.class,0);
-		}
-		public MultiplicationFactorContext multiplicationFactor() {
-			return getRuleContext(MultiplicationFactorContext.class,0);
-		}
-		public MultiplicationExpressionASTContext(MultiplicationExpressionContext ctx) { copyFrom(ctx); }
-	}
-
-	public final MultiplicationExpressionContext multiplicationExpression() throws RecognitionException {
-		MultiplicationExpressionContext _localctx = new MultiplicationExpressionContext(_ctx, getState());
-		enterRule(_localctx, 18, RULE_multiplicationExpression);
-		try {
-			_localctx = new MultiplicationExpressionASTContext(_localctx);
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(100);
-			elementExpression();
-			setState(101);
-			multiplicationFactor();
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class MultiplicationFactorContext extends ParserRuleContext {
-		public MultiplicationFactorContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_multiplicationFactor; }
-	 
-		public MultiplicationFactorContext() { }
-		public void copyFrom(MultiplicationFactorContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class MultiplicationFactorASTContext extends MultiplicationFactorContext {
 		public List<ElementExpressionContext> elementExpression() {
 			return getRuleContexts(ElementExpressionContext.class);
 		}
@@ -820,40 +610,45 @@ public class MonkeyParser extends Parser {
 		public TerminalNode DIV(int i) {
 			return getToken(MonkeyParser.DIV, i);
 		}
-		public MultiplicationFactorASTContext(MultiplicationFactorContext ctx) { copyFrom(ctx); }
+		public MultiplicationExpressionASTContext(MultiplicationExpressionContext ctx) { copyFrom(ctx); }
 	}
 
-	public final MultiplicationFactorContext multiplicationFactor() throws RecognitionException {
-		MultiplicationFactorContext _localctx = new MultiplicationFactorContext(_ctx, getState());
-		enterRule(_localctx, 20, RULE_multiplicationFactor);
+	public final MultiplicationExpressionContext multiplicationExpression() throws RecognitionException {
+		MultiplicationExpressionContext _localctx = new MultiplicationExpressionContext(_ctx, getState());
+		enterRule(_localctx, 10, RULE_multiplicationExpression);
 		int _la;
 		try {
-			_localctx = new MultiplicationFactorASTContext(_localctx);
+			int _alt;
+			_localctx = new MultiplicationExpressionASTContext(_localctx);
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(107);
+			setState(65);
+			elementExpression();
+			setState(70);
 			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==MUL || _la==DIV) {
-				{
-				{
-				setState(103);
-				_la = _input.LA(1);
-				if ( !(_la==MUL || _la==DIV) ) {
-				_errHandler.recoverInline(this);
+			_alt = getInterpreter().adaptivePredict(_input,7,_ctx);
+			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
+				if ( _alt==1 ) {
+					{
+					{
+					setState(66);
+					_la = _input.LA(1);
+					if ( !(_la==MUL || _la==DIV) ) {
+					_errHandler.recoverInline(this);
+					}
+					else {
+						if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+						_errHandler.reportMatch(this);
+						consume();
+					}
+					setState(67);
+					elementExpression();
+					}
+					} 
 				}
-				else {
-					if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-					_errHandler.reportMatch(this);
-					consume();
-				}
-				setState(104);
-				elementExpression();
-				}
-				}
-				setState(109);
+				setState(72);
 				_errHandler.sync(this);
-				_la = _input.LA(1);
+				_alt = getInterpreter().adaptivePredict(_input,7,_ctx);
 			}
 			}
 		}
@@ -883,37 +678,49 @@ public class MonkeyParser extends Parser {
 		public PrimitiveExpressionContext primitiveExpression() {
 			return getRuleContext(PrimitiveExpressionContext.class,0);
 		}
-		public ElementAccessContext elementAccess() {
-			return getRuleContext(ElementAccessContext.class,0);
+		public TerminalNode L_BRACK() { return getToken(MonkeyParser.L_BRACK, 0); }
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
 		}
-		public CallExpressionContext callExpression() {
-			return getRuleContext(CallExpressionContext.class,0);
+		public TerminalNode R_BRACK() { return getToken(MonkeyParser.R_BRACK, 0); }
+		public TerminalNode L_PAREN() { return getToken(MonkeyParser.L_PAREN, 0); }
+		public ExpressionListContext expressionList() {
+			return getRuleContext(ExpressionListContext.class,0);
 		}
+		public TerminalNode R_PAREN() { return getToken(MonkeyParser.R_PAREN, 0); }
 		public ElementExpressionASTContext(ElementExpressionContext ctx) { copyFrom(ctx); }
 	}
 
 	public final ElementExpressionContext elementExpression() throws RecognitionException {
 		ElementExpressionContext _localctx = new ElementExpressionContext(_ctx, getState());
-		enterRule(_localctx, 22, RULE_elementExpression);
+		enterRule(_localctx, 12, RULE_elementExpression);
 		try {
 			_localctx = new ElementExpressionASTContext(_localctx);
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(110);
+			setState(73);
 			primitiveExpression();
-			setState(114);
+			setState(83);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,8,_ctx) ) {
 			case 1:
 				{
-				setState(111);
-				elementAccess();
+				setState(74);
+				match(L_BRACK);
+				setState(75);
+				expression();
+				setState(76);
+				match(R_BRACK);
 				}
 				break;
 			case 2:
 				{
-				setState(112);
-				callExpression();
+				setState(78);
+				match(L_PAREN);
+				setState(79);
+				expressionList();
+				setState(80);
+				match(R_PAREN);
 				}
 				break;
 			case 3:
@@ -921,98 +728,6 @@ public class MonkeyParser extends Parser {
 				}
 				break;
 			}
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class ElementAccessContext extends ParserRuleContext {
-		public ElementAccessContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_elementAccess; }
-	 
-		public ElementAccessContext() { }
-		public void copyFrom(ElementAccessContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class ElementAccessASTContext extends ElementAccessContext {
-		public TerminalNode L_BRACK() { return getToken(MonkeyParser.L_BRACK, 0); }
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
-		}
-		public TerminalNode R_BRACK() { return getToken(MonkeyParser.R_BRACK, 0); }
-		public ElementAccessASTContext(ElementAccessContext ctx) { copyFrom(ctx); }
-	}
-
-	public final ElementAccessContext elementAccess() throws RecognitionException {
-		ElementAccessContext _localctx = new ElementAccessContext(_ctx, getState());
-		enterRule(_localctx, 24, RULE_elementAccess);
-		try {
-			_localctx = new ElementAccessASTContext(_localctx);
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(116);
-			match(L_BRACK);
-			setState(117);
-			expression();
-			setState(118);
-			match(R_BRACK);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class CallExpressionContext extends ParserRuleContext {
-		public CallExpressionContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_callExpression; }
-	 
-		public CallExpressionContext() { }
-		public void copyFrom(CallExpressionContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class CallExpressionASTContext extends CallExpressionContext {
-		public TerminalNode L_PAREN() { return getToken(MonkeyParser.L_PAREN, 0); }
-		public ExpressionListContext expressionList() {
-			return getRuleContext(ExpressionListContext.class,0);
-		}
-		public TerminalNode R_PAREN() { return getToken(MonkeyParser.R_PAREN, 0); }
-		public CallExpressionASTContext(CallExpressionContext ctx) { copyFrom(ctx); }
-	}
-
-	public final CallExpressionContext callExpression() throws RecognitionException {
-		CallExpressionContext _localctx = new CallExpressionContext(_ctx, getState());
-		enterRule(_localctx, 26, RULE_callExpression);
-		try {
-			_localctx = new CallExpressionASTContext(_localctx);
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(120);
-			match(L_PAREN);
-			setState(121);
-			expressionList();
-			setState(122);
-			match(R_PAREN);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1038,9 +753,11 @@ public class MonkeyParser extends Parser {
 		}
 	}
 	public static class PrimitiveExpression_literalASTContext extends PrimitiveExpressionContext {
-		public ArrayLiteralContext arrayLiteral() {
-			return getRuleContext(ArrayLiteralContext.class,0);
+		public TerminalNode L_BRACK() { return getToken(MonkeyParser.L_BRACK, 0); }
+		public ExpressionListContext expressionList() {
+			return getRuleContext(ExpressionListContext.class,0);
 		}
+		public TerminalNode R_BRACK() { return getToken(MonkeyParser.R_BRACK, 0); }
 		public PrimitiveExpression_literalASTContext(PrimitiveExpressionContext ctx) { copyFrom(ctx); }
 	}
 	public static class PrimitiveExpression_identASTContext extends PrimitiveExpressionContext {
@@ -1067,14 +784,46 @@ public class MonkeyParser extends Parser {
 		public PrimitiveExpression_ArrayFunctionsASTContext(PrimitiveExpressionContext ctx) { copyFrom(ctx); }
 	}
 	public static class PrimitiveExpression_FunctionLiteral_ASTContext extends PrimitiveExpressionContext {
-		public FunctionLiteralContext functionLiteral() {
-			return getRuleContext(FunctionLiteralContext.class,0);
+		public TerminalNode FN() { return getToken(MonkeyParser.FN, 0); }
+		public TerminalNode L_PAREN() { return getToken(MonkeyParser.L_PAREN, 0); }
+		public List<TerminalNode> IDENT() { return getTokens(MonkeyParser.IDENT); }
+		public TerminalNode IDENT(int i) {
+			return getToken(MonkeyParser.IDENT, i);
+		}
+		public TerminalNode R_PAREN() { return getToken(MonkeyParser.R_PAREN, 0); }
+		public TerminalNode L_BRACE() { return getToken(MonkeyParser.L_BRACE, 0); }
+		public TerminalNode R_BRACE() { return getToken(MonkeyParser.R_BRACE, 0); }
+		public List<TerminalNode> COMMA() { return getTokens(MonkeyParser.COMMA); }
+		public TerminalNode COMMA(int i) {
+			return getToken(MonkeyParser.COMMA, i);
+		}
+		public List<StatementContext> statement() {
+			return getRuleContexts(StatementContext.class);
+		}
+		public StatementContext statement(int i) {
+			return getRuleContext(StatementContext.class,i);
 		}
 		public PrimitiveExpression_FunctionLiteral_ASTContext(PrimitiveExpressionContext ctx) { copyFrom(ctx); }
 	}
 	public static class PrimitiveExpression_IfExpressionContext extends PrimitiveExpressionContext {
-		public IfExpressionContext ifExpression() {
-			return getRuleContext(IfExpressionContext.class,0);
+		public TerminalNode IF() { return getToken(MonkeyParser.IF, 0); }
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
+		public List<TerminalNode> L_BRACE() { return getTokens(MonkeyParser.L_BRACE); }
+		public TerminalNode L_BRACE(int i) {
+			return getToken(MonkeyParser.L_BRACE, i);
+		}
+		public List<TerminalNode> R_BRACE() { return getTokens(MonkeyParser.R_BRACE); }
+		public TerminalNode R_BRACE(int i) {
+			return getToken(MonkeyParser.R_BRACE, i);
+		}
+		public TerminalNode ELSE() { return getToken(MonkeyParser.ELSE, 0); }
+		public List<StatementContext> statement() {
+			return getRuleContexts(StatementContext.class);
+		}
+		public StatementContext statement(int i) {
+			return getRuleContext(StatementContext.class,i);
 		}
 		public PrimitiveExpression_IfExpressionContext(PrimitiveExpressionContext ctx) { copyFrom(ctx); }
 	}
@@ -1095,30 +844,47 @@ public class MonkeyParser extends Parser {
 		public PrimitiveExpression_expressionASTContext(PrimitiveExpressionContext ctx) { copyFrom(ctx); }
 	}
 	public static class PrimitiveExpression_HashLiteral_ASTContext extends PrimitiveExpressionContext {
-		public HashLiteralContext hashLiteral() {
-			return getRuleContext(HashLiteralContext.class,0);
+		public TerminalNode L_BRACE() { return getToken(MonkeyParser.L_BRACE, 0); }
+		public List<ExpressionContext> expression() {
+			return getRuleContexts(ExpressionContext.class);
+		}
+		public ExpressionContext expression(int i) {
+			return getRuleContext(ExpressionContext.class,i);
+		}
+		public List<TerminalNode> COLON() { return getTokens(MonkeyParser.COLON); }
+		public TerminalNode COLON(int i) {
+			return getToken(MonkeyParser.COLON, i);
+		}
+		public List<TerminalNode> COMMA() { return getTokens(MonkeyParser.COMMA); }
+		public TerminalNode COMMA(int i) {
+			return getToken(MonkeyParser.COMMA, i);
 		}
 		public PrimitiveExpression_HashLiteral_ASTContext(PrimitiveExpressionContext ctx) { copyFrom(ctx); }
 	}
 	public static class PrimitiveExpression_PrintExpressionASTContext extends PrimitiveExpressionContext {
-		public PrintExpressionContext printExpression() {
-			return getRuleContext(PrintExpressionContext.class,0);
+		public TerminalNode PUTS() { return getToken(MonkeyParser.PUTS, 0); }
+		public TerminalNode L_PAREN() { return getToken(MonkeyParser.L_PAREN, 0); }
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
 		}
+		public TerminalNode R_PAREN() { return getToken(MonkeyParser.R_PAREN, 0); }
 		public PrimitiveExpression_PrintExpressionASTContext(PrimitiveExpressionContext ctx) { copyFrom(ctx); }
 	}
 
 	public final PrimitiveExpressionContext primitiveExpression() throws RecognitionException {
 		PrimitiveExpressionContext _localctx = new PrimitiveExpressionContext(_ctx, getState());
-		enterRule(_localctx, 28, RULE_primitiveExpression);
+		enterRule(_localctx, 14, RULE_primitiveExpression);
+		int _la;
 		try {
-			setState(143);
+			int _alt;
+			setState(163);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case NUMBER:
 				_localctx = new PrimitiveExpression_numberASTContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(124);
+				setState(85);
 				match(NUMBER);
 				}
 				break;
@@ -1126,7 +892,7 @@ public class MonkeyParser extends Parser {
 				_localctx = new PrimitiveExpression_stringASTContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(125);
+				setState(86);
 				match(STRING);
 				}
 				break;
@@ -1134,7 +900,7 @@ public class MonkeyParser extends Parser {
 				_localctx = new PrimitiveExpression_identASTContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(126);
+				setState(87);
 				match(IDENT);
 				}
 				break;
@@ -1142,7 +908,7 @@ public class MonkeyParser extends Parser {
 				_localctx = new PrimitiveExpression_trueASTContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(127);
+				setState(88);
 				match(TRUE);
 				}
 				break;
@@ -1150,7 +916,7 @@ public class MonkeyParser extends Parser {
 				_localctx = new PrimitiveExpression_falseASTContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(128);
+				setState(89);
 				match(FALSE);
 				}
 				break;
@@ -1158,11 +924,11 @@ public class MonkeyParser extends Parser {
 				_localctx = new PrimitiveExpression_expressionASTContext(_localctx);
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(129);
+				setState(90);
 				match(L_PAREN);
-				setState(130);
+				setState(91);
 				expression();
-				setState(131);
+				setState(92);
 				match(R_PAREN);
 				}
 				break;
@@ -1170,8 +936,12 @@ public class MonkeyParser extends Parser {
 				_localctx = new PrimitiveExpression_literalASTContext(_localctx);
 				enterOuterAlt(_localctx, 7);
 				{
-				setState(133);
-				arrayLiteral();
+				setState(94);
+				match(L_BRACK);
+				setState(95);
+				expressionList();
+				setState(96);
+				match(R_BRACK);
 				}
 				break;
 			case LEN:
@@ -1182,13 +952,13 @@ public class MonkeyParser extends Parser {
 				_localctx = new PrimitiveExpression_ArrayFunctionsASTContext(_localctx);
 				enterOuterAlt(_localctx, 8);
 				{
-				setState(134);
+				setState(98);
 				arrayFunctions();
-				setState(135);
+				setState(99);
 				match(L_PAREN);
-				setState(136);
+				setState(100);
 				expressionList();
-				setState(137);
+				setState(101);
 				match(R_PAREN);
 				}
 				break;
@@ -1196,32 +966,193 @@ public class MonkeyParser extends Parser {
 				_localctx = new PrimitiveExpression_FunctionLiteral_ASTContext(_localctx);
 				enterOuterAlt(_localctx, 9);
 				{
-				setState(139);
-				functionLiteral();
+				setState(103);
+				match(FN);
+				setState(104);
+				match(L_PAREN);
+				setState(105);
+				match(IDENT);
+				setState(110);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				while (_la==COMMA) {
+					{
+					{
+					setState(106);
+					match(COMMA);
+					setState(107);
+					match(IDENT);
+					}
+					}
+					setState(112);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
+				setState(113);
+				match(R_PAREN);
+				setState(114);
+				match(L_BRACE);
+				setState(118);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LET) | (1L << RETURN) | (1L << FN) | (1L << PUTS) | (1L << IF) | (1L << LEN) | (1L << FIRST) | (1L << LAST) | (1L << REST) | (1L << PUSH) | (1L << L_PAREN) | (1L << L_BRACE) | (1L << L_BRACK) | (1L << TRUE) | (1L << FALSE) | (1L << NUMBER) | (1L << STRING) | (1L << IDENT))) != 0)) {
+					{
+					{
+					setState(115);
+					statement();
+					}
+					}
+					setState(120);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
+				setState(121);
+				match(R_BRACE);
 				}
 				break;
 			case L_BRACE:
 				_localctx = new PrimitiveExpression_HashLiteral_ASTContext(_localctx);
 				enterOuterAlt(_localctx, 10);
 				{
-				setState(140);
-				hashLiteral();
+				setState(122);
+				match(L_BRACE);
+				setState(123);
+				expression();
+				setState(124);
+				match(COLON);
+				setState(125);
+				expression();
+				setState(133);
+				_errHandler.sync(this);
+				_alt = getInterpreter().adaptivePredict(_input,11,_ctx);
+				while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
+					if ( _alt==1 ) {
+						{
+						{
+						setState(126);
+						match(COMMA);
+						setState(127);
+						expression();
+						setState(128);
+						match(COLON);
+						setState(129);
+						expression();
+						}
+						} 
+					}
+					setState(135);
+					_errHandler.sync(this);
+					_alt = getInterpreter().adaptivePredict(_input,11,_ctx);
+				}
 				}
 				break;
 			case PUTS:
 				_localctx = new PrimitiveExpression_PrintExpressionASTContext(_localctx);
 				enterOuterAlt(_localctx, 11);
 				{
-				setState(141);
-				printExpression();
+				setState(136);
+				match(PUTS);
+				setState(137);
+				match(L_PAREN);
+				setState(138);
+				expression();
+				setState(139);
+				match(R_PAREN);
 				}
 				break;
 			case IF:
 				_localctx = new PrimitiveExpression_IfExpressionContext(_localctx);
 				enterOuterAlt(_localctx, 12);
 				{
+				setState(141);
+				match(IF);
 				setState(142);
-				ifExpression();
+				expression();
+				setState(143);
+				match(L_BRACE);
+				setState(147);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LET) | (1L << RETURN) | (1L << FN) | (1L << PUTS) | (1L << IF) | (1L << LEN) | (1L << FIRST) | (1L << LAST) | (1L << REST) | (1L << PUSH) | (1L << L_PAREN) | (1L << L_BRACE) | (1L << L_BRACK) | (1L << TRUE) | (1L << FALSE) | (1L << NUMBER) | (1L << STRING) | (1L << IDENT))) != 0)) {
+					{
+					{
+					setState(144);
+					statement();
+					}
+					}
+					setState(149);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+				}
+				setState(150);
+				match(R_BRACE);
+				setState(161);
+				_errHandler.sync(this);
+				switch (_input.LA(1)) {
+				case ELSE:
+					{
+					setState(151);
+					match(ELSE);
+					setState(152);
+					match(L_BRACE);
+					setState(156);
+					_errHandler.sync(this);
+					_la = _input.LA(1);
+					while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LET) | (1L << RETURN) | (1L << FN) | (1L << PUTS) | (1L << IF) | (1L << LEN) | (1L << FIRST) | (1L << LAST) | (1L << REST) | (1L << PUSH) | (1L << L_PAREN) | (1L << L_BRACE) | (1L << L_BRACK) | (1L << TRUE) | (1L << FALSE) | (1L << NUMBER) | (1L << STRING) | (1L << IDENT))) != 0)) {
+						{
+						{
+						setState(153);
+						statement();
+						}
+						}
+						setState(158);
+						_errHandler.sync(this);
+						_la = _input.LA(1);
+					}
+					setState(159);
+					match(R_BRACE);
+					}
+					break;
+				case EOF:
+				case LET:
+				case RETURN:
+				case FN:
+				case PUTS:
+				case IF:
+				case LEN:
+				case FIRST:
+				case LAST:
+				case REST:
+				case PUSH:
+				case L_PAREN:
+				case R_PAREN:
+				case L_BRACE:
+				case R_BRACE:
+				case L_BRACK:
+				case R_BRACK:
+				case PYCOMMA:
+				case COMMA:
+				case COLON:
+				case LE:
+				case GE:
+				case EQUAL:
+				case GT:
+				case LT:
+				case ADD:
+				case SUB:
+				case MUL:
+				case DIV:
+				case TRUE:
+				case FALSE:
+				case NUMBER:
+				case STRING:
+				case IDENT:
+					{
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
+				}
 				}
 				break;
 			default:
@@ -1273,16 +1204,16 @@ public class MonkeyParser extends Parser {
 
 	public final ArrayFunctionsContext arrayFunctions() throws RecognitionException {
 		ArrayFunctionsContext _localctx = new ArrayFunctionsContext(_ctx, getState());
-		enterRule(_localctx, 30, RULE_arrayFunctions);
+		enterRule(_localctx, 16, RULE_arrayFunctions);
 		try {
-			setState(150);
+			setState(170);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case LEN:
 				_localctx = new ArrayFunctions_lenASTContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(145);
+				setState(165);
 				match(LEN);
 				}
 				break;
@@ -1290,7 +1221,7 @@ public class MonkeyParser extends Parser {
 				_localctx = new ArrayFunctions_firstASTContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(146);
+				setState(166);
 				match(FIRST);
 				}
 				break;
@@ -1298,7 +1229,7 @@ public class MonkeyParser extends Parser {
 				_localctx = new ArrayFunctions_lastASTContext(_localctx);
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(147);
+				setState(167);
 				match(LAST);
 				}
 				break;
@@ -1306,7 +1237,7 @@ public class MonkeyParser extends Parser {
 				_localctx = new ArrayFunctions_restASTContext(_localctx);
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(148);
+				setState(168);
 				match(REST);
 				}
 				break;
@@ -1314,292 +1245,12 @@ public class MonkeyParser extends Parser {
 				_localctx = new ArrayFunctions_pushASTContext(_localctx);
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(149);
+				setState(169);
 				match(PUSH);
 				}
 				break;
 			default:
 				throw new NoViableAltException(this);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class ArrayLiteralContext extends ParserRuleContext {
-		public ArrayLiteralContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_arrayLiteral; }
-	 
-		public ArrayLiteralContext() { }
-		public void copyFrom(ArrayLiteralContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class ArrayLiteralASTContext extends ArrayLiteralContext {
-		public TerminalNode L_BRACK() { return getToken(MonkeyParser.L_BRACK, 0); }
-		public ExpressionListContext expressionList() {
-			return getRuleContext(ExpressionListContext.class,0);
-		}
-		public TerminalNode R_BRACK() { return getToken(MonkeyParser.R_BRACK, 0); }
-		public ArrayLiteralASTContext(ArrayLiteralContext ctx) { copyFrom(ctx); }
-	}
-
-	public final ArrayLiteralContext arrayLiteral() throws RecognitionException {
-		ArrayLiteralContext _localctx = new ArrayLiteralContext(_ctx, getState());
-		enterRule(_localctx, 32, RULE_arrayLiteral);
-		try {
-			_localctx = new ArrayLiteralASTContext(_localctx);
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(152);
-			match(L_BRACK);
-			setState(153);
-			expressionList();
-			setState(154);
-			match(R_BRACK);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class FunctionLiteralContext extends ParserRuleContext {
-		public FunctionLiteralContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_functionLiteral; }
-	 
-		public FunctionLiteralContext() { }
-		public void copyFrom(FunctionLiteralContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class FunctionLiteralASTContext extends FunctionLiteralContext {
-		public TerminalNode FN() { return getToken(MonkeyParser.FN, 0); }
-		public TerminalNode L_PAREN() { return getToken(MonkeyParser.L_PAREN, 0); }
-		public FunctionParametersContext functionParameters() {
-			return getRuleContext(FunctionParametersContext.class,0);
-		}
-		public TerminalNode R_PAREN() { return getToken(MonkeyParser.R_PAREN, 0); }
-		public BlockStatementContext blockStatement() {
-			return getRuleContext(BlockStatementContext.class,0);
-		}
-		public FunctionLiteralASTContext(FunctionLiteralContext ctx) { copyFrom(ctx); }
-	}
-
-	public final FunctionLiteralContext functionLiteral() throws RecognitionException {
-		FunctionLiteralContext _localctx = new FunctionLiteralContext(_ctx, getState());
-		enterRule(_localctx, 34, RULE_functionLiteral);
-		try {
-			_localctx = new FunctionLiteralASTContext(_localctx);
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(156);
-			match(FN);
-			setState(157);
-			match(L_PAREN);
-			setState(158);
-			functionParameters();
-			setState(159);
-			match(R_PAREN);
-			setState(160);
-			blockStatement();
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class FunctionParametersContext extends ParserRuleContext {
-		public FunctionParametersContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_functionParameters; }
-	 
-		public FunctionParametersContext() { }
-		public void copyFrom(FunctionParametersContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class FunctionParametersASTContext extends FunctionParametersContext {
-		public List<TerminalNode> IDENT() { return getTokens(MonkeyParser.IDENT); }
-		public TerminalNode IDENT(int i) {
-			return getToken(MonkeyParser.IDENT, i);
-		}
-		public List<TerminalNode> COMMA() { return getTokens(MonkeyParser.COMMA); }
-		public TerminalNode COMMA(int i) {
-			return getToken(MonkeyParser.COMMA, i);
-		}
-		public FunctionParametersASTContext(FunctionParametersContext ctx) { copyFrom(ctx); }
-	}
-
-	public final FunctionParametersContext functionParameters() throws RecognitionException {
-		FunctionParametersContext _localctx = new FunctionParametersContext(_ctx, getState());
-		enterRule(_localctx, 36, RULE_functionParameters);
-		int _la;
-		try {
-			_localctx = new FunctionParametersASTContext(_localctx);
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(162);
-			match(IDENT);
-			setState(167);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==COMMA) {
-				{
-				{
-				setState(163);
-				match(COMMA);
-				setState(164);
-				match(IDENT);
-				}
-				}
-				setState(169);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class HashLiteralContext extends ParserRuleContext {
-		public HashLiteralContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_hashLiteral; }
-	 
-		public HashLiteralContext() { }
-		public void copyFrom(HashLiteralContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class HashLiteralASTContext extends HashLiteralContext {
-		public TerminalNode L_BRACE() { return getToken(MonkeyParser.L_BRACE, 0); }
-		public List<HashContentContext> hashContent() {
-			return getRuleContexts(HashContentContext.class);
-		}
-		public HashContentContext hashContent(int i) {
-			return getRuleContext(HashContentContext.class,i);
-		}
-		public TerminalNode R_BRACE() { return getToken(MonkeyParser.R_BRACE, 0); }
-		public List<TerminalNode> COMMA() { return getTokens(MonkeyParser.COMMA); }
-		public TerminalNode COMMA(int i) {
-			return getToken(MonkeyParser.COMMA, i);
-		}
-		public HashLiteralASTContext(HashLiteralContext ctx) { copyFrom(ctx); }
-	}
-
-	public final HashLiteralContext hashLiteral() throws RecognitionException {
-		HashLiteralContext _localctx = new HashLiteralContext(_ctx, getState());
-		enterRule(_localctx, 38, RULE_hashLiteral);
-		int _la;
-		try {
-			_localctx = new HashLiteralASTContext(_localctx);
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(170);
-			match(L_BRACE);
-			setState(171);
-			hashContent();
-			setState(176);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==COMMA) {
-				{
-				{
-				setState(172);
-				match(COMMA);
-				setState(173);
-				hashContent();
-				}
-				}
-				setState(178);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
-			setState(179);
-			match(R_BRACE);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class HashContentContext extends ParserRuleContext {
-		public HashContentContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_hashContent; }
-	 
-		public HashContentContext() { }
-		public void copyFrom(HashContentContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class HashContentASTContext extends HashContentContext {
-		public List<ExpressionContext> expression() {
-			return getRuleContexts(ExpressionContext.class);
-		}
-		public ExpressionContext expression(int i) {
-			return getRuleContext(ExpressionContext.class,i);
-		}
-		public TerminalNode COLON() { return getToken(MonkeyParser.COLON, 0); }
-		public HashContentASTContext(HashContentContext ctx) { copyFrom(ctx); }
-	}
-
-	public final HashContentContext hashContent() throws RecognitionException {
-		HashContentContext _localctx = new HashContentContext(_ctx, getState());
-		enterRule(_localctx, 40, RULE_hashContent);
-		try {
-			_localctx = new HashContentASTContext(_localctx);
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(181);
-			expression();
-			setState(182);
-			match(COLON);
-			setState(183);
-			expression();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1643,10 +1294,10 @@ public class MonkeyParser extends Parser {
 
 	public final ExpressionListContext expressionList() throws RecognitionException {
 		ExpressionListContext _localctx = new ExpressionListContext(_ctx, getState());
-		enterRule(_localctx, 42, RULE_expressionList);
+		enterRule(_localctx, 18, RULE_expressionList);
 		int _la;
 		try {
-			setState(194);
+			setState(181);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case FN:
@@ -1668,21 +1319,21 @@ public class MonkeyParser extends Parser {
 				_localctx = new ExpressionList_expressionASTContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(185);
+				setState(172);
 				expression();
-				setState(190);
+				setState(177);
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 				while (_la==COMMA) {
 					{
 					{
-					setState(186);
+					setState(173);
 					match(COMMA);
-					setState(187);
+					setState(174);
 					expression();
 					}
 					}
-					setState(192);
+					setState(179);
 					_errHandler.sync(this);
 					_la = _input.LA(1);
 				}
@@ -1710,291 +1361,65 @@ public class MonkeyParser extends Parser {
 		return _localctx;
 	}
 
-	public static class PrintExpressionContext extends ParserRuleContext {
-		public PrintExpressionContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_printExpression; }
-	 
-		public PrintExpressionContext() { }
-		public void copyFrom(PrintExpressionContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class PrintExpressionASTContext extends PrintExpressionContext {
-		public TerminalNode PUTS() { return getToken(MonkeyParser.PUTS, 0); }
-		public TerminalNode L_PAREN() { return getToken(MonkeyParser.L_PAREN, 0); }
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
-		}
-		public TerminalNode R_PAREN() { return getToken(MonkeyParser.R_PAREN, 0); }
-		public PrintExpressionASTContext(PrintExpressionContext ctx) { copyFrom(ctx); }
-	}
-
-	public final PrintExpressionContext printExpression() throws RecognitionException {
-		PrintExpressionContext _localctx = new PrintExpressionContext(_ctx, getState());
-		enterRule(_localctx, 44, RULE_printExpression);
-		try {
-			_localctx = new PrintExpressionASTContext(_localctx);
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(196);
-			match(PUTS);
-			setState(197);
-			match(L_PAREN);
-			setState(198);
-			expression();
-			setState(199);
-			match(R_PAREN);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class IfExpressionContext extends ParserRuleContext {
-		public IfExpressionContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_ifExpression; }
-	 
-		public IfExpressionContext() { }
-		public void copyFrom(IfExpressionContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class IfExpressionASTContext extends IfExpressionContext {
-		public TerminalNode IF() { return getToken(MonkeyParser.IF, 0); }
-		public ExpressionContext expression() {
-			return getRuleContext(ExpressionContext.class,0);
-		}
-		public List<BlockStatementContext> blockStatement() {
-			return getRuleContexts(BlockStatementContext.class);
-		}
-		public BlockStatementContext blockStatement(int i) {
-			return getRuleContext(BlockStatementContext.class,i);
-		}
-		public TerminalNode ELSE() { return getToken(MonkeyParser.ELSE, 0); }
-		public IfExpressionASTContext(IfExpressionContext ctx) { copyFrom(ctx); }
-	}
-
-	public final IfExpressionContext ifExpression() throws RecognitionException {
-		IfExpressionContext _localctx = new IfExpressionContext(_ctx, getState());
-		enterRule(_localctx, 46, RULE_ifExpression);
-		try {
-			_localctx = new IfExpressionASTContext(_localctx);
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(201);
-			match(IF);
-			setState(202);
-			expression();
-			setState(203);
-			blockStatement();
-			setState(207);
-			_errHandler.sync(this);
-			switch (_input.LA(1)) {
-			case ELSE:
-				{
-				setState(204);
-				match(ELSE);
-				setState(205);
-				blockStatement();
-				}
-				break;
-			case EOF:
-			case LET:
-			case RETURN:
-			case FN:
-			case PUTS:
-			case IF:
-			case LEN:
-			case FIRST:
-			case LAST:
-			case REST:
-			case PUSH:
-			case L_PAREN:
-			case R_PAREN:
-			case L_BRACE:
-			case R_BRACE:
-			case L_BRACK:
-			case R_BRACK:
-			case PYCOMMA:
-			case COMMA:
-			case COLON:
-			case LE:
-			case GE:
-			case EQUAL:
-			case GT:
-			case LT:
-			case ADD:
-			case SUB:
-			case MUL:
-			case DIV:
-			case TRUE:
-			case FALSE:
-			case NUMBER:
-			case STRING:
-			case IDENT:
-				{
-				}
-				break;
-			default:
-				throw new NoViableAltException(this);
-			}
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class BlockStatementContext extends ParserRuleContext {
-		public BlockStatementContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_blockStatement; }
-	 
-		public BlockStatementContext() { }
-		public void copyFrom(BlockStatementContext ctx) {
-			super.copyFrom(ctx);
-		}
-	}
-	public static class BlockStatementASTContext extends BlockStatementContext {
-		public TerminalNode L_BRACE() { return getToken(MonkeyParser.L_BRACE, 0); }
-		public TerminalNode R_BRACE() { return getToken(MonkeyParser.R_BRACE, 0); }
-		public List<StatementContext> statement() {
-			return getRuleContexts(StatementContext.class);
-		}
-		public StatementContext statement(int i) {
-			return getRuleContext(StatementContext.class,i);
-		}
-		public BlockStatementASTContext(BlockStatementContext ctx) { copyFrom(ctx); }
-	}
-
-	public final BlockStatementContext blockStatement() throws RecognitionException {
-		BlockStatementContext _localctx = new BlockStatementContext(_ctx, getState());
-		enterRule(_localctx, 48, RULE_blockStatement);
-		int _la;
-		try {
-			_localctx = new BlockStatementASTContext(_localctx);
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(209);
-			match(L_BRACE);
-			setState(213);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LET) | (1L << RETURN) | (1L << FN) | (1L << PUTS) | (1L << IF) | (1L << LEN) | (1L << FIRST) | (1L << LAST) | (1L << REST) | (1L << PUSH) | (1L << L_PAREN) | (1L << L_BRACE) | (1L << L_BRACK) | (1L << TRUE) | (1L << FALSE) | (1L << NUMBER) | (1L << STRING) | (1L << IDENT))) != 0)) {
-				{
-				{
-				setState(210);
-				statement();
-				}
-				}
-				setState(215);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
-			setState(216);
-			match(R_BRACE);
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3)\u00dd\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3)\u00ba\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
-		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
-		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
-		"\4\32\t\32\3\2\7\2\66\n\2\f\2\16\29\13\2\3\3\3\3\3\3\3\3\3\3\5\3@\n\3"+
-		"\3\4\3\4\3\4\3\4\3\4\5\4G\n\4\3\5\3\5\3\5\5\5L\n\5\3\6\3\6\3\6\5\6Q\n"+
-		"\6\3\7\3\7\3\7\3\b\3\b\7\bX\n\b\f\b\16\b[\13\b\3\t\3\t\3\t\3\n\3\n\7\n"+
-		"b\n\n\f\n\16\ne\13\n\3\13\3\13\3\13\3\f\3\f\7\fl\n\f\f\f\16\fo\13\f\3"+
-		"\r\3\r\3\r\3\r\5\ru\n\r\3\16\3\16\3\16\3\16\3\17\3\17\3\17\3\17\3\20\3"+
-		"\20\3\20\3\20\3\20\3\20\3\20\3\20\3\20\3\20\3\20\3\20\3\20\3\20\3\20\3"+
-		"\20\3\20\3\20\3\20\5\20\u0092\n\20\3\21\3\21\3\21\3\21\3\21\5\21\u0099"+
-		"\n\21\3\22\3\22\3\22\3\22\3\23\3\23\3\23\3\23\3\23\3\23\3\24\3\24\3\24"+
-		"\7\24\u00a8\n\24\f\24\16\24\u00ab\13\24\3\25\3\25\3\25\3\25\7\25\u00b1"+
-		"\n\25\f\25\16\25\u00b4\13\25\3\25\3\25\3\26\3\26\3\26\3\26\3\27\3\27\3"+
-		"\27\7\27\u00bf\n\27\f\27\16\27\u00c2\13\27\3\27\5\27\u00c5\n\27\3\30\3"+
-		"\30\3\30\3\30\3\30\3\31\3\31\3\31\3\31\3\31\3\31\5\31\u00d2\n\31\3\32"+
-		"\3\32\7\32\u00d6\n\32\f\32\16\32\u00d9\13\32\3\32\3\32\3\32\2\2\33\2\4"+
-		"\6\b\n\f\16\20\22\24\26\30\32\34\36 \"$&(*,.\60\62\2\5\3\2\27\33\3\2\35"+
-		"\36\3\2\37 \2\u00e3\2\67\3\2\2\2\4?\3\2\2\2\6A\3\2\2\2\bH\3\2\2\2\nM\3"+
-		"\2\2\2\fR\3\2\2\2\16Y\3\2\2\2\20\\\3\2\2\2\22c\3\2\2\2\24f\3\2\2\2\26"+
-		"m\3\2\2\2\30p\3\2\2\2\32v\3\2\2\2\34z\3\2\2\2\36\u0091\3\2\2\2 \u0098"+
-		"\3\2\2\2\"\u009a\3\2\2\2$\u009e\3\2\2\2&\u00a4\3\2\2\2(\u00ac\3\2\2\2"+
-		"*\u00b7\3\2\2\2,\u00c4\3\2\2\2.\u00c6\3\2\2\2\60\u00cb\3\2\2\2\62\u00d3"+
-		"\3\2\2\2\64\66\5\4\3\2\65\64\3\2\2\2\669\3\2\2\2\67\65\3\2\2\2\678\3\2"+
-		"\2\28\3\3\2\2\29\67\3\2\2\2:;\7\3\2\2;@\5\6\4\2<=\7\4\2\2=@\5\b\5\2>@"+
-		"\5\n\6\2?:\3\2\2\2?<\3\2\2\2?>\3\2\2\2@\5\3\2\2\2AB\7&\2\2BC\7\34\2\2"+
-		"CF\5\f\7\2DG\7\24\2\2EG\3\2\2\2FD\3\2\2\2FE\3\2\2\2G\7\3\2\2\2HK\5\f\7"+
-		"\2IL\7\24\2\2JL\3\2\2\2KI\3\2\2\2KJ\3\2\2\2L\t\3\2\2\2MP\5\f\7\2NQ\7\24"+
-		"\2\2OQ\3\2\2\2PN\3\2\2\2PO\3\2\2\2Q\13\3\2\2\2RS\5\20\t\2ST\5\16\b\2T"+
-		"\r\3\2\2\2UV\t\2\2\2VX\5\20\t\2WU\3\2\2\2X[\3\2\2\2YW\3\2\2\2YZ\3\2\2"+
-		"\2Z\17\3\2\2\2[Y\3\2\2\2\\]\5\24\13\2]^\5\22\n\2^\21\3\2\2\2_`\t\3\2\2"+
-		"`b\5\24\13\2a_\3\2\2\2be\3\2\2\2ca\3\2\2\2cd\3\2\2\2d\23\3\2\2\2ec\3\2"+
-		"\2\2fg\5\30\r\2gh\5\26\f\2h\25\3\2\2\2ij\t\4\2\2jl\5\30\r\2ki\3\2\2\2"+
-		"lo\3\2\2\2mk\3\2\2\2mn\3\2\2\2n\27\3\2\2\2om\3\2\2\2pt\5\36\20\2qu\5\32"+
-		"\16\2ru\5\34\17\2su\3\2\2\2tq\3\2\2\2tr\3\2\2\2ts\3\2\2\2u\31\3\2\2\2"+
-		"vw\7\22\2\2wx\5\f\7\2xy\7\23\2\2y\33\3\2\2\2z{\7\16\2\2{|\5,\27\2|}\7"+
-		"\17\2\2}\35\3\2\2\2~\u0092\7#\2\2\177\u0092\7%\2\2\u0080\u0092\7&\2\2"+
-		"\u0081\u0092\7!\2\2\u0082\u0092\7\"\2\2\u0083\u0084\7\16\2\2\u0084\u0085"+
-		"\5\f\7\2\u0085\u0086\7\17\2\2\u0086\u0092\3\2\2\2\u0087\u0092\5\"\22\2"+
-		"\u0088\u0089\5 \21\2\u0089\u008a\7\16\2\2\u008a\u008b\5,\27\2\u008b\u008c"+
-		"\7\17\2\2\u008c\u0092\3\2\2\2\u008d\u0092\5$\23\2\u008e\u0092\5(\25\2"+
-		"\u008f\u0092\5.\30\2\u0090\u0092\5\60\31\2\u0091~\3\2\2\2\u0091\177\3"+
-		"\2\2\2\u0091\u0080\3\2\2\2\u0091\u0081\3\2\2\2\u0091\u0082\3\2\2\2\u0091"+
-		"\u0083\3\2\2\2\u0091\u0087\3\2\2\2\u0091\u0088\3\2\2\2\u0091\u008d\3\2"+
-		"\2\2\u0091\u008e\3\2\2\2\u0091\u008f\3\2\2\2\u0091\u0090\3\2\2\2\u0092"+
-		"\37\3\2\2\2\u0093\u0099\7\t\2\2\u0094\u0099\7\n\2\2\u0095\u0099\7\13\2"+
-		"\2\u0096\u0099\7\f\2\2\u0097\u0099\7\r\2\2\u0098\u0093\3\2\2\2\u0098\u0094"+
-		"\3\2\2\2\u0098\u0095\3\2\2\2\u0098\u0096\3\2\2\2\u0098\u0097\3\2\2\2\u0099"+
-		"!\3\2\2\2\u009a\u009b\7\22\2\2\u009b\u009c\5,\27\2\u009c\u009d\7\23\2"+
-		"\2\u009d#\3\2\2\2\u009e\u009f\7\5\2\2\u009f\u00a0\7\16\2\2\u00a0\u00a1"+
-		"\5&\24\2\u00a1\u00a2\7\17\2\2\u00a2\u00a3\5\62\32\2\u00a3%\3\2\2\2\u00a4"+
-		"\u00a9\7&\2\2\u00a5\u00a6\7\25\2\2\u00a6\u00a8\7&\2\2\u00a7\u00a5\3\2"+
-		"\2\2\u00a8\u00ab\3\2\2\2\u00a9\u00a7\3\2\2\2\u00a9\u00aa\3\2\2\2\u00aa"+
-		"\'\3\2\2\2\u00ab\u00a9\3\2\2\2\u00ac\u00ad\7\20\2\2\u00ad\u00b2\5*\26"+
-		"\2\u00ae\u00af\7\25\2\2\u00af\u00b1\5*\26\2\u00b0\u00ae\3\2\2\2\u00b1"+
-		"\u00b4\3\2\2\2\u00b2\u00b0\3\2\2\2\u00b2\u00b3\3\2\2\2\u00b3\u00b5\3\2"+
-		"\2\2\u00b4\u00b2\3\2\2\2\u00b5\u00b6\7\21\2\2\u00b6)\3\2\2\2\u00b7\u00b8"+
-		"\5\f\7\2\u00b8\u00b9\7\26\2\2\u00b9\u00ba\5\f\7\2\u00ba+\3\2\2\2\u00bb"+
-		"\u00c0\5\f\7\2\u00bc\u00bd\7\25\2\2\u00bd\u00bf\5\f\7\2\u00be\u00bc\3"+
-		"\2\2\2\u00bf\u00c2\3\2\2\2\u00c0\u00be\3\2\2\2\u00c0\u00c1\3\2\2\2\u00c1"+
-		"\u00c5\3\2\2\2\u00c2\u00c0\3\2\2\2\u00c3\u00c5\3\2\2\2\u00c4\u00bb\3\2"+
-		"\2\2\u00c4\u00c3\3\2\2\2\u00c5-\3\2\2\2\u00c6\u00c7\7\6\2\2\u00c7\u00c8"+
-		"\7\16\2\2\u00c8\u00c9\5\f\7\2\u00c9\u00ca\7\17\2\2\u00ca/\3\2\2\2\u00cb"+
-		"\u00cc\7\7\2\2\u00cc\u00cd\5\f\7\2\u00cd\u00d1\5\62\32\2\u00ce\u00cf\7"+
-		"\b\2\2\u00cf\u00d2\5\62\32\2\u00d0\u00d2\3\2\2\2\u00d1\u00ce\3\2\2\2\u00d1"+
-		"\u00d0\3\2\2\2\u00d2\61\3\2\2\2\u00d3\u00d7\7\20\2\2\u00d4\u00d6\5\4\3"+
-		"\2\u00d5\u00d4\3\2\2\2\u00d6\u00d9\3\2\2\2\u00d7\u00d5\3\2\2\2\u00d7\u00d8"+
-		"\3\2\2\2\u00d8\u00da\3\2\2\2\u00d9\u00d7\3\2\2\2\u00da\u00db\7\21\2\2"+
-		"\u00db\63\3\2\2\2\23\67?FKPYcmt\u0091\u0098\u00a9\u00b2\u00c0\u00c4\u00d1"+
-		"\u00d7";
+		"\13\3\2\7\2\30\n\2\f\2\16\2\33\13\2\3\3\3\3\3\3\3\3\3\3\3\3\5\3#\n\3\3"+
+		"\3\3\3\3\3\3\3\5\3)\n\3\3\3\3\3\3\3\5\3.\n\3\5\3\60\n\3\3\4\3\4\3\4\3"+
+		"\5\3\5\7\5\67\n\5\f\5\16\5:\13\5\3\6\3\6\3\6\7\6?\n\6\f\6\16\6B\13\6\3"+
+		"\7\3\7\3\7\7\7G\n\7\f\7\16\7J\13\7\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b\3\b"+
+		"\3\b\5\bV\n\b\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t"+
+		"\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\7\to\n\t\f\t\16\tr\13\t\3\t\3\t\3"+
+		"\t\7\tw\n\t\f\t\16\tz\13\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\7\t"+
+		"\u0086\n\t\f\t\16\t\u0089\13\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\3\t\7\t"+
+		"\u0094\n\t\f\t\16\t\u0097\13\t\3\t\3\t\3\t\3\t\7\t\u009d\n\t\f\t\16\t"+
+		"\u00a0\13\t\3\t\3\t\5\t\u00a4\n\t\5\t\u00a6\n\t\3\n\3\n\3\n\3\n\3\n\5"+
+		"\n\u00ad\n\n\3\13\3\13\3\13\7\13\u00b2\n\13\f\13\16\13\u00b5\13\13\3\13"+
+		"\5\13\u00b8\n\13\3\13\2\2\f\2\4\6\b\n\f\16\20\22\24\2\5\3\2\27\33\3\2"+
+		"\35\36\3\2\37 \2\u00d1\2\31\3\2\2\2\4/\3\2\2\2\6\61\3\2\2\2\b8\3\2\2\2"+
+		"\n;\3\2\2\2\fC\3\2\2\2\16K\3\2\2\2\20\u00a5\3\2\2\2\22\u00ac\3\2\2\2\24"+
+		"\u00b7\3\2\2\2\26\30\5\4\3\2\27\26\3\2\2\2\30\33\3\2\2\2\31\27\3\2\2\2"+
+		"\31\32\3\2\2\2\32\3\3\2\2\2\33\31\3\2\2\2\34\35\7\3\2\2\35\36\7&\2\2\36"+
+		"\37\7\34\2\2\37\"\5\6\4\2 #\7\24\2\2!#\3\2\2\2\" \3\2\2\2\"!\3\2\2\2#"+
+		"\60\3\2\2\2$%\7\4\2\2%(\5\6\4\2&)\7\24\2\2\')\3\2\2\2(&\3\2\2\2(\'\3\2"+
+		"\2\2)\60\3\2\2\2*-\5\6\4\2+.\7\24\2\2,.\3\2\2\2-+\3\2\2\2-,\3\2\2\2.\60"+
+		"\3\2\2\2/\34\3\2\2\2/$\3\2\2\2/*\3\2\2\2\60\5\3\2\2\2\61\62\5\n\6\2\62"+
+		"\63\5\b\5\2\63\7\3\2\2\2\64\65\t\2\2\2\65\67\5\n\6\2\66\64\3\2\2\2\67"+
+		":\3\2\2\28\66\3\2\2\289\3\2\2\29\t\3\2\2\2:8\3\2\2\2;@\5\f\7\2<=\t\3\2"+
+		"\2=?\5\f\7\2><\3\2\2\2?B\3\2\2\2@>\3\2\2\2@A\3\2\2\2A\13\3\2\2\2B@\3\2"+
+		"\2\2CH\5\16\b\2DE\t\4\2\2EG\5\16\b\2FD\3\2\2\2GJ\3\2\2\2HF\3\2\2\2HI\3"+
+		"\2\2\2I\r\3\2\2\2JH\3\2\2\2KU\5\20\t\2LM\7\22\2\2MN\5\6\4\2NO\7\23\2\2"+
+		"OV\3\2\2\2PQ\7\16\2\2QR\5\24\13\2RS\7\17\2\2SV\3\2\2\2TV\3\2\2\2UL\3\2"+
+		"\2\2UP\3\2\2\2UT\3\2\2\2V\17\3\2\2\2W\u00a6\7#\2\2X\u00a6\7%\2\2Y\u00a6"+
+		"\7&\2\2Z\u00a6\7!\2\2[\u00a6\7\"\2\2\\]\7\16\2\2]^\5\6\4\2^_\7\17\2\2"+
+		"_\u00a6\3\2\2\2`a\7\22\2\2ab\5\24\13\2bc\7\23\2\2c\u00a6\3\2\2\2de\5\22"+
+		"\n\2ef\7\16\2\2fg\5\24\13\2gh\7\17\2\2h\u00a6\3\2\2\2ij\7\5\2\2jk\7\16"+
+		"\2\2kp\7&\2\2lm\7\25\2\2mo\7&\2\2nl\3\2\2\2or\3\2\2\2pn\3\2\2\2pq\3\2"+
+		"\2\2qs\3\2\2\2rp\3\2\2\2st\7\17\2\2tx\7\20\2\2uw\5\4\3\2vu\3\2\2\2wz\3"+
+		"\2\2\2xv\3\2\2\2xy\3\2\2\2y{\3\2\2\2zx\3\2\2\2{\u00a6\7\21\2\2|}\7\20"+
+		"\2\2}~\5\6\4\2~\177\7\26\2\2\177\u0087\5\6\4\2\u0080\u0081\7\25\2\2\u0081"+
+		"\u0082\5\6\4\2\u0082\u0083\7\26\2\2\u0083\u0084\5\6\4\2\u0084\u0086\3"+
+		"\2\2\2\u0085\u0080\3\2\2\2\u0086\u0089\3\2\2\2\u0087\u0085\3\2\2\2\u0087"+
+		"\u0088\3\2\2\2\u0088\u00a6\3\2\2\2\u0089\u0087\3\2\2\2\u008a\u008b\7\6"+
+		"\2\2\u008b\u008c\7\16\2\2\u008c\u008d\5\6\4\2\u008d\u008e\7\17\2\2\u008e"+
+		"\u00a6\3\2\2\2\u008f\u0090\7\7\2\2\u0090\u0091\5\6\4\2\u0091\u0095\7\20"+
+		"\2\2\u0092\u0094\5\4\3\2\u0093\u0092\3\2\2\2\u0094\u0097\3\2\2\2\u0095"+
+		"\u0093\3\2\2\2\u0095\u0096\3\2\2\2\u0096\u0098\3\2\2\2\u0097\u0095\3\2"+
+		"\2\2\u0098\u00a3\7\21\2\2\u0099\u009a\7\b\2\2\u009a\u009e\7\20\2\2\u009b"+
+		"\u009d\5\4\3\2\u009c\u009b\3\2\2\2\u009d\u00a0\3\2\2\2\u009e\u009c\3\2"+
+		"\2\2\u009e\u009f\3\2\2\2\u009f\u00a1\3\2\2\2\u00a0\u009e\3\2\2\2\u00a1"+
+		"\u00a4\7\21\2\2\u00a2\u00a4\3\2\2\2\u00a3\u0099\3\2\2\2\u00a3\u00a2\3"+
+		"\2\2\2\u00a4\u00a6\3\2\2\2\u00a5W\3\2\2\2\u00a5X\3\2\2\2\u00a5Y\3\2\2"+
+		"\2\u00a5Z\3\2\2\2\u00a5[\3\2\2\2\u00a5\\\3\2\2\2\u00a5`\3\2\2\2\u00a5"+
+		"d\3\2\2\2\u00a5i\3\2\2\2\u00a5|\3\2\2\2\u00a5\u008a\3\2\2\2\u00a5\u008f"+
+		"\3\2\2\2\u00a6\21\3\2\2\2\u00a7\u00ad\7\t\2\2\u00a8\u00ad\7\n\2\2\u00a9"+
+		"\u00ad\7\13\2\2\u00aa\u00ad\7\f\2\2\u00ab\u00ad\7\r\2\2\u00ac\u00a7\3"+
+		"\2\2\2\u00ac\u00a8\3\2\2\2\u00ac\u00a9\3\2\2\2\u00ac\u00aa\3\2\2\2\u00ac"+
+		"\u00ab\3\2\2\2\u00ad\23\3\2\2\2\u00ae\u00b3\5\6\4\2\u00af\u00b0\7\25\2"+
+		"\2\u00b0\u00b2\5\6\4\2\u00b1\u00af\3\2\2\2\u00b2\u00b5\3\2\2\2\u00b3\u00b1"+
+		"\3\2\2\2\u00b3\u00b4\3\2\2\2\u00b4\u00b8\3\2\2\2\u00b5\u00b3\3\2\2\2\u00b6"+
+		"\u00b8\3\2\2\2\u00b7\u00ae\3\2\2\2\u00b7\u00b6\3\2\2\2\u00b8\25\3\2\2"+
+		"\2\25\31\"(-/8@HUpx\u0087\u0095\u009e\u00a3\u00a5\u00ac\u00b3\u00b7";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

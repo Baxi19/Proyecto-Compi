@@ -1,5 +1,4 @@
 // Generated from C:/Users/Baxi/Desktop/Proyecto Compi\MonkeyScanner.g4 by ANTLR 4.8
-package generated;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;

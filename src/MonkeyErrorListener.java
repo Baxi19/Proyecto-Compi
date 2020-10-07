@@ -18,7 +18,7 @@ public class MonkeyErrorListener extends BaseErrorListener {
         if (recognizer instanceof MonkeyScanner){
             errorMsgs.add(new String("SCANNER ERROR -> ("+line+", "+charPositionInLine + ") " + msg));
         }else{
-            errorMsgs.add(new String("ERROR -> ("+line+", "+charPositionInLine + ") " + msg));
+            errorMsgs.add(new String("SYNTACTIC ERROR -> ("+line+", "+charPositionInLine + ") " + msg));
         }
     }
 
