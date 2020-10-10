@@ -8,11 +8,13 @@ public class Main {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e){
-            // TODO Handler
+
         }
-        Opener ventanaAbrir = new Opener();
-        ventanaAbrir.setVisible(true);
-        ventanaAbrir.setDefaultCloseOperation(2);
+        //Opener ventanaAbrir = new Opener();
+        //ventanaAbrir.setVisible(true);
+        //ventanaAbrir.setDefaultCloseOperation(2);
+        Window w = new Window();
+        w.setVisible(true);
     }
 }
 

@@ -7,10 +7,11 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
-import javax.swing.text.DefaultEditorKit;
+import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,18 +19,22 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.Arrays;
 
+import static sun.plugin.javascript.navig.JSType.Document;
+
 public class Window extends JFrame {
+    MonkeyParser parser = null;
+    MonkeyScanner scanner = null;
+    CharStream input=null;
+    CommonTokenStream tokens = null;
+    ParseTree tree;
 
     private RSyntaxTextArea codeArea = new RSyntaxTextArea();
     public JTextArea terminal = new JTextArea();
-
+    private Highlighter.HighlightPainter cyanPainter;
     public JMenuBar menu;
     public JMenu file ;
     public JMenu edit;
     public JMenu run;
-
-
-
     private File archive;
     private String ruta;
     public JPanel panel = new JPanel();
@@ -40,13 +45,10 @@ public class Window extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         setJMenuBar(getMenu());
-        //getPanels();
         add(getPanels());
-
         this.setVisible(true);
-
-
     }
+
     public JMenuBar getMenu(){
         menu = new JMenuBar();
 
@@ -92,13 +94,6 @@ public class Window extends JFrame {
                 Action.ACCELERATOR_KEY,
                 KeyStroke.getAWTKeyStroke('V', Event.CTRL_MASK));
 
-/*
-        JMenuItem e1,e2,e3;
-        e1 = new JMenuItem("Cut");
-        e2 = new JMenuItem("Copy");
-        e3 = new JMenuItem("Paste");
-*/
-
         // add menu items to menu
         edit.add(copy);
         edit.add(cut);
@@ -134,8 +129,8 @@ public class Window extends JFrame {
                     try {
                         codeArea.setText(CharStreams.fromFileName(ruta).toString());
                     }catch(Exception e1){
-                        System.out.println("Can't open file");
-                        e1.printStackTrace();
+                        JOptionPane.showMessageDialog(null, "Can't open file");
+                        terminal.setText(e1.getMessage());
                     }
                 }
             }
@@ -153,8 +148,8 @@ public class Window extends JFrame {
                     fw.flush();
                     fw.close();
                 } catch(Exception e1){
-                    System.out.println("Can't save file");
-                    e1.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Can't save file");
+                    terminal.setText(e1.getMessage());
                 }
             }
         });
@@ -175,7 +170,7 @@ public class Window extends JFrame {
                         fw.flush();
                         fw.close();
                     } catch (Exception exception) {
-                        exception.printStackTrace();
+                        terminal.setText(exception.getMessage());
                     }
                 }
 
@@ -189,48 +184,15 @@ public class Window extends JFrame {
                 dispose();
             }
         });
-/*
-        //Cut
-        e1.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                codeArea.getInputMap().put(KeyStroke.getKeyStroke("control X"),"none");// disable cut
-            }
-        });
-
-        //Copy
-        e2.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                codeArea.getInputMap().put(KeyStroke.getKeyStroke("control C"), "none"); // disable copy
-            }
-        });
-
-        //Paste
-        e3.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                codeArea.getInputMap().put(KeyStroke.getKeyStroke("control V"), "none"); // disable paste
-            }
-        });
-*/
-
 
 
         // Run
         r1.addActionListener(new ActionListener() {
-            MonkeyParser parser = null;
-            MonkeyScanner scanner = null;
-            CharStream input=null;
-            CommonTokenStream tokens = null;
-            ParseTree tree;
+
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    //pinta de rojo al correr
-                    //textArea1.getHighlighter().addHighlight(1, 1, redPainter);
-
-                    input = CharStreams.fromString(codeArea.getText());
-                    scanner  = new MonkeyScanner(input);
-                    tokens  = new CommonTokenStream(scanner);
-                    parser = new MonkeyParser(tokens);
+                    parser = getParser();
 
                     MonkeyErrorListener errorListener = new MonkeyErrorListener();
                     scanner.removeErrorListeners();
@@ -240,6 +202,7 @@ public class Window extends JFrame {
                     tree = parser.program();
 
                     if(errorListener.hasErrors()){
+                        showErrors(errorListener);
                         terminal.setForeground(Color.red);
                         String erros = errorListener.toString();
                         terminal.setText(erros + "\n\n=>Compilation: Failed");
@@ -250,32 +213,24 @@ public class Window extends JFrame {
                     }
 
                 } catch(Exception e1){
-                    System.out.println("The file doesn't exist!");
-                    e1.printStackTrace();
+                    //JOptionPane.showMessageDialog(null, "The file doesn't exist!");
+                    terminal.setText(e1.getMessage());
+
                 }
 
             }
         });
         // Generate Tree
         r2.addActionListener(new ActionListener() {
-            MonkeyParser parser = null;
-            MonkeyScanner scanner = null;
-            CharStream input=null;
-            CommonTokenStream tokens = null;
-            ParseTree tree;
-            @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    input = CharStreams.fromString(codeArea.getText());
-                    scanner  = new MonkeyScanner(input);
-                    tokens = new CommonTokenStream(scanner);
-                    parser = new MonkeyParser(tokens);
+                    parser = getParser();
                     tree = parser.program();
                     TreeViewer viewr = new TreeViewer(Arrays.asList(parser.getRuleNames()),tree);
                     viewr.open();
                 } catch(Exception e1){
-                    System.out.println("The file doesn't exist!");
-                    e1.printStackTrace();
+                    //JOptionPane.showMessageDialog(null, "The file doesn't exist!");
+                    terminal.setText(e1.getMessage());
                 }
             }
         });
@@ -288,34 +243,61 @@ public class Window extends JFrame {
         return menu;
     }
 
+    //Here should mark the text with errors
+    private void showErrors(MonkeyErrorListener errorListener) {
+        cyanPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.cyan);
+        for (int i = 0; i < errorListener.errorPositions.size() ; i+=2) {
+            /*
+            try {
+                codeArea.setCaretPosition(errorListener.errorPositions.get(i));
+                codeArea.getHighlighter().addHighlight(errorListener.errorPositions.get(0),(errorListener.errorPositions.get(i+1)) , cyanPainter);
+            } catch (BadLocationException ble) {
+
+            }
+
+             */
+            System.out.println("("+ errorListener.errorPositions.get(i) + ", "+ errorListener.errorPositions.get(i+1)+")" );
+        }
+    }
+
     //split panels
     private JSplitPane getPanels() {
 
-        RSyntaxTextArea textArea = new RSyntaxTextArea(40, 220);
-        textArea.setMinimumSize(new Dimension(50, 300));
-        textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
-        textArea.setCodeFoldingEnabled(true);
-        textArea.setBackground(Color.DARK_GRAY);
-        textArea.setForeground(Color.GREEN);
-        textArea.setLineWrap(true);
-        textArea.setWrapStyleWord(true);
-        textArea.setMargin(new Insets(10,10,10,10));
-        this.codeArea = textArea;
+        codeArea = new RSyntaxTextArea(40, 220);
+        codeArea.setMinimumSize(new Dimension(50, 300));
+        codeArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+        codeArea.setCodeFoldingEnabled(true);
+        codeArea.setBackground(Color.DARK_GRAY);
+        codeArea.setForeground(Color.GREEN);
+        codeArea.setLineWrap(true);
+        codeArea.setWrapStyleWord(true);
+        codeArea.setMargin(new Insets(10,10,10,10));
+        codeArea.setAutoIndentEnabled(true);
+        codeArea.setCloseCurlyBraces(true);
+        codeArea.setBracketMatchingEnabled(true);
+        codeArea.setCloseMarkupTags(true);
+        codeArea.setAnimateBracketMatching(true);
 
-        RTextScrollPane sp = new RTextScrollPane(textArea);
+        RTextScrollPane sp = new RTextScrollPane(codeArea);
         sp.setLineNumbersEnabled(true);
         sp.setFoldIndicatorEnabled(true);
 
         //terminal
-        JTextArea terminal  = new JTextArea("Terminal");
+        terminal  = new JTextArea("Terminal");
         terminal.setEnabled(false);
         terminal.setBackground(Color.black);
         terminal.setForeground(Color.LIGHT_GRAY);
         terminal.setMargin(new Insets(10,10,10,10));
-        this.terminal = terminal;
         return new JSplitPane(JSplitPane.VERTICAL_SPLIT,  sp, terminal);
     }
 
+    private MonkeyParser getParser(){
+        input = CharStreams.fromString(codeArea.getText());
+        scanner  = new MonkeyScanner(input);
+        tokens = new CommonTokenStream(scanner);
+        parser = new MonkeyParser(tokens);
+        return parser;
+    }
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable(){
             public void run() {

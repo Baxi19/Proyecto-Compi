@@ -7,9 +7,9 @@ import java.util.ArrayList;
 
 public class MonkeyErrorListener extends BaseErrorListener {
     public ArrayList<String> errorMsgs = new ArrayList<String>();
+    public ArrayList<Integer> errorPositions = new ArrayList<>();
 
-    public MonkeyErrorListener( )
-    {
+    public MonkeyErrorListener(){
         this.errorMsgs = new ArrayList<String>();
     }
 
@@ -17,8 +17,12 @@ public class MonkeyErrorListener extends BaseErrorListener {
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException re) {
         if (recognizer instanceof MonkeyScanner){
             errorMsgs.add(new String("SCANNER ERROR -> ("+line+", "+charPositionInLine + ") " + msg));
+            errorPositions.add(line);
+            errorPositions.add(charPositionInLine);
         }else{
-            errorMsgs.add(new String("SYNTACTIC ERROR -> ("+line+", "+charPositionInLine + ") " + msg));
+            errorMsgs.add(new String("SYNTAX ERROR -> ("+line+", "+charPositionInLine + ") " + msg));
+            errorPositions.add(line);
+            errorPositions.add(charPositionInLine);
         }
     }
 
