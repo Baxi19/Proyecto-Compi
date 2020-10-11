@@ -37,7 +37,7 @@ public class Window extends JFrame {
     public JMenu run;
     private File archive;
     private String ruta;
-    public JPanel panel = new JPanel();
+    public JSplitPane panel;
     private JFileChooser fc = new JFileChooser();
 
     public Window() {
@@ -288,7 +288,8 @@ public class Window extends JFrame {
         terminal.setBackground(Color.black);
         terminal.setForeground(Color.LIGHT_GRAY);
         terminal.setMargin(new Insets(10,10,10,10));
-        return new JSplitPane(JSplitPane.VERTICAL_SPLIT,  sp, terminal);
+        panel = new JSplitPane(JSplitPane.VERTICAL_SPLIT,  sp, terminal);
+        return panel;
     }
 
     private MonkeyParser getParser(){
