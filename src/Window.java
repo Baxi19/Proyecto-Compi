@@ -1,13 +1,10 @@
 import generated.MonkeyParser;
 import generated.MonkeyScanner;
 import org.antlr.v4.gui.TreeViewer;
-import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTree;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
-import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
@@ -19,26 +16,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.Arrays;
 
-import static sun.plugin.javascript.navig.JSType.Document;
 
 public class Window extends JFrame {
-    MonkeyParser parser = null;
-    MonkeyScanner scanner = null;
-    CharStream input=null;
-    CommonTokenStream tokens = null;
-    ParseTree tree;
 
-    private RSyntaxTextArea codeArea = new RSyntaxTextArea();
-    public JTextArea terminal = new JTextArea();
     private Highlighter.HighlightPainter cyanPainter;
     public JMenuBar menu;
     public JMenu file ;
     public JMenu edit;
     public JMenu run;
-    private File archive;
-    private String ruta;
-    public JSplitPane panel;
-    private JFileChooser fc = new JFileChooser();
 
     public Window() {
         this.setLayout(new BorderLayout());
@@ -74,7 +59,7 @@ public class Window extends JFrame {
         edit = new JMenu("Edit");
 
         // create menuitems
-        ActionMap actions = codeArea.getActionMap();
+        ActionMap actions = IDLE.getInstance().codeArea.getActionMap();
         Action copy = actions.get(DefaultEditorKit.copyAction);
         Action paste = actions.get(DefaultEditorKit.pasteAction);
         Action cut = actions.get(DefaultEditorKit.cutAction);
@@ -114,7 +99,7 @@ public class Window extends JFrame {
         f1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                codeArea.setText("");
+                IDLE.getInstance().codeArea.setText("");
             }
         });
 
@@ -122,15 +107,15 @@ public class Window extends JFrame {
         f2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int selection = fc.showOpenDialog(panel);
+                int selection = IDLE.getInstance().fc.showOpenDialog(IDLE.getInstance().panel);
                 if(selection == JFileChooser.APPROVE_OPTION){
-                    archive = fc.getSelectedFile();
-                    ruta = archive.getAbsolutePath();
+                    IDLE.getInstance().archive = IDLE.getInstance().fc.getSelectedFile();
+                    IDLE.getInstance().ruta = IDLE.getInstance().archive.getAbsolutePath();
                     try {
-                        codeArea.setText(CharStreams.fromFileName(ruta).toString());
+                        IDLE.getInstance().codeArea.setText(CharStreams.fromFileName(IDLE.getInstance().ruta).toString());
                     }catch(Exception e1){
                         JOptionPane.showMessageDialog(null, "Can't open file");
-                        terminal.setText(e1.getMessage());
+                        IDLE.getInstance().terminal.setText(e1.getMessage());
                     }
                 }
             }
@@ -141,15 +126,15 @@ public class Window extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                String content = codeArea.getText();
+                String content = IDLE.getInstance().codeArea.getText();
                 try{
-                    FileWriter fw = new FileWriter(ruta);
+                    FileWriter fw = new FileWriter(IDLE.getInstance().ruta);
                     fw.write(content);
                     fw.flush();
                     fw.close();
                 } catch(Exception e1){
                     JOptionPane.showMessageDialog(null, "Can't save file");
-                    terminal.setText(e1.getMessage());
+                    IDLE.getInstance().terminal.setText(e1.getMessage());
                 }
             }
         });
@@ -162,7 +147,7 @@ public class Window extends JFrame {
                 fsave.setDialogTitle("Save File");
                 int result = fsave.showSaveDialog(null);
                 if(result == JFileChooser.APPROVE_OPTION){
-                    String content = codeArea.getText();
+                    String content = IDLE.getInstance().codeArea.getText();
                     File fi  = fsave.getSelectedFile();
                     try{
                         FileWriter fw = new FileWriter(fi.getPath());
@@ -170,7 +155,7 @@ public class Window extends JFrame {
                         fw.flush();
                         fw.close();
                     } catch (Exception exception) {
-                        terminal.setText(exception.getMessage());
+                        IDLE.getInstance().terminal.setText(exception.getMessage());
                     }
                 }
 
@@ -192,29 +177,31 @@ public class Window extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    parser = getParser();
+                    IDLE.getInstance().parser = getParser();
 
                     MonkeyErrorListener errorListener = new MonkeyErrorListener();
-                    scanner.removeErrorListeners();
-                    parser.removeErrorListeners();
-                    scanner.addErrorListener(errorListener);
-                    parser.addErrorListener(errorListener);
-                    tree = parser.program();
+                    IDLE.getInstance().scanner.removeErrorListeners();
+                    IDLE.getInstance().parser.removeErrorListeners();
+                    IDLE.getInstance().scanner.addErrorListener(errorListener);
+                    IDLE.getInstance().parser.addErrorListener(errorListener);
+                    IDLE.getInstance().tree = IDLE.getInstance().parser.program();
 
                     if(errorListener.hasErrors()){
                         showErrors(errorListener);
-                        terminal.setForeground(Color.red);
+                        //IDLE.getInstance().terminal.setForeground(Color.red);
+                        IDLE.getInstance().terminalFail();
                         String erros = errorListener.toString();
-                        terminal.setText(erros + "\n\n=>Compilation: Failed");
+                        IDLE.getInstance().terminal.setText(erros + "\n\n=>Compilation: Failed");
                     }
                     else{
-                        terminal.setForeground(Color.green);
-                        terminal.setText("Tree: " + tree.toStringTree(parser) + "\n\n=>Compilation: Successful");
+                        //IDLE.getInstance().terminal.setForeground(Color.green);
+                        IDLE.getInstance().terminalPass();
+                        IDLE.getInstance().terminal.setText("Tree: " + IDLE.getInstance().tree.toStringTree(IDLE.getInstance().parser) + "\n\n=>Compilation: Successful");
                     }
 
                 } catch(Exception e1){
                     //JOptionPane.showMessageDialog(null, "The file doesn't exist!");
-                    terminal.setText(e1.getMessage());
+                    IDLE.getInstance().terminal.setText(e1.getMessage());
 
                 }
 
@@ -224,13 +211,13 @@ public class Window extends JFrame {
         r2.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    parser = getParser();
-                    tree = parser.program();
-                    TreeViewer viewr = new TreeViewer(Arrays.asList(parser.getRuleNames()),tree);
+                    IDLE.getInstance().parser = getParser();
+                    IDLE.getInstance().tree = IDLE.getInstance().parser.program();
+                    TreeViewer viewr = new TreeViewer(Arrays.asList(IDLE.getInstance().parser.getRuleNames()),IDLE.getInstance().tree);
                     viewr.open();
                 } catch(Exception e1){
                     //JOptionPane.showMessageDialog(null, "The file doesn't exist!");
-                    terminal.setText(e1.getMessage());
+                    IDLE.getInstance().terminal.setText(e1.getMessage());
                 }
             }
         });
@@ -245,59 +232,58 @@ public class Window extends JFrame {
 
     //Here should mark the text with errors
     private void showErrors(MonkeyErrorListener errorListener) {
-        cyanPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.cyan);
-        for (int i = 0; i < errorListener.errorPositions.size() ; i+=2) {
-            /*
-            try {
-                codeArea.setCaretPosition(errorListener.errorPositions.get(i));
-                codeArea.getHighlighter().addHighlight(errorListener.errorPositions.get(0),(errorListener.errorPositions.get(i+1)) , cyanPainter);
-            } catch (BadLocationException ble) {
 
-            }
-
-             */
-            System.out.println("("+ errorListener.errorPositions.get(i) + ", "+ errorListener.errorPositions.get(i+1)+")" );
+        for (int i = 0; i < errorListener.errorPositions.size() ; i++) {
+            IDLE.getInstance().getXYText(errorListener.errorPositions.get(i).getRow(), errorListener.errorPositions.get(i).getColum());
         }
+        /*
+        int linePosition = 0;
+        cyanPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.cyan);
+        for (String line : IDLE.getInstance().codeArea.getText().split("\\n")){
+            //doStuffWithLine(line);
+            linePosition++;
+        }
+        */
     }
+
 
     //split panels
     private JSplitPane getPanels() {
+        IDLE.getInstance().codeArea = new RSyntaxTextArea(40, 220);
+        IDLE.getInstance().codeArea.setMinimumSize(new Dimension(50, 300));
+        IDLE.getInstance().codeArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
+        IDLE.getInstance().codeArea.setCodeFoldingEnabled(true);
+        IDLE.getInstance().codeArea.setBackground(Color.DARK_GRAY);
+        IDLE.getInstance().codeArea.setForeground(Color.GREEN);
+        IDLE.getInstance().codeArea.setLineWrap(true);
+        IDLE.getInstance().codeArea.setWrapStyleWord(true);
+        IDLE.getInstance().codeArea.setMargin(new Insets(10,10,10,10));
+        IDLE.getInstance().codeArea.setAutoIndentEnabled(true);
+        IDLE.getInstance().codeArea.setCloseCurlyBraces(true);
+        IDLE.getInstance().codeArea.setBracketMatchingEnabled(true);
+        IDLE.getInstance().codeArea.setCloseMarkupTags(true);
+        IDLE.getInstance().codeArea.setAnimateBracketMatching(true);
 
-        codeArea = new RSyntaxTextArea(40, 220);
-        codeArea.setMinimumSize(new Dimension(50, 300));
-        codeArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
-        codeArea.setCodeFoldingEnabled(true);
-        codeArea.setBackground(Color.DARK_GRAY);
-        codeArea.setForeground(Color.GREEN);
-        codeArea.setLineWrap(true);
-        codeArea.setWrapStyleWord(true);
-        codeArea.setMargin(new Insets(10,10,10,10));
-        codeArea.setAutoIndentEnabled(true);
-        codeArea.setCloseCurlyBraces(true);
-        codeArea.setBracketMatchingEnabled(true);
-        codeArea.setCloseMarkupTags(true);
-        codeArea.setAnimateBracketMatching(true);
-
-        RTextScrollPane sp = new RTextScrollPane(codeArea);
+        RTextScrollPane sp = new RTextScrollPane(IDLE.getInstance().codeArea);
         sp.setLineNumbersEnabled(true);
         sp.setFoldIndicatorEnabled(true);
 
         //terminal
-        terminal  = new JTextArea("Terminal");
-        terminal.setEnabled(false);
-        terminal.setBackground(Color.black);
-        terminal.setForeground(Color.LIGHT_GRAY);
-        terminal.setMargin(new Insets(10,10,10,10));
-        panel = new JSplitPane(JSplitPane.VERTICAL_SPLIT,  sp, terminal);
-        return panel;
+        IDLE.getInstance().terminal  = new RSyntaxTextArea("Terminal");
+        IDLE.getInstance().terminal.setEnabled(false);
+        IDLE.getInstance().terminal.setBackground(Color.black);
+        IDLE.getInstance().terminal.setForeground(Color.LIGHT_GRAY);
+        IDLE.getInstance().terminal.setMargin(new Insets(10,10,10,10));
+        IDLE.getInstance().panel = new JSplitPane(JSplitPane.VERTICAL_SPLIT,  sp, IDLE.getInstance().terminal);
+        return IDLE.getInstance().panel;
     }
 
     private MonkeyParser getParser(){
-        input = CharStreams.fromString(codeArea.getText());
-        scanner  = new MonkeyScanner(input);
-        tokens = new CommonTokenStream(scanner);
-        parser = new MonkeyParser(tokens);
-        return parser;
+        IDLE.getInstance().input = CharStreams.fromString(IDLE.getInstance().codeArea.getText());
+        IDLE.getInstance().scanner  = new MonkeyScanner(IDLE.getInstance().input);
+        IDLE.getInstance().tokens = new CommonTokenStream(IDLE.getInstance().scanner);
+        IDLE.getInstance().parser = new MonkeyParser(IDLE.getInstance().tokens);
+        return IDLE.getInstance().parser;
     }
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable(){
