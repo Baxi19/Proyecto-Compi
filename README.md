@@ -18,21 +18,21 @@ RSyntaxTextArea es un componente de texto de resaltado de sintaxis personalizabl
 
 **Tip: Para la solución del Scanner, se utilizo la librería ANTLR v4**.
 
-![Scanner1](images/s1.jpeg)
+![Scanner1](img/s1.jpeg)
 
-![Scanner2](images/s2.jpeg)
+![Scanner2](img/s2.jpeg)
 
 # Parser
 
 Tip: Para la solución del Parser al igual que el Scanner, se utilizo la librería ANTLR v4.
 
-![Parser1](images/p1.jpeg)
+![Parser1](img/p1.jpeg)
 
-![Parser2](images/p2.jpeg)
+![Parser2](img/p2.jpeg)
 
 # Interfaz
 
 Tip: Para la solución de la interfaz, se utilizo la librería Rsyntaxtextarea para poder visualizar de una mejor manera el código, .
 
-![Interfaz1](images/i1.jpeg)
+![Interfaz1](img/i1.jpeg)
 
