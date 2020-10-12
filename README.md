@@ -18,7 +18,7 @@ RSyntaxTextArea es un componente de texto de resaltado de sintaxis personalizabl
 
 **Tip: Para la solución del Scanner, se utilizo la librería ANTLR v4**.
 
-![../images/WhatsApp_Image_2020-10-12_at_1.11.36_AM.jpeg](Proyecto%20#1%20de%20Compiladores%20b98dc3bba0644d53ac678f5e03d418a2/WhatsApp_Image_2020-10-12_at_1.11.36_AM.jpeg)
+![./images/WhatsApp_Image_2020-10-12_at_1.11.36_AM.jpeg](Proyecto%20#1%20de%20Compiladores%20b98dc3bba0644d53ac678f5e03d418a2/WhatsApp_Image_2020-10-12_at_1.11.36_AM.jpeg)
 
 ![images/WhatsApp_Image_2020-10-12_at_1.12.39_AM.jpeg](Proyecto%20#1%20de%20Compiladores%20b98dc3bba0644d53ac678f5e03d418a2/WhatsApp_Image_2020-10-12_at_1.12.39_AM.jpeg)
 
