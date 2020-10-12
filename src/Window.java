@@ -263,6 +263,7 @@ public class Window extends JFrame {
         IDLE.getInstance().codeArea.setBracketMatchingEnabled(true);
         IDLE.getInstance().codeArea.setCloseMarkupTags(true);
         IDLE.getInstance().codeArea.setAnimateBracketMatching(true);
+        //IDLE.getInstance().codeArea.setFont(IDLE.getInstance().font);
 
         RTextScrollPane sp = new RTextScrollPane(IDLE.getInstance().codeArea);
         sp.setLineNumbersEnabled(true);

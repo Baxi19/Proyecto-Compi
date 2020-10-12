@@ -24,7 +24,7 @@ public class IDLE {
     public RSyntaxTextArea terminal = new RSyntaxTextArea();
     public JScrollPane scrollPane = new JScrollPane(codeArea);
     public JSplitPane panel = new JSplitPane();
-    public Font font = new Font("Segoe Script", Font.BOLD, 20);
+    public Font font = new Font("Console", Font.BOLD, 14);
 
     public File archive = new File("");
     public String ruta = "";
@@ -61,7 +61,6 @@ public class IDLE {
         } catch (BadLocationException e) {
             e.printStackTrace();
         }
-        System.out.println("==> " + text);
         return text;
     }
 }
