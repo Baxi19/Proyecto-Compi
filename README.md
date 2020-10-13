@@ -30,6 +30,9 @@ Tip: Para la solución del Parser al igual que el Scanner, se utilizo la librer�
 
 ![Parser2](img/p2.jpeg)
 
+![Parser3](img/p3.jpeg)
+
+![Parser4](img/p4.jpeg)
 # Interfaz
 
 Tip: Para la solución de la interfaz, se utilizo la librería Rsyntaxtextarea para poder visualizar de una mejor manera el código, .
