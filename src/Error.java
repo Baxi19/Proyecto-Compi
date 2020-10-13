@@ -1,3 +1,4 @@
+//Class will be used to get best info from errors
 public class Error {
     public int row;
     public int colum;
@@ -43,13 +44,4 @@ public class Error {
         this.type = type;
     }
 
-    @Override
-    public String toString() {
-        return "Error{" +
-                "row=" + row +
-                ", colum=" + colum +
-                ", msj='" + msj + '\'' +
-                ", type='" + type + '\'' +
-                '}';
-    }
 }

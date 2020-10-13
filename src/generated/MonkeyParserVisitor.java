@@ -39,6 +39,27 @@ public interface MonkeyParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCallExpressionStatementAST(MonkeyParser.CallExpressionStatementASTContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code letStatementAST}
+	 * labeled alternative in {@link MonkeyParser#letStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLetStatementAST(MonkeyParser.LetStatementASTContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code returnStatementAST}
+	 * labeled alternative in {@link MonkeyParser#returnStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReturnStatementAST(MonkeyParser.ReturnStatementASTContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code expressionStatementAST}
+	 * labeled alternative in {@link MonkeyParser#expressionStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpressionStatementAST(MonkeyParser.ExpressionStatementASTContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code expressionAST}
 	 * labeled alternative in {@link MonkeyParser#expression}.
 	 * @param ctx the parse tree
@@ -60,6 +81,13 @@ public interface MonkeyParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAdditionExpressionAST(MonkeyParser.AdditionExpressionASTContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code additionFactorAST}
+	 * labeled alternative in {@link MonkeyParser#additionFactor}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAdditionFactorAST(MonkeyParser.AdditionFactorASTContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code multiplicationExpressionAST}
 	 * labeled alternative in {@link MonkeyParser#multiplicationExpression}.
 	 * @param ctx the parse tree
@@ -67,12 +95,33 @@ public interface MonkeyParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMultiplicationExpressionAST(MonkeyParser.MultiplicationExpressionASTContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code multiplicationFactorAST}
+	 * labeled alternative in {@link MonkeyParser#multiplicationFactor}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMultiplicationFactorAST(MonkeyParser.MultiplicationFactorASTContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code elementExpressionAST}
 	 * labeled alternative in {@link MonkeyParser#elementExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitElementExpressionAST(MonkeyParser.ElementExpressionASTContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code elementAccessAST}
+	 * labeled alternative in {@link MonkeyParser#elementAccess}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitElementAccessAST(MonkeyParser.ElementAccessASTContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code callExpressionAST}
+	 * labeled alternative in {@link MonkeyParser#callExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCallExpressionAST(MonkeyParser.CallExpressionASTContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code primitiveExpression_numberAST}
 	 * labeled alternative in {@link MonkeyParser#primitiveExpression}.
@@ -130,19 +179,19 @@ public interface MonkeyParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPrimitiveExpression_ArrayFunctionsAST(MonkeyParser.PrimitiveExpression_ArrayFunctionsASTContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code primitiveExpression_FunctionLiteral_AST}
+	 * Visit a parse tree produced by the {@code primitiveExpression_FunctionLiteralAST}
 	 * labeled alternative in {@link MonkeyParser#primitiveExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitPrimitiveExpression_FunctionLiteral_AST(MonkeyParser.PrimitiveExpression_FunctionLiteral_ASTContext ctx);
+	T visitPrimitiveExpression_FunctionLiteralAST(MonkeyParser.PrimitiveExpression_FunctionLiteralASTContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code primitiveExpression_HashLiteral_AST}
+	 * Visit a parse tree produced by the {@code primitiveExpression_HashLiteralAST}
 	 * labeled alternative in {@link MonkeyParser#primitiveExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitPrimitiveExpression_HashLiteral_AST(MonkeyParser.PrimitiveExpression_HashLiteral_ASTContext ctx);
+	T visitPrimitiveExpression_HashLiteralAST(MonkeyParser.PrimitiveExpression_HashLiteralASTContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code primitiveExpression_PrintExpressionAST}
 	 * labeled alternative in {@link MonkeyParser#primitiveExpression}.
@@ -151,12 +200,12 @@ public interface MonkeyParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPrimitiveExpression_PrintExpressionAST(MonkeyParser.PrimitiveExpression_PrintExpressionASTContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code primitiveExpression_IfExpression}
+	 * Visit a parse tree produced by the {@code primitiveExpression_IfExpressionAST}
 	 * labeled alternative in {@link MonkeyParser#primitiveExpression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitPrimitiveExpression_IfExpression(MonkeyParser.PrimitiveExpression_IfExpressionContext ctx);
+	T visitPrimitiveExpression_IfExpressionAST(MonkeyParser.PrimitiveExpression_IfExpressionASTContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code arrayFunctions_lenAST}
 	 * labeled alternative in {@link MonkeyParser#arrayFunctions}.
@@ -193,6 +242,41 @@ public interface MonkeyParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitArrayFunctions_pushAST(MonkeyParser.ArrayFunctions_pushASTContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code arrayLiteralAST}
+	 * labeled alternative in {@link MonkeyParser#arrayLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArrayLiteralAST(MonkeyParser.ArrayLiteralASTContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code functionLiteralAST}
+	 * labeled alternative in {@link MonkeyParser#functionLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionLiteralAST(MonkeyParser.FunctionLiteralASTContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code functionParametersAST}
+	 * labeled alternative in {@link MonkeyParser#functionParameters}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFunctionParametersAST(MonkeyParser.FunctionParametersASTContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code hashLiteralAST}
+	 * labeled alternative in {@link MonkeyParser#hashLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitHashLiteralAST(MonkeyParser.HashLiteralASTContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code hashContentAST}
+	 * labeled alternative in {@link MonkeyParser#hashContent}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitHashContentAST(MonkeyParser.HashContentASTContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code expressionList_expressionAST}
 	 * labeled alternative in {@link MonkeyParser#expressionList}.
 	 * @param ctx the parse tree
@@ -206,4 +290,25 @@ public interface MonkeyParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitExpressionList_nullAST(MonkeyParser.ExpressionList_nullASTContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code printExpressionAST}
+	 * labeled alternative in {@link MonkeyParser#printExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPrintExpressionAST(MonkeyParser.PrintExpressionASTContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ifExpressionAST}
+	 * labeled alternative in {@link MonkeyParser#ifExpression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIfExpressionAST(MonkeyParser.IfExpressionASTContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code blockStatementAST}
+	 * labeled alternative in {@link MonkeyParser#blockStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlockStatementAST(MonkeyParser.BlockStatementASTContext ctx);
 }

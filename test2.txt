@@ -23,7 +23,7 @@ let fibonacci = fn(x) {
 
 // Here is an array containing two hashes, that use strings as keys and integers
 // and strings as values
-//let people = [{"name": "Anna", "age": 24}, {"name": "Bob", "age": 99}];
+let people = [{"name": "Anna", "age": 24}, {"name": "Bob", "age": 99}];
 
 /*Cometary*/
 
@@ -82,7 +82,8 @@ let newAdder = fn(a, b) {
 // This constructs a new `adder` function:
 let adder = newAdder(1, 2);
 
-adder(8); // => 11
+
+adder(8); // => 13
 
 
  

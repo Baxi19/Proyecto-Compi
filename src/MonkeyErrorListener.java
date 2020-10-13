@@ -2,15 +2,17 @@ import generated.*;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
-
 import java.util.ArrayList;
 
+//Class to get the Errors, it's extends from Base Error Listener
 public class MonkeyErrorListener extends BaseErrorListener {
-    public ArrayList<String> errorMsgs = new ArrayList<>();
-    public ArrayList<Error> errorPositions = new ArrayList<>();
+
+    public ArrayList<String> errorMsgs ;
+    public ArrayList<Error> errorPositions;
 
     public MonkeyErrorListener(){
         this.errorMsgs = new ArrayList<String>();
+        errorPositions = new ArrayList<>();
     }
 
     @Override
@@ -24,6 +26,7 @@ public class MonkeyErrorListener extends BaseErrorListener {
         }
     }
 
+    //True if has errors
     public boolean hasErrors (){
         return this.errorMsgs.size() > 0;
     }
