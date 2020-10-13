@@ -113,12 +113,10 @@ public class IDLE {
             }
             else{
                 terminalPass();
-                terminal.setText("Tree: " + IDLE.getInstance().tree.toStringTree(IDLE.getInstance().parser) + "\n\n=>Compilation: Successful");
+                terminal.setText("Tree: " + tree.toStringTree(parser) + "\n\n=>Compilation: Successful");
             }
 
-        } catch(Exception e1){
-            IDLE.getInstance().terminal.setText(e1.getMessage());
-        }
+        } catch(Exception e1){}
 
     }
 
@@ -139,8 +137,7 @@ public class IDLE {
             try {
                 codeArea.setText(CharStreams.fromFileName(path).toString());
             }catch(Exception e1){
-                JOptionPane.showMessageDialog(null, "Can't open file");
-                terminal.setText(e1.getMessage());
+                terminal.setText("Can't open file");
             }
         }
 
@@ -155,8 +152,7 @@ public class IDLE {
             fileWriter.flush();
             fileWriter.close();
         } catch(Exception e1){
-            JOptionPane.showMessageDialog(null, "Can't save file");
-            terminal.setText(e1.getMessage());
+            terminal.setText("Can't save file");
         }
     }
 
@@ -166,7 +162,7 @@ public class IDLE {
         fsave.setDialogTitle("Save File");
         int result = fsave.showSaveDialog(null);
         if(result == JFileChooser.APPROVE_OPTION){
-            String content = IDLE.getInstance().codeArea.getText();
+            String content = codeArea.getText();
             File fi  = fsave.getSelectedFile();
             try{
                 FileWriter fw = new FileWriter(fi.getPath());
@@ -174,7 +170,7 @@ public class IDLE {
                 fw.flush();
                 fw.close();
             } catch (Exception exception) {
-                IDLE.getInstance().terminal.setText(exception.getMessage());
+                terminal.setText("Can't save as file");
             }
         }
     }
