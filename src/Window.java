@@ -2,9 +2,7 @@ import org.antlr.v4.gui.TreeViewer;
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
+import java.awt.event.*;
 
 public class Window extends JFrame {
     public Window() {
@@ -14,6 +12,7 @@ public class Window extends JFrame {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         setJMenuBar(getMenu());
         add(IDLE.getInstance().getPanels());
+
         this.setVisible(true);
     }
 

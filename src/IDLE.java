@@ -16,6 +16,8 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
@@ -209,4 +211,5 @@ public class IDLE {
         panel = new JSplitPane(JSplitPane.VERTICAL_SPLIT,  sp, terminal);
         return panel;
     }
+
 }
