@@ -64,5 +64,5 @@ IDENT   : [a-zA-Z]([a-zA-Z]|[0-9]|'_')*;
 // Skiped
 //-------------------------------------------------------------------------------------------------------------------
 WS              : [ \r\t\n]+                        -> skip ;
-BLOCK_COMMENT   : '/*' (.|BLOCK_COMMENT)* '*/'      -> skip;
 SINGLE_COMMENT  : '//' ~[\r\n]* '\r'? '\n'          -> skip ;
+BLOCK_COMMENT   : '/*' (.|BLOCK_COMMENT|SINGLE_COMMENT)* '*/'      -> skip;

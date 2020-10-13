@@ -83,7 +83,7 @@ let newAdder = fn(a, b) {
 let adder = newAdder(1, 2);
 
 
-/*Super Comentary
+/*Super Comentary 
 
 //
 /**/ 
@@ -100,7 +100,6 @@ public class AddTwoIntegers {
 }
 //others comentaries
 
-End Super Comentary = 
 */
 
 

@@ -5,10 +5,8 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
-import org.fife.ui.rsyntaxtextarea.SyntaxScheme;
-import org.fife.ui.rsyntaxtextarea.Token;
+
+import org.fife.ui.rsyntaxtextarea.*;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import javax.swing.*;
@@ -16,8 +14,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
@@ -183,7 +179,7 @@ public class IDLE {
         codeArea.setMinimumSize(new Dimension(50, 300));
         codeArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
         codeArea.setCodeFoldingEnabled(true);
-        codeArea.setBackground(Color.DARK_GRAY);
+        codeArea.setBackground(Color.BLACK);
         codeArea.setForeground(Color.GREEN);
         codeArea.setAntiAliasingEnabled(true);
         codeArea.setAutoscrolls(true);
@@ -198,6 +194,20 @@ public class IDLE {
         codeArea.setCloseMarkupTags(true);
         codeArea.setAnimateBracketMatching(true);
 
+        SyntaxScheme scheme = codeArea.getSyntaxScheme();
+        scheme.getStyle(Token.COMMENT_EOL).foreground = new Color(184,183,153);
+        scheme.getStyle(Token.COMMENT_MULTILINE).foreground = new Color(184,183,153);
+
+        scheme.getStyle(Token.DATA_TYPE).foreground = Color.PINK;
+        scheme.getStyle(Token.LITERAL_STRING_DOUBLE_QUOTE).foreground = Color.cyan;
+        scheme.getStyle(Token.LITERAL_CHAR).foreground = Color.cyan;
+        scheme.getStyle(Token.LITERAL_NUMBER_DECIMAL_INT).foreground = new Color(164, 0, 0);
+        scheme.getStyle(Token.LITERAL_NUMBER_FLOAT).foreground = new Color(164, 0, 0);
+        scheme.getStyle(Token.LITERAL_BOOLEAN).foreground = Color.orange;
+        scheme.getStyle(Token.OPERATOR).foreground = Color.magenta;
+        scheme.getStyle(Token.IDENTIFIER).foreground = Color.green;
+        codeArea.revalidate();
+
         RTextScrollPane sp = new RTextScrollPane(IDLE.getInstance().codeArea);
         sp.setLineNumbersEnabled(true);
         sp.setFoldIndicatorEnabled(true);
@@ -211,5 +221,6 @@ public class IDLE {
         panel = new JSplitPane(JSplitPane.VERTICAL_SPLIT,  sp, terminal);
         return panel;
     }
+
 
 }

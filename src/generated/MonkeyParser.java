@@ -21,7 +21,7 @@ public class MonkeyParser extends Parser {
 		COMMA=8, COLON=9, LE=10, GE=11, EQUAL=12, GT=13, LT=14, ASSIGN=15, ADD=16, 
 		SUB=17, MUL=18, DIV=19, LET=20, RETURN=21, FN=22, IF=23, ELSE=24, PUTS=25, 
 		LEN=26, FIRST=27, LAST=28, REST=29, PUSH=30, TRUE=31, FALSE=32, INTEGER=33, 
-		STRING=34, IDENT=35, WS=36, BLOCK_COMMENT=37, SINGLE_COMMENT=38;
+		STRING=34, IDENT=35, WS=36, SINGLE_COMMENT=37, BLOCK_COMMENT=38;
 	public static final int
 		RULE_program = 0, RULE_statement = 1, RULE_letStatement = 2, RULE_returnStatement = 3, 
 		RULE_expressionStatement = 4, RULE_expression = 5, RULE_comparison = 6, 
@@ -58,7 +58,7 @@ public class MonkeyParser extends Parser {
 			"PYCOMMA", "COMMA", "COLON", "LE", "GE", "EQUAL", "GT", "LT", "ASSIGN", 
 			"ADD", "SUB", "MUL", "DIV", "LET", "RETURN", "FN", "IF", "ELSE", "PUTS", 
 			"LEN", "FIRST", "LAST", "REST", "PUSH", "TRUE", "FALSE", "INTEGER", "STRING", 
-			"IDENT", "WS", "BLOCK_COMMENT", "SINGLE_COMMENT"
+			"IDENT", "WS", "SINGLE_COMMENT", "BLOCK_COMMENT"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();

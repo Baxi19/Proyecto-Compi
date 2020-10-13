@@ -8,12 +8,13 @@ public class Window extends JFrame {
     public Window() {
         this.setLayout(new BorderLayout());
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //this.setMinimumSize(new Dimension(800, 600));
+        this.setMinimumSize(new Dimension(800, 600));
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         setJMenuBar(getMenu());
         add(IDLE.getInstance().getPanels());
-
+        pack();
         this.setVisible(true);
+
     }
 
     public JMenuBar getMenu(){
