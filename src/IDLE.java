@@ -33,7 +33,7 @@ public class IDLE {
 
     //Errors vars
     protected ArrayList<Error> errors = new ArrayList<>();
-    protected Highlighter.HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.red);
+    protected Highlighter.HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(new Color(153, 5, 5));
     protected MonkeyErrorListener errorListener;
 
     //IDLE interfaz vars
@@ -197,19 +197,20 @@ public class IDLE {
         SyntaxScheme scheme = codeArea.getSyntaxScheme();
         scheme.getStyle(Token.COMMENT_EOL).foreground = new Color(184,183,153);
         scheme.getStyle(Token.COMMENT_MULTILINE).foreground = new Color(184,183,153);
-        scheme.getStyle(Token.DATA_TYPE).foreground = Color.PINK;
+        scheme.getStyle(Token.DATA_TYPE).foreground = new Color(250,32,248);
         scheme.getStyle(Token.LITERAL_STRING_DOUBLE_QUOTE).foreground = Color.cyan;
         scheme.getStyle(Token.LITERAL_CHAR).foreground = Color.cyan;
-        scheme.getStyle(Token.LITERAL_NUMBER_DECIMAL_INT).foreground = new Color(164, 0, 0);
-        scheme.getStyle(Token.LITERAL_NUMBER_FLOAT).foreground = new Color(164, 0, 0);
-        scheme.getStyle(Token.LITERAL_BOOLEAN).foreground = Color.orange;
+        scheme.getStyle(Token.LITERAL_NUMBER_DECIMAL_INT).foreground = new Color(119, 67, 191);
+        scheme.getStyle(Token.LITERAL_NUMBER_FLOAT).foreground = new Color(119, 67, 191);
+        scheme.getStyle(Token.LITERAL_BOOLEAN).foreground = new Color(249, 135, 17);
         scheme.getStyle(Token.OPERATOR).foreground = Color.magenta;
         scheme.getStyle(Token.IDENTIFIER).foreground = Color.green;
+        scheme.getStyle(Token.SEPARATOR).foreground = new Color(253,145,0);
         codeArea.revalidate();
 
-        RTextScrollPane sp = new RTextScrollPane(IDLE.getInstance().codeArea);
-        sp.setLineNumbersEnabled(true);
-        sp.setFoldIndicatorEnabled(true);
+        RTextScrollPane rScroll = new RTextScrollPane(IDLE.getInstance().codeArea);
+        rScroll.setLineNumbersEnabled(true);
+        rScroll.setFoldIndicatorEnabled(true);
 
         //terminal
         terminal  = new RSyntaxTextArea("Terminal");
@@ -217,7 +218,12 @@ public class IDLE {
         terminal.setBackground(Color.black);
         terminal.setForeground(Color.BLUE);
         terminal.setMargin(new Insets(10,10,10,10));
-        panel = new JSplitPane(JSplitPane.VERTICAL_SPLIT,  sp, terminal);
+
+        JScrollPane jScroll = new JScrollPane(terminal);
+        jScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        jScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+        panel = new JSplitPane(JSplitPane.VERTICAL_SPLIT,  rScroll, jScroll);
         return panel;
     }
 
