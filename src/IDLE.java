@@ -197,7 +197,6 @@ public class IDLE {
         SyntaxScheme scheme = codeArea.getSyntaxScheme();
         scheme.getStyle(Token.COMMENT_EOL).foreground = new Color(184,183,153);
         scheme.getStyle(Token.COMMENT_MULTILINE).foreground = new Color(184,183,153);
-
         scheme.getStyle(Token.DATA_TYPE).foreground = Color.PINK;
         scheme.getStyle(Token.LITERAL_STRING_DOUBLE_QUOTE).foreground = Color.cyan;
         scheme.getStyle(Token.LITERAL_CHAR).foreground = Color.cyan;
