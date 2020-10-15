@@ -106,12 +106,22 @@ public class IDLE {
                 showErrors(errorListener);
                 terminalFail();
                 String erros = errorListener.toString();
-                terminal.setText(erros + "\n\n=>Compilation: Failed");
+                terminal.setText(erros + "\n\n=>COMPILATION: FAILED");
                 showErrors(errorListener);
             }
             else{
+                Visitor newVisitor = new Visitor();
+                newVisitor.visit(tree);
                 terminalPass();
-                terminal.setText("Tree: " + tree.toStringTree(parser) + "\n\n=>Compilation: Successful");
+
+                String terminalText = "TREE PRINT: " + tree.toStringTree(parser) + "\n\nTREE PRINT WITH VISITOR DESIGN PATTERN:\n";
+                for(int i = 0;i<newVisitor.VisitorTree.size();i++){
+                    terminalText = terminalText  +newVisitor.VisitorTree.get(i);
+                }
+
+                terminalText += "\n\n=>COMPILATION: SUCCESSFUL";
+                terminal.setText(terminalText);
+
             }
 
         } catch(Exception e1){}
