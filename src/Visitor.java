@@ -31,7 +31,7 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitStatement_LetAST(MonkeyParser.Statement_LetASTContext ctx) {
         if(ctx.LET()!= null){
-            VisitorTree.add("\n" + Tabs(Tabs) + " "+ ctx.getText());
+            VisitorTree.add("\n" + " "+ ctx.getText());
         }if(ctx.letStatement()!= null){
             Tabs++;
             visit(ctx.letStatement());
@@ -63,11 +63,14 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
         String X = null;
         if(ctx.ASSIGN()!= null){
             X = ctx.getText();
-        }else if(ctx.IDENT()!=null){
+        }
+        if(ctx.IDENT()!=null){
             X = ctx.getText();
-        }else if(ctx.PYCOMMA()!=null){
+        }
+        if(ctx.PYCOMMA()!=null){
             X = ctx.getText();
-        }else if(ctx.expression()!=null){
+        }
+        if(ctx.expression()!=null){
             Tabs++;
             visit(ctx.expression());
             Tabs--;
@@ -85,7 +88,8 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
             Tabs++;
             visit(ctx.expression());
             Tabs--;
-        }else if(ctx.PYCOMMA()!=null){
+        }
+        if(ctx.PYCOMMA()!=null){
             VisitorTree.add(" "+ctx.getText());
         }
         return null;
@@ -98,7 +102,8 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
             Tabs++;
             visit(ctx.expression());
             Tabs--;
-        }else if(ctx.PYCOMMA()!=null){
+        }
+        if(ctx.PYCOMMA()!=null){
             VisitorTree.add(" "+ctx.getText());
         }
         return null;
@@ -111,7 +116,8 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
             Tabs++;
             visit(ctx.additionExpression());
             Tabs--;
-        }else if(ctx.comparison()!=null){
+        }
+        if(ctx.comparison()!=null){
             Tabs++;
             visit(ctx.comparison());
             Tabs--;
@@ -128,19 +134,19 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
             Tabs--;
         }
         for(int i = 0; i < ctx.LT().size();i++){
-            VisitorTree.add(Tabs(Tabs) + " "+ctx.LT().get(i).getText());
+            VisitorTree.add(" "+ctx.LT().get(i).getText());
         }
         for(int i = 0; i < ctx.GT().size();i++){
-            VisitorTree.add(Tabs(Tabs) + " "+ctx.GT().get(i).getText());
+            VisitorTree.add(" "+ctx.GT().get(i).getText());
         }
         for(int i = 0; i < ctx.LE().size();i++){
-            VisitorTree.add(Tabs(Tabs) + " "+ctx.LE().get(i).getText());
+            VisitorTree.add(" "+ctx.LE().get(i).getText());
         }
         for(int i = 0; i < ctx.GE().size();i++){
-            VisitorTree.add(Tabs(Tabs) + " "+ctx.GE().get(i).getText());
+            VisitorTree.add(" "+ctx.GE().get(i).getText());
         }
         for(int i = 0; i < ctx.EQUAL().size();i++){
-            VisitorTree.add(Tabs(Tabs) + " "+ctx.EQUAL().get(i).getText());
+            VisitorTree.add(" "+ctx.EQUAL().get(i).getText());
         }
         return null;
     }
@@ -152,7 +158,8 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
             Tabs++;
             visit(ctx.additionFactor());
             Tabs--;
-        }else if(ctx.multiplicationExpression()!=null){
+        }
+        if(ctx.multiplicationExpression()!=null){
             Tabs++;
             visit(ctx.multiplicationExpression());
             Tabs--;
@@ -168,10 +175,10 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
             Tabs--;
         }
         for(int i = 0; i < ctx.ADD().size();i++){
-            VisitorTree.add(Tabs(Tabs) + " "+ctx.ADD().get(i).getText());
+            VisitorTree.add(" "+ctx.ADD().get(i).getText());
         }
         for(int i = 0; i < ctx.SUB().size();i++){
-            VisitorTree.add(Tabs(Tabs) + " "+ctx.SUB().get(i).getText());
+            VisitorTree.add(" "+ctx.SUB().get(i).getText());
         }
         return null;
     }
@@ -183,7 +190,8 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
             Tabs++;
             visit(ctx.elementExpression());
             Tabs--;
-        }else if(ctx.multiplicationFactor()!=null){
+        }
+        if(ctx.multiplicationFactor()!=null){
             Tabs++;
             visit(ctx.multiplicationFactor());
             Tabs--;
@@ -200,10 +208,10 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
             Tabs--;
         }
         for(int i = 0; i < ctx.MUL().size();i++){
-            VisitorTree.add(Tabs(Tabs) + " "+ctx.MUL().get(i).getText());
+            VisitorTree.add(" "+ctx.MUL().get(i).getText());
         }
         for(int i = 0; i < ctx.DIV().size();i++){
-            VisitorTree.add(Tabs(Tabs) + " "+ctx.DIV().get(i).getText());
+            VisitorTree.add(" "+ctx.DIV().get(i).getText());
         }
         return null;
     }
@@ -215,11 +223,13 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
             Tabs++;
             visit(ctx.primitiveExpression());
             Tabs--;
-        }else if(ctx.elementAccess()!=null){
+        }
+        if(ctx.elementAccess()!=null){
             Tabs++;
             visit(ctx.elementAccess());
             Tabs--;
-        }else if(ctx.callExpression()!=null){
+        }
+        if(ctx.callExpression()!=null){
             Tabs++;
             visit(ctx.callExpression());
             Tabs--;
@@ -232,9 +242,11 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
         VisitorTree.add("\n" + Tabs(Tabs)+" Element Access ");
         if(ctx.L_BRACK()!=null){
             VisitorTree.add(" "+ctx.getText());
-        }else if(ctx.R_BRACK()!=null){
+        }
+        if(ctx.R_BRACK()!=null){
             VisitorTree.add(" "+ctx.getText());
-        }else if(ctx.expression()!=null){
+        }
+        if(ctx.expression()!=null){
             Tabs++;
             visit(ctx.expression());
             Tabs--;
@@ -247,9 +259,11 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
         VisitorTree.add("\n" + Tabs(Tabs)+" Call Expression ");
         if(ctx.L_PAREN()!=null){
             VisitorTree.add(" "+ctx.getText());
-        }else if(ctx.R_PAREN()!=null){
+        }
+        if(ctx.R_PAREN()!=null){
             VisitorTree.add(" "+ctx.getText());
-        }else if(ctx.expressionList()!=null){
+        }
+        if(ctx.expressionList()!=null){
             Tabs++;
             visit(ctx.expressionList());
             Tabs--;
@@ -292,9 +306,11 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
         VisitorTree.add("\n" + Tabs(Tabs)+" Expression ");
         if(ctx.L_PAREN()!=null){
             VisitorTree.add(" "+ctx.getText());
-        }else if(ctx.R_PAREN()!=null){
+        }
+        if(ctx.R_PAREN()!=null){
             VisitorTree.add(" "+ctx.getText());
-        }else if(ctx.expression()!=null){
+        }
+        if(ctx.expression()!=null){
             Tabs++;
             visit(ctx.expression());
             Tabs--;
@@ -317,13 +333,16 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
 
         if(ctx.L_PAREN()!=null){
             VisitorTree.add(" "+ctx.getText());
-        }else if(ctx.R_PAREN()!=null){
+        }
+        if(ctx.R_PAREN()!=null){
             VisitorTree.add(" "+ctx.getText());
-        }else if(ctx.arrayFunctions()!=null){
+        }
+        if(ctx.arrayFunctions()!=null){
             Tabs++;
             visit(ctx.arrayFunctions());
             Tabs--;
-        }else if(ctx.expressionList()!=null){
+        }
+        if(ctx.expressionList()!=null){
             Tabs++;
             visit(ctx.expressionList());
             Tabs--;
@@ -402,9 +421,11 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
         VisitorTree.add("\n" + Tabs(Tabs)+" Array Literal ");
         if(ctx.L_BRACK()!=null){
             VisitorTree.add(" "+ctx.getText());
-        }else if(ctx.R_BRACK()!=null){
+        }
+        if(ctx.R_BRACK()!=null){
             VisitorTree.add(" "+ctx.getText());
-        }else if(ctx.expressionList()!=null){
+        }
+        if(ctx.expressionList()!=null){
             Tabs++;
             visit(ctx.expressionList());
             Tabs--;
@@ -417,15 +438,19 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
         VisitorTree.add("\n" + Tabs(Tabs)+" Function Literal ");
         if(ctx.FN()!=null){
             VisitorTree.add(" "+ctx.getText());
-        }else if(ctx.L_PAREN()!=null){
+        }
+        if(ctx.L_PAREN()!=null){
             VisitorTree.add(" "+ctx.getText());
-        }else if(ctx.R_PAREN()!=null){
+        }
+        if(ctx.R_PAREN()!=null){
             VisitorTree.add(" "+ctx.getText());
-        }else if(ctx.functionParameters()!=null){
+        }
+        if(ctx.functionParameters()!=null){
             Tabs++;
             visit(ctx.functionParameters());
             Tabs--;
-        }else if(ctx.blockStatement()!=null){
+        }
+        if(ctx.blockStatement()!=null){
             Tabs++;
             visit(ctx.blockStatement());
             Tabs--;
@@ -435,12 +460,12 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitFunctionParametersAST(MonkeyParser.FunctionParametersASTContext ctx) {
-        System.out.println(Tabs(Tabs) + " Function Parameters ");
+        VisitorTree.add(Tabs(Tabs) + " Function Parameters ");
         for(int i = 0; i < ctx.IDENT().size();i++){
-            VisitorTree.add(Tabs(Tabs) +" "+ ctx.IDENT().get(i).getText());
+            VisitorTree.add(" "+ ctx.IDENT().get(i).getText());
         }
         for(int i = 0; i < ctx.COMMA().size();i++){
-            VisitorTree.add(Tabs(Tabs) + " "+ ctx.COMMA().get(i).getText());
+            VisitorTree.add(" "+ ctx.COMMA().get(i).getText());
         }
         return null;
     }
@@ -454,7 +479,7 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
             Tabs--;
         }
         for(int i = 0; i < ctx.COMMA().size();i++){
-            VisitorTree.add(Tabs(Tabs) +" "+ ctx.COMMA().get(i).getText());
+            VisitorTree.add(" "+ ctx.COMMA().get(i).getText());
         }
         if(ctx.L_BRACE()!=null){
             VisitorTree.add(" "+ctx.getText());
@@ -469,7 +494,7 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
             VisitorTree.add(" "+ctx.getText());
         }
         for(int i = 0; i < ctx.expression().size();i++){
-            VisitorTree.add(Tabs(Tabs) + " "+ctx.expression().get(i).getText());
+            VisitorTree.add(" "+ctx.expression().get(i).getText());
         }
         return null;
     }
@@ -478,10 +503,10 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
     public Object visitExpressionList_expressionAST(MonkeyParser.ExpressionList_expressionASTContext ctx) {
         VisitorTree.add("\n" + Tabs(Tabs)+" Expression List - Expression ");
         for(int i = 0; i < ctx.expression().size();i++){
-            VisitorTree.add(Tabs(Tabs) + " "+ ctx.expression().get(i).getText());
+            VisitorTree.add(" "+ ctx.expression().get(i).getText());
         }
         for(int i = 0; i < ctx.COMMA().size();i++){
-            VisitorTree.add(Tabs(Tabs) +" "+ ctx.expression().get(i).getText());
+            VisitorTree.add(" "+ ctx.expression().get(i).getText());
         }
         return null;
     }
@@ -497,11 +522,14 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
         VisitorTree.add("\n" + Tabs(Tabs)+" Print - Expression ");
         if(ctx.PUTS()!=null){
             VisitorTree.add(" "+ctx.getText());
-        }else if(ctx.L_PAREN()!=null){
+        }
+        if(ctx.L_PAREN()!=null){
             VisitorTree.add(" "+ctx.getText());
-        }else if(ctx.R_PAREN()!=null){
+        }
+        if(ctx.R_PAREN()!=null){
             VisitorTree.add(" "+ctx.getText());
-        }else if(ctx.expression()!=null){
+        }
+        if(ctx.expression()!=null){
             Tabs++;
             visit(ctx.expression());
             Tabs--;
@@ -514,9 +542,11 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
         VisitorTree.add("\n" + Tabs(Tabs)+" If - Expression ");
         if(ctx.IF()!=null){
             VisitorTree.add(" "+ ctx.getText());
-        }else if(ctx.ELSE()!=null){
+        }
+        if(ctx.ELSE()!=null){
             VisitorTree.add(" "+ctx.getText());
-        }else if(ctx.expression()!=null){
+        }
+        if(ctx.expression()!=null){
             Tabs++;
             visit(ctx.expression());
             Tabs--;
