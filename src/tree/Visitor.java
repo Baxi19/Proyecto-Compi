@@ -1,3 +1,5 @@
+package tree;
+
 import generated.MonkeyParser;
 import generated.MonkeyParserBaseVisitor;
 
@@ -7,7 +9,7 @@ import java.util.ArrayList;
 public class Visitor extends MonkeyParserBaseVisitor<Object> {
 
     private int Tabs=0;
-    ArrayList<String> VisitorTree = new ArrayList<String>();
+    public ArrayList<String> VisitorTree = new ArrayList<>();
 
     private String Tabs(int cantTabs){
         String res="";

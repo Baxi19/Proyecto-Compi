@@ -1,3 +1,7 @@
+package frontend;
+
+import errors.Error;
+import errors.MonkeyErrorListener;
 import generated.MonkeyParser;
 import generated.MonkeyScanner;
 import org.antlr.v4.gui.TreeViewer;
@@ -8,6 +12,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import org.fife.ui.rsyntaxtextarea.*;
 import org.fife.ui.rtextarea.RTextScrollPane;
+import tree.Visitor;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
@@ -18,6 +23,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+
 
 //Singleton class will get all important methods
 public class IDLE {

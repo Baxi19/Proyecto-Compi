@@ -1,10 +1,13 @@
+package errors;
+
+import errors.Error;
 import generated.*;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import java.util.ArrayList;
 
-//Class to get the Errors, it's extends from Base Error Listener
+//Class to get the Errors, it's extends from Base errors.Error Listener
 public class MonkeyErrorListener extends BaseErrorListener {
 
     public ArrayList<String> errorMsgs ;

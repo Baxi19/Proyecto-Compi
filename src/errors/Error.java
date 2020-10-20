@@ -1,3 +1,5 @@
+package errors;
+
 //Class will be used to get best info from errors
 public class Error {
     public int row;
