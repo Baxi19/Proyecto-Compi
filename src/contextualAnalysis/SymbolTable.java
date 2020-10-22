@@ -75,9 +75,6 @@ public class SymbolTable {
         for (int i = 0; i < table.size(); i++) {
             Token s = ( Token ) ((Ident) table.get(i)).token;
             tableData += "\nNombre: " + s.getText() + " - Nivel: " + ((Ident) table.get(i)).level;
-            /*            if (s.getType() == 0) System.out.println("\tTipo: Indefinido");
-            else if (s.getType() == 1) System.out.println("\tTipo: Integer\n");
-            else if (s.getType() == 2) System.out.println("\tTipo: String\n");*/
         }
         tableData += "\n------TABLE END-------";
         return tableData;
