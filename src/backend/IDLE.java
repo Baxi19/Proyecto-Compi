@@ -1,4 +1,4 @@
-package frontend;
+package backend;
 
 import errors.Error;
 import errors.MonkeyErrorListener;
@@ -44,8 +44,8 @@ public class IDLE {
     protected MonkeyErrorListener errorListener;
 
     //IDLE interfaz vars
-    protected RSyntaxTextArea codeArea = new RSyntaxTextArea();
-    protected RSyntaxTextArea terminal = new RSyntaxTextArea();
+    public RSyntaxTextArea codeArea = new RSyntaxTextArea();
+    public RSyntaxTextArea terminal = new RSyntaxTextArea();
     protected JSplitPane panel = new JSplitPane();
 
     //Vars to get the user files
@@ -54,7 +54,7 @@ public class IDLE {
     protected JFileChooser fileChooser = new JFileChooser();
 
     //Singleton
-    protected static IDLE getInstance(){
+    public static IDLE getInstance(){
         if (instance == null) {
             instance = new IDLE();
         }
@@ -91,14 +91,14 @@ public class IDLE {
     }
 
     //Show Tree
-    protected TreeViewer generateTree() {
+    public TreeViewer generateTree() {
         getParser();
         tree = parser.program();
         return new TreeViewer(Arrays.asList(parser.getRuleNames()),tree);
     }
 
     //Execute app
-    protected void run(){
+    public void run(){
         try {
             codeArea.getHighlighter().removeAllHighlights();
             getParser();
@@ -144,7 +144,7 @@ public class IDLE {
     }
 
     //Open File
-    protected void openFile(){
+    public void openFile(){
         int selection = fileChooser.showOpenDialog(panel);
         if(selection == JFileChooser.APPROVE_OPTION){
             archive = fileChooser.getSelectedFile();
@@ -159,7 +159,7 @@ public class IDLE {
     }
 
     //Save file
-    protected void saveFile() {
+    public void saveFile() {
         String content = codeArea.getText();
         try{
             FileWriter fileWriter = new FileWriter(path);
@@ -172,7 +172,7 @@ public class IDLE {
     }
 
     //Save file As
-    protected void saveFileAs() {
+    public void saveFileAs() {
         JFileChooser fsave = new JFileChooser();
         fsave.setDialogTitle("Save File");
         int result = fsave.showSaveDialog(null);
@@ -191,7 +191,7 @@ public class IDLE {
     }
 
     //split panels
-    protected JSplitPane getPanels() {
+    public JSplitPane getPanels() {
         codeArea = new RSyntaxTextArea(40, 220);
         codeArea.setMinimumSize(new Dimension(50, 300));
         codeArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);

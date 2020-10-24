@@ -1,11 +1,13 @@
 package frontend;
 
+import backend.IDLE;
 import org.antlr.v4.gui.TreeViewer;
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.*;
 
+//Class Window, will show the code area and the terminal too
 public class Window extends JFrame {
     public Window() {
         this.setLayout(new BorderLayout());
@@ -16,9 +18,9 @@ public class Window extends JFrame {
         add(IDLE.getInstance().getPanels());
         pack();
         this.setVisible(true);
-
     }
 
+    //Menu
     public JMenuBar getMenu(){
         JMenuBar menu;
         JMenu file ;
@@ -53,6 +55,7 @@ public class Window extends JFrame {
         Action paste = actions.get(DefaultEditorKit.pasteAction);
         Action cut = actions.get(DefaultEditorKit.cutAction);
 
+        // basics events
         copy.putValue(Action.NAME, "Copy");
         copy.putValue(
                 Action.ACCELERATOR_KEY,
