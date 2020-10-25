@@ -9,7 +9,6 @@ import java.util.LinkedList;
 // Symbols Table
 public class SymbolTable {
     LinkedList<Object> table;
-
     private int currentLevel;
 
     class Ident{
@@ -36,6 +35,7 @@ public class SymbolTable {
         this.currentLevel=-1;
     }
 
+    //TODO: Make
     public void insertar(Token id, ParserRuleContext decl) {
         //no se puede insertar un elemento repetido en el mismo nivel
         Ident i = new Ident(id,decl);
@@ -44,22 +44,25 @@ public class SymbolTable {
 
     public Ident search(String nombre){
         Ident temp=null;
-        for(Object id : table)
-            if (((Ident)id).token.getText().equals(nombre))
-                temp = ((Ident)id);
+        for(Object id : table) {
+            if ((( Ident ) id).token.getText().equals(nombre)){
+                temp = (( Ident ) id);
+            }
+        }
         return temp;
     }
 
     public Ident searchReverse(String nombre){
         Collections.reverse(table);
         Ident temp=null;
-        for(Object id : table)
-            if (((Ident)id).token.getText().equals(nombre))
+        for(Object id : table){
+            if (((Ident)id).token.getText().equals(nombre)){
                 temp = ((Ident)id);
+            }
+        }
         Collections.reverse(table);
         return temp;
     }
-
 
     public void openScope(){
         currentLevel++;

@@ -62,7 +62,7 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitLetStatementAST(MonkeyParser.LetStatementASTContext ctx) {
-        String X = null;
+       /* String X = null;
         if(ctx.ASSIGN()!= null){
             X = ctx.getText();
         }
@@ -80,6 +80,8 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
         if(X != null){
             VisitorTree.add("\n" + Tabs(Tabs)+ " Let Statement " + " "+ X);
         }
+
+        */
         return null;
     }
 

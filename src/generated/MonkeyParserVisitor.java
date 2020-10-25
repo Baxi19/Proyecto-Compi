@@ -1,5 +1,8 @@
 // Generated from C:/Users/Baxi/Desktop/Proyecto Compi\MonkeyParser.g4 by ANTLR 4.8
 package generated;
+
+    import contextualAnalysis.TablaSimbolos;
+
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -311,4 +314,11 @@ public interface MonkeyParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitBlockStatementAST(MonkeyParser.BlockStatementASTContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code identAST}
+	 * labeled alternative in {@link MonkeyParser#ident}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIdentAST(MonkeyParser.IdentASTContext ctx);
 }
