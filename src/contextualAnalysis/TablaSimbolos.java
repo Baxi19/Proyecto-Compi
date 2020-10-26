@@ -45,9 +45,11 @@ public class TablaSimbolos {
     public Ident buscar(String nombre){
         //debe buscarse en otro orden... de atrás para adelante
         Ident temp=null;
-        for(Object id : tabla)
-            if (((Ident)id).tok.getText().equals(nombre))
-                temp = ((Ident)id);
+        for(Object id : tabla) {
+            if ((( Ident ) id).tok.getText().equals(nombre)) {
+                temp = (( Ident ) id);
+            }
+        }
         return temp;
     }
 
@@ -65,9 +67,13 @@ public class TablaSimbolos {
         for (int i = 0; i < tabla.size(); i++) {
             Token s = ( Token ) ((Ident) tabla.get(i)).tok;
             System.out.println("Nombre: " + s.getText() + " - " + ((Ident) tabla.get(i)).nivel + " - " + ((Ident) tabla.get(i)).type);
-/*            if (s.getType() == 0) System.out.println("\tTipo: Indefinido");
-            else if (s.getType() == 1) System.out.println("\tTipo: Integer\n");
-            else if (s.getType() == 2) System.out.println("\tTipo: String\n");*/
+            if (s.getType() == 0){
+                System.out.println("Tipo: Indefinido");
+            }else if (s.getType() == 1) {
+                System.out.println("Tipo: Integer");
+            }else if (s.getType() == 2) {
+                System.out.println("Tipo: String");
+            }
         }
         System.out.println("----- FIN TABLA ------");
     }

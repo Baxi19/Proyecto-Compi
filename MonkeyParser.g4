@@ -9,15 +9,17 @@ options {
 
 @header {
     import contextualAnalysis.TablaSimbolos;
+    import contextualAnalysis.SymbolTable;
 }
 
 @members {
     private contextualAnalysis.TablaSimbolos symbols = new contextualAnalysis.TablaSimbolos();
+    private contextualAnalysis.SymbolTable symbols2 = new contextualAnalysis.SymbolTable();
 }
 //-------------------------------------------------------------------------------------------------------------------
 //                               Grammar for Monkey Language
 //-------------------------------------------------------------------------------------------------------------------
-program  	                    : {symbols.openScope();}
+program  	                    :{symbols.openScope();}
                                 statement*
                                 {symbols.imprimir(); symbols.closeScope();}                                             #programAST;
 
@@ -28,7 +30,7 @@ statement  	                    :LET letStatement                               
 
 //-------------------------------------------------------------------------------------------------------------------
 letStatement                    : IDENT ASSIGN expression (PYCOMMA | )
-{symbols.insertar($IDENT,0,$ctx);}
+                                {symbols.insertar($IDENT,0,$ctx);}
                                                                                                                         #letStatementAST;
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -70,7 +72,7 @@ callExpression	                : L_PAREN expressionList R_PAREN                 
 primitiveExpression	            : INTEGER                                                                               #primitiveExpression_numberAST
                                 | STRING                                                                                #primitiveExpression_stringAST
                                 | IDENT
-                                {if ( symbols.buscar($IDENT.text) == null ) {
+                                {if (symbols.buscar($IDENT.text) == null) {
                                     System.err.println("undefined variable: "+$IDENT.text+ " in : ["+$IDENT.line+","+$IDENT.pos + "]");
                                 }}                                                                                      #primitiveExpression_identAST
                                 | TRUE                                                                                  #primitiveExpression_trueAST

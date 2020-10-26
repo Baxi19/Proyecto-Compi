@@ -4,11 +4,11 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 
 import java.util.Collections;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 // Symbols Table
 public class SymbolTable {
-    LinkedList<Object> table;
+    ArrayList<Object> table;
     private int currentLevel;
 
     class Ident{
@@ -31,7 +31,7 @@ public class SymbolTable {
     }
 
     public SymbolTable() {
-        table = new LinkedList<Object>();
+        table = new ArrayList<Object>();
         this.currentLevel=-1;
     }
 

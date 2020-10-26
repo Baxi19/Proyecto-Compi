@@ -1288,7 +1288,7 @@ public class MonkeyParser extends Parser {
 				{
 				setState(133);
 				((PrimitiveExpression_identASTContext)_localctx).IDENT = match(IDENT);
-				if ( symbols.buscar((((PrimitiveExpression_identASTContext)_localctx).IDENT!=null?((PrimitiveExpression_identASTContext)_localctx).IDENT.getText():null)) == null ) {
+				if (symbols.buscar((((PrimitiveExpression_identASTContext)_localctx).IDENT!=null?((PrimitiveExpression_identASTContext)_localctx).IDENT.getText():null)) == null) {
 				                                    System.err.println("undefined variable: "+(((PrimitiveExpression_identASTContext)_localctx).IDENT!=null?((PrimitiveExpression_identASTContext)_localctx).IDENT.getText():null)+ " in : ["+(((PrimitiveExpression_identASTContext)_localctx).IDENT!=null?((PrimitiveExpression_identASTContext)_localctx).IDENT.getLine():0)+","+(((PrimitiveExpression_identASTContext)_localctx).IDENT!=null?((PrimitiveExpression_identASTContext)_localctx).IDENT.getCharPositionInLine():0) + "]");
 				                                }
 				}

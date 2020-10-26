@@ -1,10 +1,13 @@
 package contextualAnalysis;
 
+import backend.IDLE;
+import errors.Error;
 import generated.MonkeyParser;
 import generated.MonkeyParserBaseVisitor;
 
 //tree.Visitor, Used by Save the simbols table
 public class Visitor extends MonkeyParserBaseVisitor<Object> {
+    private TablaSimbolos tablaSimbolos = new TablaSimbolos();
 
     @Override
     public Object visitProgramAST(MonkeyParser.ProgramASTContext ctx) {
@@ -32,6 +35,17 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitLetStatementAST(MonkeyParser.LetStatementASTContext ctx) {
+        String name = ctx.IDENT.getText();
+        int type = ( int ) visit(ctx.expression());
+        TablaSimbolos.Ident ident =tablaSimbolos.buscar(name);
+        //TODO: Finish If
+        if(ident != null){
+            System.out.println("Variable has been already declared");
+        }else{
+            IDLE.getInstance().errorsContextual.add(
+                    new Error(ctx.IDENT.getLine(), ctx.IDENT.getCharPositionInLine(),
+                            "Variable '" + name + "' has not been declared in current context", "CONTEXT ERROR"));
+        }
         return null;
     }
 
@@ -92,12 +106,12 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitPrimitiveExpression_numberAST(MonkeyParser.PrimitiveExpression_numberASTContext ctx) {
-        return null;
+        return 0;
     }
 
     @Override
     public Object visitPrimitiveExpression_stringAST(MonkeyParser.PrimitiveExpression_stringASTContext ctx) {
-        return null;
+        return 1;
     }
 
     @Override

@@ -65,4 +65,4 @@ IDENT   : [a-zA-Z]([a-zA-Z]|[0-9]|'_')*;
 //-------------------------------------------------------------------------------------------------------------------
 WS              : [ \r\t\n]+                                        -> skip ;
 SINGLE_COMMENT  : '//' ~[\r\n]* '\r'? '\n'                          -> skip ;
-BLOCK_COMMENT   : '/*' (.|BLOCK_COMMENT|SINGLE_COMMENT)* '*/'       -> skip;
+BLOCK_COMMENT   : '/*' (.|BLOCK_COMMENT|SINGLE_COMMENT)* '*/'       -> skip ;

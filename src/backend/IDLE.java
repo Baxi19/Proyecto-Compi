@@ -40,6 +40,7 @@ public class IDLE {
 
     //Errors vars
     protected ArrayList<Error> errors = new ArrayList<>();
+    public ArrayList<Error> errorsContextual = new ArrayList<>();
     protected Highlighter.HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(new Color(153, 5, 5));
     protected MonkeyErrorListener errorListener;
 
@@ -115,8 +116,9 @@ public class IDLE {
                 String erros = errorListener.toString();
                 terminal.setText(erros + "\n\n=>COMPILATION: FAILED");
                 showErrors(errorListener);
-            }
-            else{
+            }else{
+
+
                 Visitor newVisitor = new Visitor();
                 newVisitor.visit(tree);
                 terminalPass();
@@ -128,6 +130,7 @@ public class IDLE {
 
                 terminalText += "\n\n=>COMPILATION: SUCCESSFUL";
                 terminal.setText(terminalText);
+
 
             }
 

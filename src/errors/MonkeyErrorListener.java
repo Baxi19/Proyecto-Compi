@@ -1,6 +1,5 @@
 package errors;
 
-import errors.Error;
 import generated.*;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.RecognitionException;
