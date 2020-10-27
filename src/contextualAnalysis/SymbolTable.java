@@ -11,7 +11,7 @@ public class SymbolTable {
     ArrayList<Object> table;
     private int currentLevel;
 
-    class Ident{
+    public class Ident{
         Token token;
         int level;
         int value;

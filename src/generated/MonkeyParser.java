@@ -2,6 +2,7 @@
 package generated;
 
     import contextualAnalysis.TablaSimbolos;
+    import contextualAnalysis.SymbolTable;
 
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
@@ -113,6 +114,7 @@ public class MonkeyParser extends Parser {
 
 
 	    private contextualAnalysis.TablaSimbolos symbols = new contextualAnalysis.TablaSimbolos();
+	    private contextualAnalysis.SymbolTable symbols2 = new contextualAnalysis.SymbolTable();
 
 	public MonkeyParser(TokenStream input) {
 		super(input);

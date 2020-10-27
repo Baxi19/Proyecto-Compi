@@ -2,6 +2,7 @@
 package generated;
 
     import contextualAnalysis.TablaSimbolos;
+    import contextualAnalysis.SymbolTable;
 
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 

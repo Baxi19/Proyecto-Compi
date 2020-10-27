@@ -39,10 +39,10 @@ public class IDLE {
     protected ParseTree tree = null;
 
     //Errors vars
-    protected ArrayList<Error> errors = new ArrayList<>();
-    public ArrayList<Error> errorsContextual = new ArrayList<>();
     protected Highlighter.HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(new Color(153, 5, 5));
     protected MonkeyErrorListener errorListener;
+    protected ArrayList<Error> errors = new ArrayList<>();
+    public ArrayList<Error> errorsContextual = new ArrayList<>();
 
     //IDLE interfaz vars
     public RSyntaxTextArea codeArea = new RSyntaxTextArea();
@@ -116,11 +116,11 @@ public class IDLE {
                 String erros = errorListener.toString();
                 terminal.setText(erros + "\n\n=>COMPILATION: FAILED");
                 showErrors(errorListener);
+
             }else{
-
-
                 Visitor newVisitor = new Visitor();
                 newVisitor.visit(tree);
+
                 terminalPass();
 
                 String terminalText = "TREE PRINT: " + tree.toStringTree(parser) + "\n\nTREE PRINT WITH VISITOR DESIGN PATTERN:\n";

@@ -7,12 +7,15 @@ import generated.MonkeyParserBaseVisitor;
 
 //tree.Visitor, Used by Save the simbols table
 public class Visitor extends MonkeyParserBaseVisitor<Object> {
-    private TablaSimbolos tablaSimbolos = new TablaSimbolos();
+    private int level=-1;
+    private SymbolTable symbolTable = new SymbolTable();
 
     @Override
     public Object visitProgramAST(MonkeyParser.ProgramASTContext ctx) {
         for(int i = 0; i < ctx.statement().size();i++){
+            level++;
             visit(ctx.statement(i));
+            level--;
         }
         return null;
     }
@@ -36,8 +39,9 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitLetStatementAST(MonkeyParser.LetStatementASTContext ctx) {
         String name = ctx.IDENT.getText();
+        //type will be used to save in table
         int type = ( int ) visit(ctx.expression());
-        TablaSimbolos.Ident ident =tablaSimbolos.buscar(name);
+        SymbolTable.Ident ident = symbolTable.search(name);
         //TODO: Finish If
         if(ident != null){
             System.out.println("Variable has been already declared");
