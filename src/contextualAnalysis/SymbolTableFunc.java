@@ -5,21 +5,20 @@ import errors.Error;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 
-import java.util.Collections;
 import java.util.ArrayList;
+import java.util.Collections;
 
 // Symbols Table
-public class SymbolTable {
+public class SymbolTableFunc {
     ArrayList<Object> table;
     private int currentLevel;
 
     public static class Ident{
+
         Token token;
         int level;
         int value;
         TYPE type;
-        ParserRuleContext declCtx;
-        ArrayList<Token> parameters;
 
         //Type added
         enum TYPE {
@@ -33,13 +32,14 @@ public class SymbolTable {
             FUNC
         }
 
+        ParserRuleContext declCtx;
+
         public Ident(Token tok,int level ,ParserRuleContext decl){
             this.token = tok;
             this.level=level;
             this.value = 0;
             this.type = TYPE.NEUTRAL;
             this.declCtx=decl;
-            this.parameters = new ArrayList<>();
         }
 
         //Setter 7 getter
@@ -85,7 +85,7 @@ public class SymbolTable {
     }
 
     //Constructor
-    public SymbolTable() {
+    public SymbolTableFunc() {
         table = new ArrayList<Object>();
         this.currentLevel=-1;
     }
@@ -101,6 +101,7 @@ public class SymbolTable {
                             "Variable '" + token.getText() + "' has not been declared in current context",
                             "CONTEXT ERROR"));
         }
+
     }
 
     public Ident search(String nombre){
@@ -130,8 +131,7 @@ public class SymbolTable {
     }
 
     public void closeScope(){
-        table.removeIf(n -> (
-                ((Ident)n).level == currentLevel));
+        table.removeIf(n -> (((Ident)n).level == currentLevel));
         currentLevel--;
     }
 

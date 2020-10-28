@@ -1,8 +1,6 @@
 package backend;
 
-import contextualAnalysis.Ident;
 import contextualAnalysis.SymbolTable;
-import contextualAnalysis.TablaSimbolos;
 import contextualAnalysis.Visitor;
 import errors.Error;
 import errors.MonkeyErrorListener;
@@ -90,6 +88,17 @@ public class IDLE {
 
     }
 
+    //Mark all errors Context
+    private void markContextErrors() throws BadLocationException {
+        for (int i = 0; i < errorsContextual.size() ; i++) {
+            int row = errorsContextual.get(i).getRow();
+            int startIndex = codeArea.getLineStartOffset(row-1);
+            int endIndex = codeArea.getLineEndOffset(row-1);
+            codeArea.getHighlighter().addHighlight(startIndex, endIndex, painter);
+        }
+
+    }
+
     //Update the parser
     private void getParser(){
         input = CharStreams.fromString(codeArea.getText());
@@ -140,10 +149,11 @@ public class IDLE {
                     terminalPass();
                     terminal.setText("=>COMPILATION: SUCCESSFUL");
                 }else{
+                    markContextErrors();
                     terminalFail();
                     terminal.setText(getContextualErrors() + "\n\n=>COMPILATION: FAILED");
                 }
-                //terminalText += "\n\n=>COMPILATION: SUCCESSFUL";
+
             }
 
         } catch(Exception e1){}
@@ -259,12 +269,16 @@ public class IDLE {
         return panel;
     }
 
+
+
+
     public String getContextualErrors(){
         String errors = "";
         for (int i = 0; i < errorsContextual.size(); i++) {
             errors += "\n " + errorsContextual.get(i).type +
                     ": (" + errorsContextual.get(i).row + "," +
-                    errorsContextual.get(i).colum + ") " + "'" +errorsContextual.get(i).msj+"'";
+                    errorsContextual.get(i).colum + ") " + "'"
+                    +errorsContextual.get(i).msj+"'" ;
         }
         return errors;
     }

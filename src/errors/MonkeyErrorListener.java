@@ -23,8 +23,8 @@ public class MonkeyErrorListener extends BaseErrorListener {
             errorMsgs.add(new String("SCANNER ERROR -> ("+line+", "+charPositionInLine + ") " + msg));
             errorPositions.add(new Error(line,charPositionInLine, msg, "SCANNER"));
         }else{
-            errorMsgs.add(new String("CONTEXT ERROR -> ("+line+", "+charPositionInLine + ") " + msg));
-            errorPositions.add(new Error(line,charPositionInLine, msg, "SYNTAX"));
+            errorMsgs.add(new String("PARSER  ERROR -> ("+line+", "+charPositionInLine + ") " + msg));
+            errorPositions.add(new Error(line,charPositionInLine, msg, "PARSER"));
         }
     }
 
