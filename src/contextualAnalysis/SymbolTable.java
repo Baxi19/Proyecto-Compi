@@ -1,5 +1,7 @@
 package contextualAnalysis;
 
+import backend.IDLE;
+import errors.Error;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
 
@@ -17,11 +19,11 @@ public class SymbolTable {
         int value;
         ParserRuleContext declCtx;
 
-        public Ident(Token tok, ParserRuleContext decl){
-            token = tok;
-            level=currentLevel;
-            value = 0;
-            declCtx=decl;
+        public Ident(Token tok,int level ,ParserRuleContext decl){
+            this.token = tok;
+            this.level=level;
+            this.value = 0;
+            this.declCtx=decl;
         }
 
         public void setValue(int v){
@@ -36,10 +38,17 @@ public class SymbolTable {
     }
 
     //TODO: Make
-    public void insertar(Token id, ParserRuleContext decl) {
-        //no se puede insertar un elemento repetido en el mismo nivel
-        Ident i = new Ident(id,decl);
-        table.add(i);
+    public void insertar(Token token, int level, ParserRuleContext decl) {
+        if(search(token.getText()) == null){
+            Ident i = new Ident(token,level,decl);
+            table.add(i);
+        }else{
+            IDLE.getInstance().errorsContextual.add(
+                    new Error(token.getLine(), token.getCharPositionInLine(),
+                            "Variable '" + token.getText() + "' has not been declared in current context",
+                            "CONTEXT ERROR"));
+        }
+
     }
 
     public Ident search(String nombre){

@@ -46,4 +46,6 @@ public class Error {
         this.type = type;
     }
 
+
+
 }

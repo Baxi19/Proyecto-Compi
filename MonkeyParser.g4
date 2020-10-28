@@ -7,21 +7,10 @@ options {
     tokenVocab = MonkeyScanner;
 }
 
-@header {
-    import contextualAnalysis.TablaSimbolos;
-    import contextualAnalysis.SymbolTable;
-}
-
-@members {
-    private contextualAnalysis.TablaSimbolos symbols = new contextualAnalysis.TablaSimbolos();
-    private contextualAnalysis.SymbolTable symbols2 = new contextualAnalysis.SymbolTable();
-}
 //-------------------------------------------------------------------------------------------------------------------
 //                               Grammar for Monkey Language
 //-------------------------------------------------------------------------------------------------------------------
-program  	                    :{symbols.openScope();}
-                                statement*
-                                {symbols.imprimir(); symbols.closeScope();}                                             #programAST;
+program  	                    :statement*                                                                             #programAST;
 
 //-------------------------------------------------------------------------------------------------------------------
 statement  	                    :LET letStatement                                                                       #statement_LetAST
@@ -29,9 +18,8 @@ statement  	                    :LET letStatement                               
                                 | expressionStatement                                                                   #callExpressionStatementAST;
 
 //-------------------------------------------------------------------------------------------------------------------
-letStatement                    : IDENT ASSIGN expression (PYCOMMA | )
-                                {symbols.insertar($IDENT,0,$ctx);}
-                                                                                                                        #letStatementAST;
+//Assign
+letStatement                    : IDENT ASSIGN expression (PYCOMMA | )                                                  #letStatementAST;
 
 //-------------------------------------------------------------------------------------------------------------------
 returnStatement	                : expression (PYCOMMA | )                                                               #returnStatementAST;
@@ -71,10 +59,7 @@ callExpression	                : L_PAREN expressionList R_PAREN                 
 //-------------------------------------------------------------------------------------------------------------------
 primitiveExpression	            : INTEGER                                                                               #primitiveExpression_numberAST
                                 | STRING                                                                                #primitiveExpression_stringAST
-                                | IDENT
-                                {if (symbols.buscar($IDENT.text) == null) {
-                                    System.err.println("undefined variable: "+$IDENT.text+ " in : ["+$IDENT.line+","+$IDENT.pos + "]");
-                                }}                                                                                      #primitiveExpression_identAST
+                                | IDENT                                                                                 #primitiveExpression_identAST
                                 | TRUE                                                                                  #primitiveExpression_trueAST
                                 | FALSE                                                                                 #primitiveExpression_falseAST
                                 | L_PAREN expression R_PAREN                                                            #primitiveExpression_expressionAST
@@ -140,4 +125,3 @@ ifExpression	                : IF expression blockStatement (ELSE blockStatement
 blockStatement	                : L_BRACE statement* R_BRACE                                                            #blockStatementAST;
 
 //-------------------------------------------------------------------------------------------------------------------
-ident locals [LetStatementContext decl = null]: IDENT                                                                   #identAST;

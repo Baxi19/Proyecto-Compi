@@ -10,7 +10,7 @@ public class TablaSimbolos {
 
     private int nivelActual;
 
-    class Ident{
+    public class Ident{
         Token tok;
         int type; //esto probablemente cambie a un tipo más estructurado
         int nivel;
@@ -67,6 +67,9 @@ public class TablaSimbolos {
         for (int i = 0; i < tabla.size(); i++) {
             Token s = ( Token ) ((Ident) tabla.get(i)).tok;
             System.out.println("Nombre: " + s.getText() + " - " + ((Ident) tabla.get(i)).nivel + " - " + ((Ident) tabla.get(i)).type);
+
+
+
             if (s.getType() == 0){
                 System.out.println("Tipo: Indefinido");
             }else if (s.getType() == 1) {

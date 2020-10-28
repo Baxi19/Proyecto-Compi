@@ -1,9 +1,5 @@
 // Generated from C:/Users/Baxi/Desktop/Proyecto Compi\MonkeyParser.g4 by ANTLR 4.8
 package generated;
-
-    import contextualAnalysis.TablaSimbolos;
-    import contextualAnalysis.SymbolTable;
-
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 /**
@@ -316,11 +312,4 @@ public class MonkeyParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
 	@Override public T visitBlockStatementAST(MonkeyParser.BlockStatementASTContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitIdentAST(MonkeyParser.IdentASTContext ctx) { return visitChildren(ctx); }
 }

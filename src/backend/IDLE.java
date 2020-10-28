@@ -1,5 +1,9 @@
 package backend;
 
+import contextualAnalysis.Ident;
+import contextualAnalysis.SymbolTable;
+import contextualAnalysis.TablaSimbolos;
+import contextualAnalysis.Visitor;
 import errors.Error;
 import errors.MonkeyErrorListener;
 import generated.MonkeyParser;
@@ -12,7 +16,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import org.fife.ui.rsyntaxtextarea.*;
 import org.fife.ui.rtextarea.RTextScrollPane;
-import tree.Visitor;
+
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
@@ -53,6 +57,9 @@ public class IDLE {
     protected File archive = new File("");
     protected String path = "";
     protected JFileChooser fileChooser = new JFileChooser();
+
+    //Contextual Analysis
+    public SymbolTable tablaSimbolos = new SymbolTable();
 
     //Singleton
     public static IDLE getInstance(){
@@ -118,20 +125,25 @@ public class IDLE {
                 showErrors(errorListener);
 
             }else{
+                /*
                 Visitor newVisitor = new Visitor();
                 newVisitor.visit(tree);
-
-                terminalPass();
-
                 String terminalText = "TREE PRINT: " + tree.toStringTree(parser) + "\n\nTREE PRINT WITH VISITOR DESIGN PATTERN:\n";
                 for(int i = 0;i<newVisitor.VisitorTree.size();i++){
                     terminalText = terminalText  +newVisitor.VisitorTree.get(i);
                 }
+                */
+                Visitor analysisContextual = new Visitor();
+                analysisContextual.visit(tree);
 
-                terminalText += "\n\n=>COMPILATION: SUCCESSFUL";
-                terminal.setText(terminalText);
-
-
+                if(IDLE.getInstance().errorsContextual.isEmpty()){
+                    terminalPass();
+                    terminal.setText("=>COMPILATION: SUCCESSFUL");
+                }else{
+                    terminalFail();
+                    terminal.setText(getContextualErrors() + "\n\n=>COMPILATION: FAILED");
+                }
+                //terminalText += "\n\n=>COMPILATION: SUCCESSFUL";
             }
 
         } catch(Exception e1){}
@@ -247,5 +259,14 @@ public class IDLE {
         return panel;
     }
 
+    public String getContextualErrors(){
+        String errors = "";
+        for (int i = 0; i < errorsContextual.size(); i++) {
+            errors += "\n " + errorsContextual.get(i).type +
+                    ": (" + errorsContextual.get(i).row + "," +
+                    errorsContextual.get(i).colum + ") " + "'" +errorsContextual.get(i).msj+"'";
+        }
+        return errors;
+    }
 
 }
