@@ -11,12 +11,13 @@ import java.util.ArrayList;
 // Symbols Table
 public class SymbolTable {
     public ArrayList<Ident> table ;
-
+    //------------------------------------------------------------------------------------------------------------------
     //Constructor
     public SymbolTable() {
         table = new ArrayList<>();
     }
 
+    //------------------------------------------------------------------------------------------------------------------
     //Method to insert "type Var"
     public void insertVar(Token token, String type,int level, ParserRuleContext decl) {
         if(search(token, type) == null){
@@ -30,6 +31,7 @@ public class SymbolTable {
         }
     }
 
+    //------------------------------------------------------------------------------------------------------------------
     //Method to insert "type Method"
     public void insertMet(Token token, String type, int level, ParserRuleContext decl) {
         if(search(token, type) == null){
@@ -43,6 +45,7 @@ public class SymbolTable {
         }
     }
 
+    //------------------------------------------------------------------------------------------------------------------
     //Method to Search Methods or Vars in table
     public Ident search(Token token, String type){
         Collections.reverse(table);
@@ -55,9 +58,10 @@ public class SymbolTable {
         return null;
     }
 
+    //------------------------------------------------------------------------------------------------------------------
     //Method to print table info
     public String printTables() {
-        String tableData = "\n*******************************************************************************************";
+        String tableData = "\n\n*******************************************************************************************";
         tableData +=  "\n\n-----TABLE MET------";
         for (int i = 0; i < table.size(); i++) {
             if(table.get(i).getType().equals("MET")){
@@ -72,6 +76,8 @@ public class SymbolTable {
             }
         }
         tableData += "\n------END------";
-        return tableData += "\n*******************************************************************************************";
+        return tableData += "\n\n*******************************************************************************************\n\n";
     }
+
+    //------------------------------------------------------------------------------------------------------------------
 }

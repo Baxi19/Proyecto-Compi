@@ -5,7 +5,6 @@ import org.antlr.v4.runtime.Token;
 
 //Class Variable, will represent "Iden" as simple's variable declaration
 public class Variable extends Ident {
-    //TODO: Trabajar y analizar el tipo
     protected int value;
 
     //Constructor

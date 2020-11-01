@@ -15,6 +15,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import org.fife.ui.rsyntaxtextarea.*;
 import org.fife.ui.rtextarea.RTextScrollPane;
+import tree.Visitor;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
@@ -58,6 +59,8 @@ public class IDLE {
 
     //Contextual Analysis
     public SymbolTable tablaSimbolos = new SymbolTable();
+    public Boolean showTableSymbol = false;
+    public Boolean showConsoleTree = false;
 
     //Singleton
     public static IDLE getInstance(){
@@ -134,15 +137,6 @@ public class IDLE {
                 showErrors(errorListener);
 
             }else{
-                /*
-                Visitor newVisitor = new Visitor();
-                newVisitor.visit(tree);
-                String terminalText = "TREE PRINT: " + tree.toStringTree(parser) + "\n\nTREE PRINT WITH VISITOR DESIGN PATTERN:\n";
-                for(int i = 0;i<newVisitor.VisitorTree.size();i++){
-                    terminalText = terminalText  +newVisitor.VisitorTree.get(i);
-                }
-                */
-                //TODO: Visit let Vars
                 //Check the methods first
                 tablaSimbolos = new SymbolTable();
                 errorsContextual = new ArrayList<>();
@@ -155,14 +149,31 @@ public class IDLE {
                 VisitorVariable analysisContextualVariables = new VisitorVariable();
                 analysisContextualVariables.visit(tree);
 
+                //Check if the user want to see the symbols Table in console
+                String terminalText = "";
+                if(showTableSymbol){
+                    terminalText = tablaSimbolos.printTables();
+                    showTableSymbol = false;
+                }else if(showConsoleTree){
+                    Visitor newVisitor = new Visitor();
+                    newVisitor.visit(tree);
+                    terminalText = "\n\n*******************************************************************************************";
+                    terminalText += "TREE PRINT: " + tree.toStringTree(parser) + "\n\nTREE PRINT WITH VISITOR DESIGN PATTERN:\n";
+                    for(int i = 0;i<newVisitor.VisitorTree.size();i++){
+                        terminalText += newVisitor.VisitorTree.get(i);
+                    }
+                    terminalText +=  "\n\n*******************************************************************************************\n\n";
+                    showConsoleTree = false;
+                }
 
+                //Normal Run
                 if(IDLE.getInstance().errorsContextual.isEmpty()){
                     terminalPass();
-                    terminal.setText("=>COMPILATION: SUCCESSFUL");
+                    terminal.setText(terminalText += "\n\n=>COMPILATION: SUCCESSFUL");
                 }else{
                     markContextErrors();
                     terminalFail();
-                    terminal.setText(getContextualErrors() + "\n\n=>COMPILATION: FAILED");
+                    terminal.setText(terminalText += getContextualErrors() + "\n\n=>COMPILATION: FAILED");
                 }
 
             }

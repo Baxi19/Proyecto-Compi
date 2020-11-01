@@ -38,7 +38,7 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitLetStatementAST(MonkeyParser.LetStatementASTContext ctx) {
         visit(ctx.expression());
-        //TODO: Revisar el tipo
+        //if is Funtion
         String[] parts = ctx.getText().split("\\=");
         if(parts[1].startsWith("fn(")){
             IDLE.getInstance().tablaSimbolos.insertMet(ctx.IDENT().getSymbol(), "MET" ,level, ctx);
@@ -54,9 +54,7 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitExpressionStatementAST(MonkeyParser.ExpressionStatementASTContext ctx) {
-        //TODO: tomar el nombre de la funcion y ver si esta en la tabla, primero la mas local
         visit(ctx.expression());
-
         return null;
     }
 
@@ -64,7 +62,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
     public Object visitExpressionAST(MonkeyParser.ExpressionASTContext ctx) {
         visit(ctx.additionExpression());
         visit(ctx.comparison());
-
         return null;
     }
 
@@ -95,7 +92,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
     public Object visitAdditionExpressionAST(MonkeyParser.AdditionExpressionASTContext ctx) {
         visit(ctx.additionFactor());
         visit(ctx.multiplicationExpression());
-
         return null;
     }
 
@@ -115,7 +111,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitMultiplicationExpressionAST(MonkeyParser.MultiplicationExpressionASTContext ctx) {
-
         if(ctx.elementExpression()!=null){
             visit(ctx.elementExpression());
         }
@@ -142,7 +137,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitElementExpressionAST(MonkeyParser.ElementExpressionASTContext ctx) {
-
         if(ctx.primitiveExpression()!=null){
             visit(ctx.primitiveExpression());
         }
@@ -157,13 +151,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitElementAccessAST(MonkeyParser.ElementAccessASTContext ctx) {
-
-        if(ctx.L_BRACK()!=null){
-
-        }
-        if(ctx.R_BRACK()!=null){
-
-        }
         if(ctx.expression()!=null){
             visit(ctx.expression());
         }
@@ -172,13 +159,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitCallExpressionAST(MonkeyParser.CallExpressionASTContext ctx) {
-
-        if(ctx.L_PAREN()!=null){
-
-        }
-        if(ctx.R_PAREN()!=null){
-
-        }
         if(ctx.expressionList()!=null){
             visit(ctx.expressionList());
         }
@@ -197,15 +177,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitPrimitiveExpression_identAST(MonkeyParser.PrimitiveExpression_identASTContext ctx) {
-        //Check Methods
-        /*if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT().getSymbol(), "MET") == null){
-            IDLE.getInstance().errorsContextual.add(
-                    new Error(ctx.IDENT().getSymbol().getLine(),
-                            ctx.IDENT().getSymbol().getCharPositionInLine(),"Undefined Method '" +ctx.IDENT().getText() + "' ", "ERROR CONTEXT"));
-
-        }
-         */
-
         return null;
     }
 
@@ -221,12 +192,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitPrimitiveExpression_expressionAST(MonkeyParser.PrimitiveExpression_expressionASTContext ctx) {
-        if(ctx.L_PAREN()!=null){
-
-        }
-        if(ctx.R_PAREN()!=null){
-
-        }
         if(ctx.expression()!=null){
             visit(ctx.expression());
         }
@@ -241,12 +206,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitPrimitiveExpression_ArrayFunctionsAST(MonkeyParser.PrimitiveExpression_ArrayFunctionsASTContext ctx) {
-        if(ctx.L_PAREN()!=null){
-
-        }
-        if(ctx.R_PAREN()!=null){
-
-        }
         if(ctx.arrayFunctions()!=null){
             visit(ctx.arrayFunctions());
         }
@@ -307,12 +266,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitArrayLiteralAST(MonkeyParser.ArrayLiteralASTContext ctx) {
-        if(ctx.L_BRACK()!=null){
-
-        }
-        if(ctx.R_BRACK()!=null){
-
-        }
         if(ctx.expressionList()!=null){
             visit(ctx.expressionList());
         }
@@ -322,15 +275,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitFunctionLiteralAST(MonkeyParser.FunctionLiteralASTContext ctx) {
 
-        if(ctx.FN()!=null){
-
-        }
-        if(ctx.L_PAREN()!=null){
-
-        }
-        if(ctx.R_PAREN()!=null){
-
-        }
         if(ctx.functionParameters()!=null){
             visit(ctx.functionParameters());
         }
@@ -342,38 +286,20 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitFunctionParametersAST(MonkeyParser.FunctionParametersASTContext ctx) {
-
-        for(int i = 0; i < ctx.IDENT().size();i++){
-
-        }
-        for(int i = 0; i < ctx.COMMA().size();i++){
-
-        }
         //TODO: Trying to return the parameters Size
         return ctx.IDENT().size();
     }
 
     @Override
     public Object visitHashLiteralAST(MonkeyParser.HashLiteralASTContext ctx) {
-
         for(int i = 0; i < ctx.hashContent().size();i++){
             visit(ctx.hashContent(i));
-        }
-        for(int i = 0; i < ctx.COMMA().size();i++){
-
-        }
-        if(ctx.L_BRACE()!=null){
-
         }
         return null;
     }
 
     @Override
     public Object visitHashContentAST(MonkeyParser.HashContentASTContext ctx) {
-
-        if(ctx.COLON()!=null){
-
-        }
         for(int i = 0; i < ctx.expression().size();i++){
 
         }
@@ -382,7 +308,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitExpressionList_expressionAST(MonkeyParser.ExpressionList_expressionASTContext ctx) {
-
         for(int i = 0; i < ctx.expression().size();i++){
 
         }
@@ -394,22 +319,11 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitExpressionList_nullAST(MonkeyParser.ExpressionList_nullASTContext ctx) {
-
         return null;
     }
 
     @Override
     public Object visitPrintExpressionAST(MonkeyParser.PrintExpressionASTContext ctx) {
-
-        if(ctx.PUTS()!=null){
-
-        }
-        if(ctx.L_PAREN()!=null){
-
-        }
-        if(ctx.R_PAREN()!=null){
-
-        }
         if(ctx.expression()!=null){
             visit(ctx.expression());
         }

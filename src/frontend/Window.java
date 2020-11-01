@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 //Class Window, will show the code area and the terminal too
+//----------------------------------------------------------------------------------------------------------------------
 public class Window extends JFrame {
     public Window() {
         this.setLayout(new BorderLayout());
@@ -20,14 +21,17 @@ public class Window extends JFrame {
         this.setVisible(true);
     }
 
+    //------------------------------------------------------------------------------------------------------------------
     //Menu
     public JMenuBar getMenu(){
         JMenuBar menu;
         JMenu file ;
         JMenu edit;
         JMenu run;
+        JMenu view;
         menu = new JMenuBar();
 
+        //-----------------------------------------------------
         // create a File options
         file = new JMenu("File");
 
@@ -46,6 +50,7 @@ public class Window extends JFrame {
         file.add(f4);
         file.add(f5);
 
+        //-----------------------------------------------------
         // create a Edit options
         edit = new JMenu("Edit");
 
@@ -76,6 +81,7 @@ public class Window extends JFrame {
         edit.add(cut);
         edit.add(paste);
 
+        //-----------------------------------------------------
         // create a Run options
         run = new JMenu("Run");
 
@@ -86,6 +92,18 @@ public class Window extends JFrame {
         run.add(r1);run.add(r2);
 
 
+        //-----------------------------------------------------
+        // create a View options
+        view = new JMenu("View");
+
+        // create menuitems
+        JMenuItem v1,v2;
+        v1 = new JMenuItem("Symbol Table");
+        v2 = new JMenuItem("Console Tree");
+        // add menu items to menu
+        view.add(v1);view.add(v2);
+
+        //--------------------------------------------------------------------------------------------------------------
         // -- Action Listeners --
 
         // New File
@@ -146,14 +164,32 @@ public class Window extends JFrame {
                 }
             }
         });
-
+        //Symbol's Table
+        v1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                IDLE.getInstance().showTableSymbol = true;
+                IDLE.getInstance().run();
+            }
+        });
+        // Console Tree
+        v2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                IDLE.getInstance().showConsoleTree = true;
+                IDLE.getInstance().run();
+            }
+        });
+        //-----------------------------------------------------
         // add menu to menu bar
         menu.add(file);
         menu.add(edit);
         menu.add(run);
+        menu.add(view);
         return menu;
     }
 
+    //------------------------------------------------------------------------------------------------------------------
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable(){
             public void run() {

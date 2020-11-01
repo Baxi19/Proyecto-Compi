@@ -10,6 +10,7 @@ public class Function extends Ident {
     public ArrayList<Token> parameters;
     public Object returnValue;
 
+    //------------------------------------------------------------------------------------------------------------------
     //Constructor
     public Function(Token id, String type, int level, ParserRuleContext declCtx) {
         super(id, type, level, declCtx);
@@ -23,7 +24,7 @@ public class Function extends Ident {
         this.parameters = new ArrayList<>();
         this.returnValue = returnValue;
     }
-
+    //------------------------------------------------------------------------------------------------------------------
     //Getter & Setter
     public ArrayList<Token> getParameters() {
         return parameters;
@@ -41,6 +42,7 @@ public class Function extends Ident {
         this.returnValue = returnValue;
     }
 
+    //------------------------------------------------------------------------------------------------------------------
     @Override
     public String toString() {
         return "\nName = " + id.getText() + ", Level = " + level + ", Row = " + id.getLine()+ ", Column = " + id.getCharPositionInLine()  + ", Type = " + type  + ", Parameters = " + parameters.size() + ", Declaration Context=" + declCtx.getText();
