@@ -16,7 +16,7 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
         for(int i = 0; i < ctx.statement().size();i++){
             visit(ctx.statement(i));
         }
-        System.out.println(IDLE.getInstance().tablaSimbolos.imprimir());
+        System.out.println(IDLE.getInstance().tablaSimbolos.printTables());
         return null;
     }
 
@@ -48,9 +48,18 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
         //Tabs++;
         visit(ctx.expression());
         //Tabs--;
+        //TODO: Revisar el tipo
+        String[] parts = ctx.getText().split("\\=");
+        if(parts[1].startsWith("fn(")){
+            IDLE.getInstance().tablaSimbolos.insertMet(ctx.IDENT().getSymbol(), "MET" ,level, ctx);
+            System.err.println("=> FUNTION : let " + parts[0] + " = "  + parts[1]);
+        }else{
+            IDLE.getInstance().tablaSimbolos.insertVar(ctx.IDENT().getSymbol(), "VAR",level, ctx);
+            System.err.println("=> VARIABLE: let "  + parts[0] + " = "+parts[1]);
+        }
 
-        IDLE.getInstance().tablaSimbolos.insertar(ctx.IDENT().getSymbol(), level, ctx);
-        //IDLE.getInstance().table.add(new Variable(ctx.IDENT().getSymbol(),1,ctx ));
+
+
         return null;
     }
 
@@ -66,7 +75,7 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitExpressionStatementAST(MonkeyParser.ExpressionStatementASTContext ctx) {
         //TODO: tomar el nombre de la funcion y ver si esta en la tabla, primero la mas local
-        System.out.println(" ===> " +ctx.expression().getText());
+        //System.out.println(" ===> " +ctx.expression().getText());
         visit(ctx.expression());
 
         return null;
@@ -231,8 +240,15 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitPrimitiveExpression_identAST(MonkeyParser.PrimitiveExpression_identASTContext ctx) {
         //TODO: Preguntar por la tabla de metodos
+        //Check Methods
+        if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT().getSymbol(), "MET") == null){
+            IDLE.getInstance().errorsContextual.add(
+                    new Error(ctx.IDENT().getSymbol().getLine(),
+                            ctx.IDENT().getSymbol().getCharPositionInLine(),"Undefined Method '" +ctx.IDENT().getText() + "' ", "CONTEXT"));
 
-        if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT().getText()) == null){
+        }
+        //Check Vars
+        if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT().getSymbol(), "VAR") == null){
             IDLE.getInstance().errorsContextual.add(
                     new Error(ctx.IDENT().getSymbol().getLine(),
                             ctx.IDENT().getSymbol().getCharPositionInLine(),"Undefined Variable '" +ctx.IDENT().getText() + "' ", "CONTEXT"));

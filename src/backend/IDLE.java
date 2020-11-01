@@ -1,5 +1,6 @@
 package backend;
 
+import contextualAnalysis.Ident;
 import contextualAnalysis.SymbolTable;
 import contextualAnalysis.Visitor;
 import errors.Error;
@@ -58,6 +59,9 @@ public class IDLE {
 
     //Contextual Analysis
     public SymbolTable tablaSimbolos = new SymbolTable();
+    public ArrayList<Ident> table = new ArrayList<>();
+    public ArrayList<Ident> tableMethod = new ArrayList<>();
+    //public int currentLevel;
 
     //Singleton
     public static IDLE getInstance(){
@@ -269,9 +273,7 @@ public class IDLE {
         return panel;
     }
 
-
-
-
+    //Method checks the contextual errors, return all errors as String
     public String getContextualErrors(){
         String errors = "";
         for (int i = 0; i < errorsContextual.size(); i++) {

@@ -11,8 +11,15 @@ public class Function extends Ident {
     public Object returnValue;
 
     //Constructor
-    public Function(Token id, int level, ParserRuleContext declCtx) {
-        super(id, level, declCtx);
+    public Function(Token id, String type, int level, ParserRuleContext declCtx) {
+        super(id, type, level, declCtx);
+        this.parameters = new ArrayList<>();
+        this.returnValue = null;
+    }
+
+    public Function(Token id, String type, int level, ParserRuleContext declCtx, Object returnValue) {
+        super(id, type, level, declCtx);
+        this.type = "MET";
         this.parameters = new ArrayList<>();
         this.returnValue = returnValue;
     }
@@ -32,6 +39,11 @@ public class Function extends Ident {
 
     public void setReturnValue(Object returnValue) {
         this.returnValue = returnValue;
+    }
+
+    @Override
+    public String toString() {
+        return "\nName = " + id.getText() + ", Row = " + id.getLine()+ ", Column = " + id.getCharPositionInLine() + ", Level = " + level + ", Type = " + type  + ", Parameters = " + parameters.size() + ", Declaration Context=" + declCtx.getText();
     }
 
 }
