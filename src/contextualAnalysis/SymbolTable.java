@@ -94,7 +94,7 @@ public class SymbolTable {
     public void insertar(Token token, int level, ParserRuleContext decl) {
         if(search(token.getText()) == null){
             Ident i = new Ident(token,level,decl);
-            table.add(i);
+            table.add(0, i);
         }else{
             IDLE.getInstance().errorsContextual.add(
                     new Error(token.getLine(), token.getCharPositionInLine(),
@@ -106,8 +106,8 @@ public class SymbolTable {
     public Ident search(String nombre){
         Ident temp=null;
         for(Object id : table) {
-            if ((( Ident ) id).token.getText().equals(nombre)){
-                temp = (( Ident ) id);
+            if (((Ident) id).token.getText().equals(nombre)){
+                return (( Ident ) id);
             }
         }
         return temp;
@@ -118,7 +118,7 @@ public class SymbolTable {
         Ident temp=null;
         for(Object id : table){
             if (((Ident)id).token.getText().equals(nombre)){
-                temp = ((Ident)id);
+                return ((Ident)id);
             }
         }
         Collections.reverse(table);
@@ -131,7 +131,8 @@ public class SymbolTable {
 
     public void closeScope(){
         table.removeIf(n -> (
-                ((Ident)n).level == currentLevel));
+                ((Ident)n).level == currentLevel)
+        );
         currentLevel--;
     }
 

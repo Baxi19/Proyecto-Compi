@@ -14,9 +14,7 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
     public Object visitProgramAST(MonkeyParser.ProgramASTContext ctx) {
         IDLE.getInstance().tablaSimbolos = new SymbolTable();
         for(int i = 0; i < ctx.statement().size();i++){
-            //Tabs++;
             visit(ctx.statement(i));
-            //Tabs--;
         }
         System.out.println(IDLE.getInstance().tablaSimbolos.imprimir());
         return null;
@@ -24,9 +22,7 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitStatement_LetAST(MonkeyParser.Statement_LetASTContext ctx) {
-        //Tabs++;
         visit(ctx.letStatement());
-        //Tabs--;
         return null;
     }
 
@@ -69,31 +65,18 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitExpressionStatementAST(MonkeyParser.ExpressionStatementASTContext ctx) {
+        //TODO: tomar el nombre de la funcion y ver si esta en la tabla, primero la mas local
+        System.out.println(" ===> " +ctx.expression().getText());
+        visit(ctx.expression());
 
-        if(ctx.expression()!=null){
-            //Tabs++;
-            visit(ctx.expression());
-            //Tabs--;
-        }
-        if(ctx.PYCOMMA()!=null){
-
-        }
         return null;
     }
 
     @Override
     public Object visitExpressionAST(MonkeyParser.ExpressionASTContext ctx) {
+        visit(ctx.additionExpression());
+        visit(ctx.comparison());
 
-        if(ctx.additionExpression()!=null){
-            //Tabs++;
-            visit(ctx.additionExpression());
-            //Tabs--;
-        }
-        if(ctx.comparison()!=null){
-           // Tabs++;
-            visit(ctx.comparison());
-            //Tabs--;
-        }
         return null;
     }
 
@@ -125,16 +108,9 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitAdditionExpressionAST(MonkeyParser.AdditionExpressionASTContext ctx) {
-        if(ctx.additionFactor()!=null){
-            //Tabs++;
-            visit(ctx.additionFactor());
-            //Tabs--;
-        }
-        if(ctx.multiplicationExpression()!=null){
-            //Tabs++;
-            visit(ctx.multiplicationExpression());
-            //Tabs--;
-        }
+        visit(ctx.additionFactor());
+        visit(ctx.multiplicationExpression());
+
         return null;
     }
 
@@ -254,6 +230,8 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitPrimitiveExpression_identAST(MonkeyParser.PrimitiveExpression_identASTContext ctx) {
+        //TODO: Preguntar por la tabla de metodos
+
         if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT().getText()) == null){
             IDLE.getInstance().errorsContextual.add(
                     new Error(ctx.IDENT().getSymbol().getLine(),
