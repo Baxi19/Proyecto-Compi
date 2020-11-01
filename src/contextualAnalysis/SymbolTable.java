@@ -52,34 +52,26 @@ public class SymbolTable {
             }
         }
         Collections.reverse(table);
-        /*if(type.equals("MET")){
-            //if is method declared, return method
-            for(int i = 0; i<table.size(); i++){
-                if(table.get(i).getId().getText().equals(token.getText()) &&  table.get(i).getType().equals("MET")){
-                    return table.get(i);
-                }
-            }
-        }else{
-            //if is var declared, return var
-            for(int i = 0; i<table.size(); i++){
-                if(table.get(i).getId().getText().equals(token.getText()) &&  table.get(i).getType().equals("VAR")){
-                    return table.get(i);
-                }
-            }
-        }
-
-         */
         return null;
     }
 
     //Method to print table info
     public String printTables() {
-        Collections.reverse(table);
-        String tableData =  "\n\n-----TABLE------";
+        String tableData = "\n*******************************************************************************************";
+        tableData +=  "\n\n-----TABLE MET------";
         for (int i = 0; i < table.size(); i++) {
-            tableData += table.get(i).toString();
+            if(table.get(i).getType().equals("MET")){
+                tableData += table.get(i).toString();
+            }
         }
-        Collections.reverse(table);
-        return tableData += "\n------END------";
+        tableData += "\n------END------";
+        tableData +=  "\n\n-----TABLE VAR------";
+        for (int i = 0; i < table.size(); i++) {
+            if(table.get(i).getType().equals("VAR")){
+                tableData += table.get(i).toString();
+            }
+        }
+        tableData += "\n------END------";
+        return tableData += "\n*******************************************************************************************";
     }
 }

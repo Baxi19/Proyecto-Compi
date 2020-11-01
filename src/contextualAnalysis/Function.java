@@ -43,7 +43,7 @@ public class Function extends Ident {
 
     @Override
     public String toString() {
-        return "\nName = " + id.getText() + ", Row = " + id.getLine()+ ", Column = " + id.getCharPositionInLine() + ", Level = " + level + ", Type = " + type  + ", Parameters = " + parameters.size() + ", Declaration Context=" + declCtx.getText();
+        return "\nName = " + id.getText() + ", Level = " + level + ", Row = " + id.getLine()+ ", Column = " + id.getCharPositionInLine()  + ", Type = " + type  + ", Parameters = " + parameters.size() + ", Declaration Context=" + declCtx.getText();
     }
 
 }

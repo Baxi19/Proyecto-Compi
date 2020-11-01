@@ -9,8 +9,6 @@ public class Variable extends Ident {
     protected int value;
 
     //Constructor
-
-
     public Variable(Token id, String type, int level, ParserRuleContext declCtx) {
         super(id, type, level, declCtx);
     }
@@ -24,10 +22,9 @@ public class Variable extends Ident {
         this.value = value;
     }
 
-
     //to String
     @Override
     public String toString() {
-        return "\nName = " + id.getText() + ", Row = " + id.getLine()+ ", Column = " + id.getCharPositionInLine() + ", Level = " + level + ", Type = " + type  + ", Value = " + value + ", Declaration Context=" + declCtx.getText();
+        return "\nName = " + id.getText() + ", Level = " + level+ ", Row = " + id.getLine()+ ", Column = " + id.getCharPositionInLine()  + ", Type = " + type  + ", Value = " + value + ", Declaration Context=" + declCtx.getText();
     }
 }

@@ -1,8 +1,8 @@
 package backend;
 
-import contextualAnalysis.Ident;
 import contextualAnalysis.SymbolTable;
-import contextualAnalysis.Visitor;
+import contextualAnalysis.VisitorFuntion;
+import contextualAnalysis.VisitorVariable;
 import errors.Error;
 import errors.MonkeyErrorListener;
 import generated.MonkeyParser;
@@ -15,7 +15,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 
 import org.fife.ui.rsyntaxtextarea.*;
 import org.fife.ui.rtextarea.RTextScrollPane;
-
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
@@ -59,9 +58,6 @@ public class IDLE {
 
     //Contextual Analysis
     public SymbolTable tablaSimbolos = new SymbolTable();
-    public ArrayList<Ident> table = new ArrayList<>();
-    public ArrayList<Ident> tableMethod = new ArrayList<>();
-    //public int currentLevel;
 
     //Singleton
     public static IDLE getInstance(){
@@ -146,8 +142,19 @@ public class IDLE {
                     terminalText = terminalText  +newVisitor.VisitorTree.get(i);
                 }
                 */
-                Visitor analysisContextual = new Visitor();
-                analysisContextual.visit(tree);
+                //TODO: Visit let Vars
+                //Check the methods first
+                tablaSimbolos = new SymbolTable();
+                errorsContextual = new ArrayList<>();
+
+                //Save Funtions
+                VisitorFuntion analysisContextualMethods = new VisitorFuntion();
+                analysisContextualMethods.visit(tree);
+
+                //Save Variables
+                VisitorVariable analysisContextualVariables = new VisitorVariable();
+                analysisContextualVariables.visit(tree);
+
 
                 if(IDLE.getInstance().errorsContextual.isEmpty()){
                     terminalPass();

@@ -7,16 +7,16 @@ import generated.MonkeyParserBaseVisitor;
 
 
 //Visitor, Used by Save the simbols table
-public class Visitor extends MonkeyParserBaseVisitor<Object> {
+public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
     public int level =1;
 
     @Override
     public Object visitProgramAST(MonkeyParser.ProgramASTContext ctx) {
-        IDLE.getInstance().tablaSimbolos = new SymbolTable();
         for(int i = 0; i < ctx.statement().size();i++){
             visit(ctx.statement(i));
         }
         System.out.println(IDLE.getInstance().tablaSimbolos.printTables());
+        System.out.println("Table Size: " + IDLE.getInstance().tablaSimbolos.table.size());
         return null;
     }
 
@@ -28,54 +28,36 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitStatement_returnAST(MonkeyParser.Statement_returnASTContext ctx) {
-        //Tabs++;
         visit(ctx.returnStatement());
-        //Tabs--;
         return null;
     }
 
     @Override
     public Object visitCallExpressionStatementAST(MonkeyParser.CallExpressionStatementASTContext ctx) {
-        //Tabs++;
         visit(ctx.expressionStatement());
-        //Tabs--;
         return null;
     }
 
     @Override
     public Object visitLetStatementAST(MonkeyParser.LetStatementASTContext ctx) {
-
-        //Tabs++;
         visit(ctx.expression());
-        //Tabs--;
         //TODO: Revisar el tipo
         String[] parts = ctx.getText().split("\\=");
-        if(parts[1].startsWith("fn(")){
-            IDLE.getInstance().tablaSimbolos.insertMet(ctx.IDENT().getSymbol(), "MET" ,level, ctx);
-            System.err.println("=> FUNTION : let " + parts[0] + " = "  + parts[1]);
-        }else{
+        if(!parts[1].startsWith("fn(")){
             IDLE.getInstance().tablaSimbolos.insertVar(ctx.IDENT().getSymbol(), "VAR",level, ctx);
-            System.err.println("=> VARIABLE: let "  + parts[0] + " = "+parts[1]);
         }
-
-
-
         return null;
     }
 
     @Override
     public Object visitReturnStatementAST(MonkeyParser.ReturnStatementASTContext ctx) {
-        //Tabs++;
         visit(ctx.expression());
-        //Tabs--;
-
         return null;
     }
 
     @Override
     public Object visitExpressionStatementAST(MonkeyParser.ExpressionStatementASTContext ctx) {
         //TODO: tomar el nombre de la funcion y ver si esta en la tabla, primero la mas local
-        //System.out.println(" ===> " +ctx.expression().getText());
         visit(ctx.expression());
 
         return null;
@@ -91,11 +73,8 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitComparisonAST(MonkeyParser.ComparisonASTContext ctx) {
-        //VisitorTree.add("\n" + Tabs(Tabs)+" Comparison ");
         for(int i = 0; i < ctx.additionExpression().size();i++){
-            //Tabs++;
             visit(ctx.additionExpression(i));
-            //Tabs--;
         }
         for(int i = 0; i < ctx.LT().size();i++){
 
@@ -126,9 +105,7 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitAdditionFactorAST(MonkeyParser.AdditionFactorASTContext ctx) {
         for(int i = 0; i < ctx.multiplicationExpression().size();i++){
-            //Tabs++;
             visit(ctx.multiplicationExpression(i));
-            //Tabs--;
         }
         for(int i = 0; i < ctx.ADD().size();i++){
 
@@ -143,14 +120,10 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
     public Object visitMultiplicationExpressionAST(MonkeyParser.MultiplicationExpressionASTContext ctx) {
 
         if(ctx.elementExpression()!=null){
-            //Tabs++;
             visit(ctx.elementExpression());
-           // Tabs--;
         }
         if(ctx.multiplicationFactor()!=null){
-            //Tabs++;
             visit(ctx.multiplicationFactor());
-            //Tabs--;
         }
         return null;
     }
@@ -159,9 +132,7 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
     public Object visitMultiplicationFactorAST(MonkeyParser.MultiplicationFactorASTContext ctx) {
 
         for(int i = 0; i < ctx.elementExpression().size();i++){
-            //Tabs++;
             visit(ctx.elementExpression(i));
-            //Tabs--;
         }
         for(int i = 0; i < ctx.MUL().size();i++){
 
@@ -176,19 +147,13 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
     public Object visitElementExpressionAST(MonkeyParser.ElementExpressionASTContext ctx) {
 
         if(ctx.primitiveExpression()!=null){
-            //Tabs++;
             visit(ctx.primitiveExpression());
-            //Tabs--;
         }
         if(ctx.elementAccess()!=null){
-            //Tabs++;
             visit(ctx.elementAccess());
-            //Tabs--;
         }
         if(ctx.callExpression()!=null){
-            //Tabs++;
             visit(ctx.callExpression());
-            //Tabs--;
         }
         return null;
     }
@@ -203,9 +168,7 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
 
         }
         if(ctx.expression()!=null){
-            //Tabs++;
             visit(ctx.expression());
-            //Tabs--;
         }
         return null;
     }
@@ -220,9 +183,7 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
 
         }
         if(ctx.expressionList()!=null){
-            //Tabs++;
             visit(ctx.expressionList());
-            //Tabs--;
         }
         return null;
     }
@@ -241,19 +202,23 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
     public Object visitPrimitiveExpression_identAST(MonkeyParser.PrimitiveExpression_identASTContext ctx) {
         //TODO: Preguntar por la tabla de metodos
         //Check Methods
+
         if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT().getSymbol(), "MET") == null){
             IDLE.getInstance().errorsContextual.add(
                     new Error(ctx.IDENT().getSymbol().getLine(),
-                            ctx.IDENT().getSymbol().getCharPositionInLine(),"Undefined Method '" +ctx.IDENT().getText() + "' ", "CONTEXT"));
+                            ctx.IDENT().getSymbol().getCharPositionInLine(),"Undefined  " +ctx.IDENT().getText() + " ", "ERROR CONTEXT"));
 
         }
+
+        //TODO: Check if is necesary to double check the vars
         //Check Vars
-        if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT().getSymbol(), "VAR") == null){
+        /*if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT().getSymbol(), "VAR") == null){
             IDLE.getInstance().errorsContextual.add(
                     new Error(ctx.IDENT().getSymbol().getLine(),
-                            ctx.IDENT().getSymbol().getCharPositionInLine(),"Undefined Variable '" +ctx.IDENT().getText() + "' ", "CONTEXT"));
+                            ctx.IDENT().getSymbol().getCharPositionInLine(),"Undefined Var'" +ctx.IDENT().getText() + "' ", "ERROR CONTEXT"));
 
-        }
+        }*/
+
         return null;
     }
 
@@ -276,19 +241,14 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
 
         }
         if(ctx.expression()!=null){
-            //Tabs++;
             visit(ctx.expression());
-            //Tabs--;
         }
         return null;
     }
 
     @Override
     public Object visitPrimitiveExpression_literalAST(MonkeyParser.PrimitiveExpression_literalASTContext ctx) {
-
-        //Tabs++;
         visit(ctx.arrayLiteral());
-        //Tabs--;
         return null;
     }
 
@@ -301,47 +261,35 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
 
         }
         if(ctx.arrayFunctions()!=null){
-            //Tabs++;
             visit(ctx.arrayFunctions());
-            //Tabs--;
         }
         if(ctx.expressionList()!=null){
-            //Tabs++;
             visit(ctx.expressionList());
-           // Tabs--;
         }
         return null;
     }
 
     @Override
     public Object visitPrimitiveExpression_FunctionLiteralAST(MonkeyParser.PrimitiveExpression_FunctionLiteralASTContext ctx) {
-        //Tabs++;
         visit(ctx.functionLiteral());
-        //Tabs--;
         return null;
     }
 
     @Override
     public Object visitPrimitiveExpression_HashLiteralAST(MonkeyParser.PrimitiveExpression_HashLiteralASTContext ctx) {
-        //Tabs++;
         visit(ctx.hashLiteral());
-        //Tabs--;
         return null;
     }
 
     @Override
     public Object visitPrimitiveExpression_PrintExpressionAST(MonkeyParser.PrimitiveExpression_PrintExpressionASTContext ctx) {
-       // Tabs++;
         visit(ctx.printExpression());
-       // Tabs--;
         return null;
     }
 
     @Override
     public Object visitPrimitiveExpression_IfExpressionAST(MonkeyParser.PrimitiveExpression_IfExpressionASTContext ctx) {
-        //Tabs++;
         visit(ctx.ifExpression());
-        //Tabs--;
         return null;
     }
 
@@ -379,9 +327,7 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
 
         }
         if(ctx.expressionList()!=null){
-            //Tabs++;
             visit(ctx.expressionList());
-            //Tabs--;
         }
         return null;
     }
@@ -399,14 +345,10 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
 
         }
         if(ctx.functionParameters()!=null){
-            //Tabs++;
             visit(ctx.functionParameters());
-            //Tabs--;
         }
         if(ctx.blockStatement()!=null){
-            //Tabs++;
             visit(ctx.blockStatement());
-            //Tabs--;
         }
         return null;
     }
@@ -420,16 +362,15 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
         for(int i = 0; i < ctx.COMMA().size();i++){
 
         }
-        return null;
+        //TODO: Trying to return the parameters Size
+        return ctx.IDENT().size();
     }
 
     @Override
     public Object visitHashLiteralAST(MonkeyParser.HashLiteralASTContext ctx) {
 
         for(int i = 0; i < ctx.hashContent().size();i++){
-            //Tabs++;
             visit(ctx.hashContent(i));
-            //Tabs--;
         }
         for(int i = 0; i < ctx.COMMA().size();i++){
 
@@ -483,9 +424,7 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
 
         }
         if(ctx.expression()!=null){
-            //Tabs++;
             visit(ctx.expression());
-            //Tabs--;
         }
         return null;
     }
@@ -500,14 +439,10 @@ public class Visitor extends MonkeyParserBaseVisitor<Object> {
 
         }
         if(ctx.expression()!=null){
-            //Tabs++;
             visit(ctx.expression());
-            //Tabs--;
         }
         for(int i = 0; i < ctx.blockStatement().size();i++){
-            //Tabs++;
             visit(ctx.blockStatement(i));
-            //Tabs--;
         }
         return null;
     }
