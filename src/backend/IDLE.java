@@ -1,5 +1,6 @@
 package backend;
 
+import contextualAnalysis.Ident;
 import contextualAnalysis.SymbolTable;
 import contextualAnalysis.VisitorFuntion;
 import contextualAnalysis.VisitorVariable;
@@ -26,7 +27,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
-
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 //Singleton class will get all important methods
@@ -58,6 +60,7 @@ public class IDLE {
     protected JFileChooser fileChooser = new JFileChooser();
 
     //Contextual Analysis
+    public int tableId = 0;
     public SymbolTable tablaSimbolos = new SymbolTable();
     public Boolean showTableSymbol = false;
     public Boolean showConsoleTree = false;
@@ -301,6 +304,51 @@ public class IDLE {
                     +errorsContextual.get(i).msj+"'" ;
         }
         return errors;
+    }
+
+    //Serial, to control de simbols table's ident
+    public int getNewId() {
+        tableId += 1;
+        return tableId;
+    }
+
+    //Search parameters in string
+    public ArrayList<String> getFuntionInfo(String method){
+        String[] lParent = method.split("\\(");
+        String[] rParent =  lParent[1].split("\\)");
+        String[] param = rParent[0].split("\\,");
+        ArrayList<String> list = new ArrayList<>();
+        for (int i = 0; i < param.length; i++) {
+            list.add(param[i]);
+        }
+        //Check if aren't parameters with same name
+        if(checkParameters(list)){
+            return list;
+        }
+        return null;
+    }
+
+    //Method check if are parameters with same name
+    public Boolean checkParameters(ArrayList<String> list){
+        List<String> duplicateList = list
+                    .stream()
+                    .collect(Collectors.groupingBy(s -> s))
+                    .entrySet()
+                    .stream()
+                    // filter if are more than one paremeter with same name
+                    .filter(e -> e.getValue().size() > 1)
+                    .map(e -> e.getKey())
+                    .collect(Collectors.toList());
+
+        //If are not ambiguos parameters'name
+        if(duplicateList.isEmpty()){
+            return true;
+        }else{
+            /*for(String parameter : duplicateList) {
+                System.err.println("(X) Error, duplicate parameter: " + parameter);
+            }*/
+            return false;
+        }
     }
 
 }

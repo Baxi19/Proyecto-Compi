@@ -3,6 +3,9 @@ package contextualAnalysis;
 import backend.IDLE;
 import generated.MonkeyParser;
 import generated.MonkeyParserBaseVisitor;
+import org.antlr.v4.runtime.Token;
+
+import java.util.ArrayList;
 
 
 //Visitor, Used by Save the simbols table
@@ -38,14 +41,7 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitLetStatementAST(MonkeyParser.LetStatementASTContext ctx) {
         visit(ctx.expression());
-
-
-        //if is Funtion
-        String[] parts = ctx.getText().split("\\=");
-
-        //TODO: get Parameters
-
-        if(parts[1].startsWith("fn(")){
+        if(ctx.getText().split("\\=")[1].startsWith("fn(")){
             IDLE.getInstance().tablaSimbolos.insertMet(ctx.IDENT().getSymbol(), "MET" ,level, ctx);
         }
         return null;
@@ -291,7 +287,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitFunctionParametersAST(MonkeyParser.FunctionParametersASTContext ctx) {
-        //TODO: Trying to return the parameters Size
         return ctx.IDENT();
     }
 

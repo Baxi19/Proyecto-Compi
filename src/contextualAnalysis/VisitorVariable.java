@@ -183,7 +183,7 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
         if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT().getSymbol(), "MET") == null){
             IDLE.getInstance().errorsContextual.add(
                     new Error(ctx.IDENT().getSymbol().getLine(),
-                            ctx.IDENT().getSymbol().getCharPositionInLine(),"Undefined  " +ctx.IDENT().getText() + " ", "ERROR CONTEXT"));
+                            ctx.IDENT().getSymbol().getCharPositionInLine(),"Undefined  " +ctx.IDENT().getText() + " ", "CONTEXT ERROR "));
 
         }
         return null;
@@ -295,7 +295,6 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitFunctionParametersAST(MonkeyParser.FunctionParametersASTContext ctx) {
-        //TODO: Trying to return the parameters Size
         return ctx.IDENT().size();
     }
 
@@ -337,15 +336,14 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitPrintExpressionAST(MonkeyParser.PrintExpressionASTContext ctx) {
-        if(ctx.expression()!=null){
-            visit(ctx.expression());
-        }
+
+        visit(ctx.expression());
+
         return null;
     }
 
     @Override
     public Object visitIfExpressionAST(MonkeyParser.IfExpressionASTContext ctx) {
-
         if(ctx.IF()!=null){
 
         }

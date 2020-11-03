@@ -31,17 +31,48 @@ public class SymbolTable {
         }
     }
 
+    //TODO: get Parameters
     //------------------------------------------------------------------------------------------------------------------
     //Method to insert "type Method"
     public void insertMet(Token token, String type, int level, ParserRuleContext decl) {
+        //get Parameters as list[] of string
+        ArrayList<String> param = IDLE.getInstance().getFuntionInfo(decl.getText().split("\\=")[1]);
+
+        //If some parameters have the same name, the param will be null, => New Error
+        if(param == null){
+            IDLE.getInstance().errorsContextual.add(
+                    new Error(token.getLine(), token.getCharPositionInLine(),
+                            "Some Parameter has the same name in method :" + token.getText(),
+                            "CONTEXT ERROR "));
+            return;
+        }
+
+
+
+
+
+
+        //TODO: It's only to check the info, we have to delete
+        System.out.println("\n=>CTX: " + decl.getText());
+        System.out.println("=>IDENT: " + token.getText());
+        for (int i = 0; i < param.size(); i++) {
+            System.out.println("@Parameter: "+param.get(i));
+        }
+
+
+
+
+
+
+
         if(search(token, type) == null){
-            Function function = new Function(token,type,level,decl);
+            Function function = new Function(token,type,level,decl,param);
             table.add(function);
         }else{
             IDLE.getInstance().errorsContextual.add(
                     new Error(token.getLine(), token.getCharPositionInLine(),
                             "Method '" + token.getText() + "' has not been declared in current context",
-                            "CONTEXT ERROR"));
+                            "CONTEXT ERROR "));
         }
     }
 
@@ -50,7 +81,7 @@ public class SymbolTable {
     public Ident search(Token token, String type){
         Collections.reverse(table);
         for(int i = 0; i<table.size(); i++){
-            if(table.get(i).getId().getText().equals(token.getText()) &&  table.get(i).getType().equals(type)){
+            if(table.get(i).getToken().getText().equals(token.getText()) &&  table.get(i).getType().equals(type)){
                 return table.get(i);
             }
         }

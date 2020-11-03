@@ -24,6 +24,6 @@ public class Variable extends Ident {
     //to String
     @Override
     public String toString() {
-        return "\nName = " + id.getText() + ", Level = " + level+ ", Row = " + id.getLine()+ ", Column = " + id.getCharPositionInLine()  + ", Type = " + type  + ", Value = " + value + ", Declaration Context=" + declCtx.getText();
+        return "\n(" + token.getLine()+ "," + token.getCharPositionInLine()  + ") ID = " + super.getId() +", Name = " + token.getText() + ", Level = " + level+  ", Type = " + type  + ", Value = " + value + ", Declaration Context=" + declCtx.getText();
     }
 }
