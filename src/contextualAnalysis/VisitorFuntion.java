@@ -38,8 +38,13 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitLetStatementAST(MonkeyParser.LetStatementASTContext ctx) {
         visit(ctx.expression());
+
+
         //if is Funtion
         String[] parts = ctx.getText().split("\\=");
+
+        //TODO: get Parameters
+
         if(parts[1].startsWith("fn(")){
             IDLE.getInstance().tablaSimbolos.insertMet(ctx.IDENT().getSymbol(), "MET" ,level, ctx);
         }
@@ -287,7 +292,7 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitFunctionParametersAST(MonkeyParser.FunctionParametersASTContext ctx) {
         //TODO: Trying to return the parameters Size
-        return ctx.IDENT().size();
+        return ctx.IDENT();
     }
 
     @Override
