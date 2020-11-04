@@ -15,8 +15,11 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitProgramAST(MonkeyParser.ProgramASTContext ctx) {
+        //TODO: Clean the values used by visitors
         IDLE.getInstance().tableId = 0;
         IDLE.getInstance().tablaSimbolos = new SymbolTable();
+        IDLE.getInstance().parameters = new ArrayList<>();
+
         for(int i = 0; i < ctx.statement().size();i++){
             visit(ctx.statement(i));
         }
@@ -45,7 +48,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
     public Object visitLetStatementAST(MonkeyParser.LetStatementASTContext ctx) {
         visit(ctx.expression());
         if(ctx.getText().split("\\=")[1].startsWith("fn(")){
-            //TODO: INSERT PARAMETERS
             IDLE.getInstance().tablaSimbolos.insertMet(ctx.IDENT(), TYPE.FUNCTION, level, ctx);
         }
         return null;
@@ -182,17 +184,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitPrimitiveExpression_identAST(MonkeyParser.PrimitiveExpression_identASTContext ctx) {
-
-        //TODO: check method
-        //Check Methods
-  /*      if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT().getSymbol(), "MET") == null){
-            IDLE.getInstance().errorsContextual.add(
-                    new Error(ctx.IDENT().getSymbol().getLine(),
-                            ctx.IDENT().getSymbol().getCharPositionInLine(),"Undefined  " +ctx.IDENT().getText() + " ", "CONTEXT ERROR "));
-
-        }
-
-   */
 
         return null;
     }

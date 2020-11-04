@@ -1,6 +1,6 @@
 package backend;
 
-import contextualAnalysis.Ident;
+
 import contextualAnalysis.SymbolTable;
 import contextualAnalysis.VisitorFuntion;
 import contextualAnalysis.VisitorVariable;
@@ -54,6 +54,8 @@ public class IDLE {
     public RSyntaxTextArea codeArea = new RSyntaxTextArea();
     public RSyntaxTextArea terminal = new RSyntaxTextArea();
     protected JSplitPane panel = new JSplitPane();
+    public Boolean showTableSymbol = false;
+    public Boolean showConsoleTree = false;
 
     //Vars to get the user files
     protected File archive = new File("");
@@ -64,8 +66,6 @@ public class IDLE {
     //Contextual Analysis
     public int tableId = 0;
     public SymbolTable tablaSimbolos = new SymbolTable();
-    public Boolean showTableSymbol = false;
-    public Boolean showConsoleTree = false;
     public ArrayList<TerminalNode> parameters = new ArrayList<>();
 
     //Singleton

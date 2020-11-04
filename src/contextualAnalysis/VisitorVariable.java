@@ -180,11 +180,11 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitPrimitiveExpression_identAST(MonkeyParser.PrimitiveExpression_identASTContext ctx) {
-        //TODO: Check Methods(I Added the level @param)
+        //TODO: DEBUG: To Check Method, to verify if exist to **rewrite**
         if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT(), TYPE.FUNCTION, level) == null){
             IDLE.getInstance().errorsContextual.add(
                     new Error(ctx.IDENT().getSymbol().getLine(),
-                            ctx.IDENT().getSymbol().getCharPositionInLine(),"Undefined  " +ctx.IDENT().getText() + " ", "CONTEXT ERROR "));
+                            ctx.IDENT().getSymbol().getCharPositionInLine(),"Undefined  " +ctx.IDENT().getText() + " ", "SINTAX ERROR  "));
 
         }
         return null;

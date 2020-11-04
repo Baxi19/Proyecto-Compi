@@ -29,11 +29,10 @@ public class SymbolTable {
             IDLE.getInstance().errorsContextual.add(
                     new Error(token.getSymbol().getLine(), token.getSymbol().getCharPositionInLine(),
                             "Variable '" + token.getText() + "' has not been declared in current context",
-                            "CONTEXT ERROR"));
+                            "SINTAX ERROR  "));
         }
     }
 
-    //TODO: get Parameters
     //------------------------------------------------------------------------------------------------------------------
     //Method to insert "type Method"
     public void insertMet(TerminalNode token, TYPE type, int level, ParserRuleContext decl) {
@@ -45,65 +44,43 @@ public class SymbolTable {
             IDLE.getInstance().errorsContextual.add(
                     new Error(token.getSymbol().getLine(), token.getSymbol().getCharPositionInLine(),
                             "Some Parameter has the same name in method :" + token.getText(),
-                            "CONTEXT ERROR "));
+                            "SINTAX ERROR  "));
             return;
         }
 
         if(search(token,type,level) == null){
-            //Function function = new Function(token,type,level,decl,parmeters);
             Function function = new Function(token,type,level,decl);
             ArrayList<TerminalNode> parm = IDLE.getInstance().parameters;
-            //TODO: Insertar cada parametro con alguna tecnica
             for (int i = 0; i < parm.size(); i++) {
-                //parm.get(i);
                 Parameter parameter = new Parameter(parm.get(i), TYPE.PARAMETER, level, decl, true, function.getId());
                 function.getParameters().add(parameter);
                 table.add(parameter);
             }
-
             table.add(function);
 
         }else{
             IDLE.getInstance().errorsContextual.add(
                     new Error(token.getSymbol().getLine(), token.getSymbol().getCharPositionInLine(),
                             "Method '" + token.getText() + "' has not been declared in current context",
-                            "CONTEXT ERROR "));
+                            "SINTAX ERROR  "));
         }
     }
 
     //------------------------------------------------------------------------------------------------------------------
     //Method to Search Methods or Vars in table
-    //TODO: REWRITE THIS METHODS
+    //TODO: DEBUG THIS METHOD
     public Ident search(TerminalNode token, TYPE type, int level){
         Collections.reverse(table);
         for(int i = 0; i<table.size(); i++){
-            //If are the same token's name ?
-          /*  if(table.get(i).getToken().getText().equals(token.getText())){
-                //if are in the same level ?
-                if(table.get(i).getLevel() == level){
-                    //if are var or method ?
-                    if(table.get(i).getType() == type){
-                        return table.get(i);
-                    }
-                    //if are parameter ?
-                    if(table.get(i).getType().equals(TYPE.PARAMETER)){
-                        return table.get(i);
-                    }
-                }
-            }
-
-            */
             if(table.get(i).getToken().getText().equals(token.getText()) &&
-                    (table.get(i).getType().equals(type) || table.get(i).getType().equals(TYPE.PARAMETER))){
+                    (table.get(i).getType().equals(type) ||
+                            table.get(i).getType().equals(TYPE.PARAMETER))){
                 return table.get(i);
             }
-
-
         }
         Collections.reverse(table);
         return null;
     }
-
 
     //------------------------------------------------------------------------------------------------------------------
     //Method to print table info
