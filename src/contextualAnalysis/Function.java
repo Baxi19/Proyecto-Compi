@@ -1,37 +1,45 @@
 package contextualAnalysis;
 
+import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.TerminalNode;
+import utils.TYPE;
 
 import java.util.ArrayList;
 
 //Class Function, will represent "Iden" as method's declaration
 public class Function extends Ident {
-    public ArrayList<String> parameters;
+    public ArrayList<Ident> parameters;
     public Object returnValue;
 
     //------------------------------------------------------------------------------------------------------------------
     //Constructor
-    public Function(Token token, String type, int level, ParserRuleContext declCtx, ArrayList<String> parameters) {
+    public Function(TerminalNode token, TYPE type, int level, ParserRuleContext declCtx) {
+        super(token, type, level, declCtx);
+        this.parameters = new ArrayList<>();
+        this.returnValue = null;
+    }
+
+    public Function(TerminalNode token, TYPE type, int level, ParserRuleContext declCtx, ArrayList<Ident> parameters) {
         super(token, type, level, declCtx);
         this.parameters = parameters;
         this.returnValue = null;
     }
 
-    public Function(Token token, String type, int level, ParserRuleContext declCtx,ArrayList<String> parameters,  Object returnValue) {
+    public Function(TerminalNode token, TYPE type, int level, ParserRuleContext declCtx,ArrayList<Ident> parameters,  Object returnValue) {
         super(token, type, level, declCtx);
-        this.type = "MET";
         this.parameters = parameters;
         this.returnValue = returnValue;
     }
 
     //------------------------------------------------------------------------------------------------------------------
     //Getter & Setter
-    public ArrayList<String> getParameters() {
+    public ArrayList<Ident> getParameters() {
         return parameters;
     }
 
-    public void setParameters(ArrayList<String> parameters) {
+    public void setParameters(ArrayList<Ident> parameters) {
         this.parameters = parameters;
     }
 
@@ -46,7 +54,7 @@ public class Function extends Ident {
     //------------------------------------------------------------------------------------------------------------------
     @Override
     public String toString() {
-        return "\n(" + token.getLine()+ "," + token.getCharPositionInLine()  + ") ID = " + super.getId() +", Name = " + token.getText() + ", Level = " + level +  ", Type = " + type  + ", Parameters = " + parameters.size() + ", Declaration Context=" + declCtx.getText();
+        return "\n(" + token.getSymbol().getLine()+ "," + token.getSymbol().getCharPositionInLine()  + ") ID = " + super.getId() +", Name = " + token.getText() + ", Level = " + level +  ", Type = " + type  + ", Parameters = " + parameters.size() + ", Declaration Context=" + declCtx.getText();
     }
 
     //------------------------------------------------------------------------------------------------------------------

@@ -3,7 +3,8 @@ package contextualAnalysis;
 import backend.IDLE;
 import generated.MonkeyParser;
 import generated.MonkeyParserBaseVisitor;
-import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.TerminalNode;
+import utils.TYPE;
 
 import java.util.ArrayList;
 
@@ -14,6 +15,8 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitProgramAST(MonkeyParser.ProgramASTContext ctx) {
+        IDLE.getInstance().tableId = 0;
+        IDLE.getInstance().tablaSimbolos = new SymbolTable();
         for(int i = 0; i < ctx.statement().size();i++){
             visit(ctx.statement(i));
         }
@@ -42,7 +45,8 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
     public Object visitLetStatementAST(MonkeyParser.LetStatementASTContext ctx) {
         visit(ctx.expression());
         if(ctx.getText().split("\\=")[1].startsWith("fn(")){
-            IDLE.getInstance().tablaSimbolos.insertMet(ctx.IDENT().getSymbol(), "MET" ,level, ctx);
+            //TODO: INSERT PARAMETERS
+            IDLE.getInstance().tablaSimbolos.insertMet(ctx.IDENT(), TYPE.FUNCTION, level, ctx);
         }
         return null;
     }
@@ -178,6 +182,18 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitPrimitiveExpression_identAST(MonkeyParser.PrimitiveExpression_identASTContext ctx) {
+
+        //TODO: check method
+        //Check Methods
+  /*      if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT().getSymbol(), "MET") == null){
+            IDLE.getInstance().errorsContextual.add(
+                    new Error(ctx.IDENT().getSymbol().getLine(),
+                            ctx.IDENT().getSymbol().getCharPositionInLine(),"Undefined  " +ctx.IDENT().getText() + " ", "CONTEXT ERROR "));
+
+        }
+
+   */
+
         return null;
     }
 
@@ -287,7 +303,9 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitFunctionParametersAST(MonkeyParser.FunctionParametersASTContext ctx) {
-        return ctx.IDENT();
+        ctx.IDENT();
+        IDLE.getInstance().parameters = ( ArrayList<TerminalNode> ) ctx.IDENT();
+        return null;
     }
 
     @Override

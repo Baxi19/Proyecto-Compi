@@ -14,6 +14,7 @@ import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.fife.ui.rsyntaxtextarea.*;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import tree.Visitor;
@@ -59,11 +60,13 @@ public class IDLE {
     protected String path = "";
     protected JFileChooser fileChooser = new JFileChooser();
 
+    //TODO: Set vars in the first value every time when visitor run
     //Contextual Analysis
     public int tableId = 0;
     public SymbolTable tablaSimbolos = new SymbolTable();
     public Boolean showTableSymbol = false;
     public Boolean showConsoleTree = false;
+    public ArrayList<TerminalNode> parameters = new ArrayList<>();
 
     //Singleton
     public static IDLE getInstance(){

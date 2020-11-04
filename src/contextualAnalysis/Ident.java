@@ -3,17 +3,19 @@ package contextualAnalysis;
 import backend.IDLE;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.TerminalNode;
+import utils.TYPE;
 
 //Class Ident "Father"
 public abstract class Ident {
     public int id;
-    public Token token;
-    protected String type;
+    public TerminalNode token;
+    protected TYPE type;
     public int level;
     public ParserRuleContext declCtx;
 
     //Constructor
-    public Ident(Token token, String type, int level, ParserRuleContext declCtx) {
+    public Ident(TerminalNode token, TYPE type, int level, ParserRuleContext declCtx) {
         this.id = IDLE.getInstance().getNewId();
         this.token = token;
         this.type = type;
@@ -30,19 +32,19 @@ public abstract class Ident {
         this.id = id;
     }
 
-    public Token getToken() {
+    public TerminalNode getToken() {
         return token;
     }
 
-    public void setToken(Token token) {
+    public void setToken(TerminalNode token) {
         this.token = token;
     }
 
-    public String getType() {
+    public TYPE getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(TYPE type) {
         this.type = type;
     }
 

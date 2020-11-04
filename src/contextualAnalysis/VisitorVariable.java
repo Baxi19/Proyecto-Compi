@@ -4,6 +4,7 @@ import backend.IDLE;
 import errors.Error;
 import generated.MonkeyParser;
 import generated.MonkeyParserBaseVisitor;
+import utils.TYPE;
 
 
 //Visitor, Used by Save the simbols table
@@ -44,7 +45,7 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
         //if is  NOT a  Funtion
         String[] parts = ctx.getText().split("\\=");
         if(!parts[1].startsWith("fn(")){
-            IDLE.getInstance().tablaSimbolos.insertVar(ctx.IDENT().getSymbol(), "VAR",level, ctx);
+            IDLE.getInstance().tablaSimbolos.insertVar(ctx.IDENT(), TYPE.VARIABLE, level, ctx);
         }
         return null;
     }
@@ -179,8 +180,8 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitPrimitiveExpression_identAST(MonkeyParser.PrimitiveExpression_identASTContext ctx) {
-        //Check Methods
-        if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT().getSymbol(), "MET") == null){
+        //TODO: Check Methods(I Added the level @param)
+        if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT(), TYPE.FUNCTION, level) == null){
             IDLE.getInstance().errorsContextual.add(
                     new Error(ctx.IDENT().getSymbol().getLine(),
                             ctx.IDENT().getSymbol().getCharPositionInLine(),"Undefined  " +ctx.IDENT().getText() + " ", "CONTEXT ERROR "));
