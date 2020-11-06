@@ -69,7 +69,6 @@ public class SymbolTable {
 
     //------------------------------------------------------------------------------------------------------------------
     //Method to Search Methods or Vars in table
-    //TODO: DEBUG THIS METHOD
     public Ident search(TerminalNode token, TYPE type, int level){
         Collections.reverse(table);
         for(int i = 0; i<table.size(); i++){

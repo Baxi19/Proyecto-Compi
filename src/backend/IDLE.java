@@ -70,6 +70,7 @@ public class IDLE {
     public int tableId = 0;
     public SymbolTable tablaSimbolos = new SymbolTable();
     public ArrayList<TerminalNode> parameters = new ArrayList<>();
+    public String callWith = "";
 
     //Singleton
     public static IDLE getInstance(){

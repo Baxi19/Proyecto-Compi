@@ -65,7 +65,7 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
     public Object visitExpressionStatementAST(MonkeyParser.ExpressionStatementASTContext ctx) {
         visit(ctx.expression());
         //TODO: Call expresion
-        //System.out.println("Expresion: " + ctx.getText());
+        //System.out.println("Expresion: " + ctx.expression().getText());
         return null;
     }
 
@@ -156,6 +156,8 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
         }
         if(ctx.callExpression()!=null){
             visit(ctx.callExpression());
+            //TODO: check funtion parameter if are equal at declared
+            System.out.println(ctx.callExpression().getText());
         }
         return null;
     }
@@ -170,9 +172,9 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitCallExpressionAST(MonkeyParser.CallExpressionASTContext ctx) {
-        if(ctx.expressionList()!=null){
-            visit(ctx.expressionList());
-        }
+        //Get the parameter in every call
+        visit(ctx.expressionList());
+        IDLE.getInstance().callWith = ctx.expressionList().getText();
         return null;
     }
 
@@ -324,11 +326,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitExpressionList_expressionAST(MonkeyParser.ExpressionList_expressionASTContext ctx) {
         //TODO: Check first parameter
-        //if(IDLE.getInstance().isInt(ctx.expression().get(0).getText())){
-            //System.out.println("INT: " + ctx.expression().get(0).getText());
-      //  }
-
-
         for(int i = 0; i < ctx.expression().size();i++){
             //System.out.println(ctx.expression().get(i).getText());
         }
