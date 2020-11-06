@@ -14,7 +14,6 @@ import java.util.regex.*;
 public class SymbolTable {
     public ArrayList<Ident> table ;
 
-    //public int level;
     //------------------------------------------------------------------------------------------------------------------
     //Constructor
     public SymbolTable() {
@@ -75,8 +74,8 @@ public class SymbolTable {
         Collections.reverse(table);
         for(int i = 0; i<table.size(); i++){
             if(table.get(i).getToken().getText().equals(token.getText()) &&
-                    (table.get(i).getType().equals(type) ||
-                            table.get(i).getType().equals(TYPE.PARAMETER))){
+                    (table.get(i).getType() == type ||
+                            table.get(i).getType() == TYPE.PARAMETER)){
                 return table.get(i);
             }
         }
@@ -139,17 +138,6 @@ public class SymbolTable {
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    /*public void openScope(){
-        level++;
-    }
-
-    public void closeScope(){
-        table.removeIf(n -> (((Ident)n).getLevel() == level));
-        level--;
-    }
-
-     */
-
     public Boolean check(String searched){
         for (int i = 0; i < table.size(); i++) {
             if(table.get(i).getToken().getText().equals(searched)){

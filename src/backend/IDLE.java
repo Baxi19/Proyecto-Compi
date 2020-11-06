@@ -358,7 +358,7 @@ public class IDLE {
         try {
             ScriptEngineManager mgr = new ScriptEngineManager();
             ScriptEngine engine = mgr.getEngineByName("JavaScript");
-            System.out.println(engine.eval(value));
+            engine.eval(value);
             return true;
         } catch (ScriptException e) {
             return false;
@@ -372,13 +372,10 @@ public class IDLE {
         String[] data =  lBrace[1].split("\\,");
         String first = data[0];
         if(first.startsWith("\"")){
-            System.out.println("STRING");
             return true;
         }else if(isInt(first)){
-            System.out.println("INT");
             return true;
         }else{
-            System.out.println("Not supported in first position");
             return false;
         }
     }

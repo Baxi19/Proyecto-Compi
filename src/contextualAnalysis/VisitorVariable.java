@@ -43,9 +43,7 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
         //if is  NOT a  Funtion
         String[] parts = ctx.getText().split("\\=");
         if(!parts[1].startsWith("fn(")){
-            //TODO: call  function declared ejp: let x = fib(5);
-            //Call Function
-
+            //TODO: call  function declared ejp: let x = fib(5); also check parameters number
 
             //List
             if(parts[1].startsWith("[")){
@@ -61,7 +59,6 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
             //Hash
             else if(parts[1].startsWith("{")){
                 IDLE.getInstance().tablaSimbolos.insertVar(ctx.IDENT(), TYPE.HASH, level, ctx);
-
             }
             //Variable
             else {
@@ -192,34 +189,59 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitPrimitiveExpression_numberAST(MonkeyParser.PrimitiveExpression_numberASTContext ctx) {
-        return null;
+        return ctx.INTEGER();
     }
 
     @Override
     public Object visitPrimitiveExpression_stringAST(MonkeyParser.PrimitiveExpression_stringASTContext ctx) {
-        return null;
+        return ctx.STRING();
     }
 
     @Override
     public Object visitPrimitiveExpression_identAST(MonkeyParser.PrimitiveExpression_identASTContext ctx) {
         //TODO: DEBUG: To Check Method, to verify if exist to **rewrite**
-        if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT(), TYPE.FUNCTION, level) == null){
+        boolean function  = false;
+        boolean  parameter = false;
+        boolean  variable = false;
+        boolean  list  = false;
+        boolean  hash = false;
+        /*if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT(), TYPE.FUNCTION, level) == null){
             IDLE.getInstance().errorsContextual.add(
                     new Error(ctx.IDENT().getSymbol().getLine(),
                             ctx.IDENT().getSymbol().getCharPositionInLine(),"Undefined  " +ctx.IDENT().getText() + " ", "SINTAX ERROR  "));
+        }*/
 
+        if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT(), TYPE.FUNCTION, level) != null){
+            function = true;
+        }
+        if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT(), TYPE.PARAMETER, level) != null){
+            parameter = true;
+        }
+        if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT(), TYPE.VARIABLE, level) != null){
+            variable = true;
+        }
+        if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT(), TYPE.LIST, level) != null){
+            list = true;
+        }
+        if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT(), TYPE.HASH, level) != null){
+            hash = true;
+        }
+        if(!(function || parameter || variable || list || hash)){
+            IDLE.getInstance().errorsContextual.add(
+                    new Error(ctx.IDENT().getSymbol().getLine(),
+                            ctx.IDENT().getSymbol().getCharPositionInLine(),"Undefined  " +ctx.IDENT().getText() + " ", "SINTAX ERROR  "));
         }
         return null;
     }
 
     @Override
     public Object visitPrimitiveExpression_trueAST(MonkeyParser.PrimitiveExpression_trueASTContext ctx) {
-        return null;
+        return ctx.TRUE();
     }
 
     @Override
     public Object visitPrimitiveExpression_falseAST(MonkeyParser.PrimitiveExpression_falseASTContext ctx) {
-        return null;
+        return ctx.FALSE();
     }
 
     @Override
