@@ -13,6 +13,8 @@ import java.util.regex.*;
 // Symbols Table
 public class SymbolTable {
     public ArrayList<Ident> table ;
+
+    //public int level;
     //------------------------------------------------------------------------------------------------------------------
     //Constructor
     public SymbolTable() {
@@ -52,7 +54,7 @@ public class SymbolTable {
             Function function = new Function(token,type,level,decl);
             ArrayList<TerminalNode> parm = IDLE.getInstance().parameters;
             for (int i = 0; i < parm.size(); i++) {
-                Parameter parameter = new Parameter(parm.get(i), TYPE.PARAMETER, level, decl, true, function.getId());
+                Parameter parameter = new Parameter(parm.get(i), TYPE.PARAMETER, level, decl, true, function);
                 function.getParameters().add(parameter);
                 table.add(parameter);
             }
@@ -87,7 +89,8 @@ public class SymbolTable {
     public String printTables() {
         Collections.reverse(table);
         String tableData = "\n\n*******************************************************************************************";
-        tableData +=  "\n\n-----TABLE MET------";
+        //Funtion
+        tableData +=  "\n\n-----TABLE FUNTION------";
         for (int i = 0; i < table.size(); i++) {
             if(table.get(i).getType().equals(TYPE.FUNCTION)){
                 tableData += table.get(i).toString();
@@ -95,7 +98,8 @@ public class SymbolTable {
         }
         tableData += "\n------END------";
 
-        tableData +=  "\n\n-----TABLE PAR------";
+        //Parameter
+        tableData +=  "\n\n-----TABLE PARAMETER------";
         for (int i = 0; i < table.size(); i++) {
             if(table.get(i).getType().equals(TYPE.PARAMETER)){
                 tableData += table.get(i).toString();
@@ -103,27 +107,56 @@ public class SymbolTable {
         }
         tableData += "\n------END------";
 
-        tableData +=  "\n\n-----TABLE VAR------";
+        //Variable
+        tableData +=  "\n\n-----TABLE VARIABLE------";
         for (int i = 0; i < table.size(); i++) {
             if(table.get(i).getType().equals(TYPE.VARIABLE)){
                 tableData += table.get(i).toString();
             }
         }
         tableData += "\n------END------";
+
+        //List
+        tableData +=  "\n\n-----TABLE LIST------";
+        for (int i = 0; i < table.size(); i++) {
+            if(table.get(i).getType().equals(TYPE.LIST)){
+                tableData += table.get(i).toString();
+            }
+        }
+        tableData += "\n------END------";
+
+        //Hash
+        tableData +=  "\n\n-----TABLE HASH------";
+        for (int i = 0; i < table.size(); i++) {
+            if(table.get(i).getType().equals(TYPE.HASH)){
+                tableData += table.get(i).toString();
+            }
+        }
+        tableData += "\n------END------";
+
         Collections.reverse(table);
         return tableData += "\n\n*******************************************************************************************\n\n";
     }
 
     //------------------------------------------------------------------------------------------------------------------
-   /* public void openScope(){
-        nivelActual++;
+    /*public void openScope(){
+        level++;
     }
 
     public void closeScope(){
-        tabla.removeIf(n -> (((Ident)n).nivel == nivelActual));
-        nivelActual--;
+        table.removeIf(n -> (((Ident)n).getLevel() == level));
+        level--;
     }
 
-    */
+     */
+
+    public Boolean check(String searched){
+        for (int i = 0; i < table.size(); i++) {
+            if(table.get(i).getToken().getText().equals(searched)){
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

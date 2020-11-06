@@ -354,4 +354,21 @@ public class IDLE {
         }
     }
 
+    //Method to check if is Int
+    public Boolean isInt(String value){
+        try {
+            int test = Integer.parseInt(value);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    //Method to check if isn't ident
+    public boolean isIdent(String text) {
+        if(tablaSimbolos.check(text)){
+            return true;
+        }
+        return false;
+    }
 }

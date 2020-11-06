@@ -45,7 +45,15 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
         //if is  NOT a  Funtion
         String[] parts = ctx.getText().split("\\=");
         if(!parts[1].startsWith("fn(")){
-            IDLE.getInstance().tablaSimbolos.insertVar(ctx.IDENT(), TYPE.VARIABLE, level, ctx);
+            if(parts[1].startsWith("[")){
+                IDLE.getInstance().tablaSimbolos.insertVar(ctx.IDENT(), TYPE.LIST, level, ctx);
+
+            }else if(parts[1].startsWith("{")){
+                IDLE.getInstance().tablaSimbolos.insertVar(ctx.IDENT(), TYPE.HASH, level, ctx);
+
+            }else {
+                IDLE.getInstance().tablaSimbolos.insertVar(ctx.IDENT(), TYPE.VARIABLE, level, ctx);
+            }
         }
         return null;
     }
@@ -59,6 +67,7 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitExpressionStatementAST(MonkeyParser.ExpressionStatementASTContext ctx) {
         visit(ctx.expression());
+
         return null;
     }
 
