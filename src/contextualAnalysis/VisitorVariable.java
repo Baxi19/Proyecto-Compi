@@ -16,8 +16,6 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
         for(int i = 0; i < ctx.statement().size();i++){
             visit(ctx.statement(i));
         }
-        //System.out.println(IDLE.getInstance().tablaSimbolos.printTables());
-        //System.out.println("Table Size: " + IDLE.getInstance().tablaSimbolos.table.size());
         return null;
     }
 
@@ -45,13 +43,28 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
         //if is  NOT a  Funtion
         String[] parts = ctx.getText().split("\\=");
         if(!parts[1].startsWith("fn(")){
-            if(parts[1].startsWith("[")){
-                IDLE.getInstance().tablaSimbolos.insertVar(ctx.IDENT(), TYPE.LIST, level, ctx);
+            //TODO: call  function declared ejp: let x = fib(5);
+            //Call Function
 
-            }else if(parts[1].startsWith("{")){
+
+            //List
+            if(parts[1].startsWith("[")){
+                if(IDLE.getInstance().checkFirstParameter(parts[1])){
+                    IDLE.getInstance().tablaSimbolos.insertVar(ctx.IDENT(), TYPE.LIST, level, ctx);
+                }else{
+                    IDLE.getInstance().errorsContextual.add(
+                            new Error(ctx.IDENT().getSymbol().getLine(),
+                                    ctx.IDENT().getSymbol().getCharPositionInLine(),"Hash Content only supports (INT or STRING) in first position, in : '" +ctx.IDENT().getText() + " ", "SINTAX ERROR  "));
+                }
+            }
+
+            //Hash
+            else if(parts[1].startsWith("{")){
                 IDLE.getInstance().tablaSimbolos.insertVar(ctx.IDENT(), TYPE.HASH, level, ctx);
 
-            }else {
+            }
+            //Variable
+            else {
                 IDLE.getInstance().tablaSimbolos.insertVar(ctx.IDENT(), TYPE.VARIABLE, level, ctx);
             }
         }

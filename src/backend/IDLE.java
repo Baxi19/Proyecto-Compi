@@ -19,6 +19,9 @@ import org.fife.ui.rsyntaxtextarea.*;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import tree.Visitor;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
@@ -331,25 +334,21 @@ public class IDLE {
         return null;
     }
 
-    //Method check if are parameters with same name
+    //Method check if are parameters with same name in function declaration
     public Boolean checkParameters(ArrayList<String> list){
         List<String> duplicateList = list
                     .stream()
                     .collect(Collectors.groupingBy(s -> s))
                     .entrySet()
                     .stream()
-                    // filter if are more than one paremeter with same name
+                    // filter if are more than one parameter with same name
                     .filter(e -> e.getValue().size() > 1)
                     .map(e -> e.getKey())
                     .collect(Collectors.toList());
-
-        //If are not ambiguos parameters'name
+        //If are not ambiguous parameters'name
         if(duplicateList.isEmpty()){
             return true;
         }else{
-            /*for(String parameter : duplicateList) {
-                System.err.println("(X) Error, duplicate parameter: " + parameter);
-            }*/
             return false;
         }
     }
@@ -357,18 +356,30 @@ public class IDLE {
     //Method to check if is Int
     public Boolean isInt(String value){
         try {
-            int test = Integer.parseInt(value);
+            ScriptEngineManager mgr = new ScriptEngineManager();
+            ScriptEngine engine = mgr.getEngineByName("JavaScript");
+            System.out.println(engine.eval(value));
             return true;
-        }catch (Exception e){
+        } catch (ScriptException e) {
             return false;
         }
+
     }
 
-    //Method to check if isn't ident
-    public boolean isIdent(String text) {
-        if(tablaSimbolos.check(text)){
+    //Check first value of List [?,.,.,.,.,.]
+    public boolean checkFirstParameter(String part) {
+        String[] lBrace = part.split("\\[");
+        String[] data =  lBrace[1].split("\\,");
+        String first = data[0];
+        if(first.startsWith("\"")){
+            System.out.println("STRING");
             return true;
+        }else if(isInt(first)){
+            System.out.println("INT");
+            return true;
+        }else{
+            System.out.println("Not supported in first position");
+            return false;
         }
-        return false;
     }
 }
