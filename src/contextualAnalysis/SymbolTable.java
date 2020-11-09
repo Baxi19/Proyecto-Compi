@@ -70,12 +70,123 @@ public class SymbolTable {
     //------------------------------------------------------------------------------------------------------------------
     //Method to Search Methods or Vars in table
     public Ident search(TerminalNode token, TYPE type, int level){
+        /*Collections.reverse(table);
+        for(int i = 0; i<table.size(); i++){
+            if(table.get(i).getToken().getText().equals(token.getText()) &&  (table.get(i).getType() == type || table.get(i).getType() == TYPE.PARAMETER)){
+                return table.get(i);
+            }
+        }
+        Collections.reverse(table);
+         */
+        switch (type) {
+            case FUNCTION:
+                return searchFunction(token,level);
+            case VARIABLE:
+                return searchVariable(token,level);
+            case HASHCONTENT:
+                return searchHashContent(token,level);
+            case HASHLITERAL:
+                return searchHashLiteral(token,level);
+            case PARAMETER:
+                return searchParameter(token,level);
+        }
+        return null;
+
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    //Method to Search Variable
+    public Ident searchVariable(TerminalNode token, int level){
+        if(level > 1){
+            return searchParameter(token,level);
+        }else{
+            Collections.reverse(table);
+            for(int i = 0; i<table.size(); i++){
+                if(table.get(i).getType() == TYPE.VARIABLE){
+                    //If same name
+                    if(table.get(i).getToken().getText().equals(token.getText())){
+                        //if same level
+                        if(table.get(i).getLevel() == level){
+                            return table.get(i);
+                        }
+                    }
+                }
+            }
+            Collections.reverse(table);
+            return null;
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    //Method to Search Function
+    public Ident searchFunction(TerminalNode token, int level){
         Collections.reverse(table);
         for(int i = 0; i<table.size(); i++){
-            if(table.get(i).getToken().getText().equals(token.getText()) &&
-                    (table.get(i).getType() == type ||
-                            table.get(i).getType() == TYPE.PARAMETER)){
-                return table.get(i);
+            if(table.get(i).getType() == TYPE.PARAMETER){
+                //If same name
+                if(table.get(i).getToken().getText().equals(token.getText())){
+                    //if same level
+                    if(table.get(i).getLevel() == level){
+                        return table.get(i);
+                    }
+                }
+            }
+        }
+        Collections.reverse(table);
+        return null;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    //Method to Search Parameter
+    public Ident searchParameter(TerminalNode token, int level){
+        Collections.reverse(table);
+        for(int i = 0; i<table.size(); i++){
+            if(table.get(i).getType() ==  TYPE.PARAMETER){
+                //If same name
+                if(table.get(i).getToken().getText().equals(token.getText())){
+                    //if same level
+                    if(table.get(i).getLevel() == level){
+                        return table.get(i);
+                    }
+                }
+            }
+        }
+        Collections.reverse(table);
+        return null;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    //Method to Search Hash Content
+    public Ident searchHashContent(TerminalNode token, int level){
+        Collections.reverse(table);
+        for(int i = 0; i<table.size(); i++){
+            if(table.get(i).getType() ==  TYPE.HASHCONTENT){
+                //If same name
+                if(table.get(i).getToken().getText().equals(token.getText())){
+                    //if same level
+                    if(table.get(i).getLevel() == level){
+                        return table.get(i);
+                    }
+                }
+            }
+        }
+        Collections.reverse(table);
+        return null;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    //Method to Search Hash Literal
+    public Ident searchHashLiteral(TerminalNode token, int level){
+        Collections.reverse(table);
+        for(int i = 0; i<table.size(); i++){
+            if(table.get(i).getType() == TYPE.HASHLITERAL){
+                //If same name
+                if(table.get(i).getToken().getText().equals(token.getText())){
+                    //if same level
+                    if(table.get(i).getLevel() == level){
+                        return table.get(i);
+                    }
+                }
             }
         }
         Collections.reverse(table);
@@ -88,7 +199,7 @@ public class SymbolTable {
         Collections.reverse(table);
         String tableData = "\n\n*******************************************************************************************";
         //Funtion
-        tableData +=  "\n\n-----TABLE FUNTION------";
+        tableData +=  "\n\n-----TABLE FUNCTION------";
         for (int i = 0; i < table.size(); i++) {
             if(table.get(i).getType().equals(TYPE.FUNCTION)){
                 tableData += table.get(i).toString();
@@ -115,18 +226,18 @@ public class SymbolTable {
         tableData += "\n------END------";
 
         //List
-        tableData +=  "\n\n-----TABLE LIST------";
+        tableData +=  "\n\n-----TABLE HASH CONTENT------";
         for (int i = 0; i < table.size(); i++) {
-            if(table.get(i).getType().equals(TYPE.LIST)){
+            if(table.get(i).getType().equals(TYPE.HASHCONTENT)){
                 tableData += table.get(i).toString();
             }
         }
         tableData += "\n------END------";
 
         //Hash
-        tableData +=  "\n\n-----TABLE HASH------";
+        tableData +=  "\n\n-----TABLE HASH LITERAL------";
         for (int i = 0; i < table.size(); i++) {
-            if(table.get(i).getType().equals(TYPE.HASH)){
+            if(table.get(i).getType().equals(TYPE.HASHLITERAL)){
                 tableData += table.get(i).toString();
             }
         }
@@ -145,5 +256,4 @@ public class SymbolTable {
         }
         return false;
     }
-
 }

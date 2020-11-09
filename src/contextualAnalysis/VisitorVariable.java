@@ -48,7 +48,7 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
             //List
             if(parts[1].startsWith("[")){
                 if(IDLE.getInstance().checkFirstParameter(parts[1])){
-                    IDLE.getInstance().tablaSimbolos.insertVar(ctx.IDENT(), TYPE.LIST, level, ctx);
+                    IDLE.getInstance().tablaSimbolos.insertVar(ctx.IDENT(), TYPE.HASHCONTENT, level, ctx);
                 }else{
                     IDLE.getInstance().errorsContextual.add(
                             new Error(ctx.IDENT().getSymbol().getLine(),
@@ -58,7 +58,7 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
 
             //Hash
             else if(parts[1].startsWith("{")){
-                IDLE.getInstance().tablaSimbolos.insertVar(ctx.IDENT(), TYPE.HASH, level, ctx);
+                IDLE.getInstance().tablaSimbolos.insertVar(ctx.IDENT(), TYPE.HASHLITERAL, level, ctx);
             }
             //Variable
             else {
@@ -220,10 +220,10 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
         if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT(), TYPE.VARIABLE, level) != null){
             variable = true;
         }
-        if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT(), TYPE.LIST, level) != null){
+        if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT(), TYPE.HASHCONTENT, level) != null){
             list = true;
         }
-        if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT(), TYPE.HASH, level) != null){
+        if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT(), TYPE.HASHLITERAL, level) != null){
             hash = true;
         }
         if(!(function || parameter || variable || list || hash)){
@@ -328,13 +328,14 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitFunctionLiteralAST(MonkeyParser.FunctionLiteralASTContext ctx) {
-
+        level++;
         if(ctx.functionParameters()!=null){
             visit(ctx.functionParameters());
         }
         if(ctx.blockStatement()!=null){
             visit(ctx.blockStatement());
         }
+        level--;
         return null;
     }
 
@@ -407,9 +408,9 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitBlockStatementAST(MonkeyParser.BlockStatementASTContext ctx) {
         for(int i = 0; i < ctx.statement().size();i++){
-            level++;
+            //level++;
             visit(ctx.statement(i));
-            level--;
+            //level--;
         }
         return null;
     }
