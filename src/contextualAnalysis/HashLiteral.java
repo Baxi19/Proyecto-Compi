@@ -7,25 +7,15 @@ import utils.TYPE;
 import java.util.ArrayList;
 
 public class HashLiteral extends Ident {
-    public String name;
     public ArrayList<Ident> data;
 
     //Contructor
-    public HashLiteral(TerminalNode token, TYPE type, int level, ParserRuleContext declCtx, String name) {
+    public HashLiteral(TerminalNode token, TYPE type, int level, ParserRuleContext declCtx) {
         super(token, type, level, declCtx);
-        this.name = name;
         this.data = new ArrayList<>();
     }
 
     //Setter & Getter
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public ArrayList<Ident> getData() {
         return data;
     }

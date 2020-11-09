@@ -48,7 +48,7 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
             //List
             if(parts[1].startsWith("[")){
                 if(IDLE.getInstance().checkFirstParameter(parts[1])){
-                    IDLE.getInstance().tablaSimbolos.insertVar(ctx.IDENT(), TYPE.HASHCONTENT, level, ctx);
+                    IDLE.getInstance().tablaSimbolos.insertHashContent(ctx.IDENT(), TYPE.HASHCONTENT, level, ctx);
                 }else{
                     IDLE.getInstance().errorsContextual.add(
                             new Error(ctx.IDENT().getSymbol().getLine(),
@@ -58,7 +58,7 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
 
             //Hash
             else if(parts[1].startsWith("{")){
-                IDLE.getInstance().tablaSimbolos.insertVar(ctx.IDENT(), TYPE.HASHLITERAL, level, ctx);
+                IDLE.getInstance().tablaSimbolos.insertHashLiteral(ctx.IDENT(), TYPE.HASHLITERAL, level, ctx);
             }
             //Variable
             else {

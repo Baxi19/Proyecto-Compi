@@ -68,6 +68,34 @@ public class SymbolTable {
     }
 
     //------------------------------------------------------------------------------------------------------------------
+    //Method to insert "HASH CONTENT"
+    public void insertHashContent(TerminalNode token, TYPE type, int level, ParserRuleContext decl) {
+        if(search(token, type, level) == null){
+            HashContent var = new HashContent(token,type,level,decl);
+            table.add(var);
+        }else{
+            IDLE.getInstance().errorsContextual.add(
+                    new Error(token.getSymbol().getLine(), token.getSymbol().getCharPositionInLine(),
+                            "Hash Content '" + token.getText() + "' has not been declared in current context",
+                            "SINTAX ERROR  "));
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    //Method to insert "HASH Literal"
+    public void insertHashLiteral(TerminalNode token, TYPE type, int level, ParserRuleContext decl) {
+        if(search(token, type, level) == null){
+            HashLiteral var = new HashLiteral(token,type,level,decl);
+            table.add(var);
+        }else{
+            IDLE.getInstance().errorsContextual.add(
+                    new Error(token.getSymbol().getLine(), token.getSymbol().getCharPositionInLine(),
+                            "Hash Literal '" + token.getText() + "' has not been declared in current context",
+                            "SINTAX ERROR  "));
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
     //Method to Search Methods or Vars in table
     public Ident search(TerminalNode token, TYPE type, int level){
         /*Collections.reverse(table);
@@ -83,12 +111,13 @@ public class SymbolTable {
                 return searchFunction(token,level);
             case VARIABLE:
                 return searchVariable(token,level);
+            case PARAMETER:
+                return searchParameter(token,level);
             case HASHCONTENT:
                 return searchHashContent(token,level);
             case HASHLITERAL:
                 return searchHashLiteral(token,level);
-            case PARAMETER:
-                return searchParameter(token,level);
+
         }
         return null;
 
@@ -122,7 +151,7 @@ public class SymbolTable {
     public Ident searchFunction(TerminalNode token, int level){
         Collections.reverse(table);
         for(int i = 0; i<table.size(); i++){
-            if(table.get(i).getType() == TYPE.PARAMETER){
+            if(table.get(i).getType() == TYPE.FUNCTION){
                 //If same name
                 if(table.get(i).getToken().getText().equals(token.getText())){
                     //if same level
