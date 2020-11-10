@@ -4,7 +4,11 @@ import backend.IDLE;
 import errors.Error;
 import generated.MonkeyParser;
 import generated.MonkeyParserBaseVisitor;
+import org.antlr.v4.runtime.CommonToken;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import utils.TYPE;
+
+import java.util.ArrayList;
 
 
 //Visitor, Used by Save the simbols table
@@ -13,6 +17,9 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitProgramAST(MonkeyParser.ProgramASTContext ctx) {
+        IDLE.getInstance().parameters = new ArrayList<>();
+        IDLE.getInstance().paramenter = 0;
+
         for(int i = 0; i < ctx.statement().size();i++){
             visit(ctx.statement(i));
         }
@@ -167,6 +174,19 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
         }
         if(ctx.callExpression()!=null){
             visit(ctx.callExpression());
+            //System.out.println("=>" + ctx.getText());
+            String[] name = ctx.getText().split("\\(");
+            String function = name[0];
+            int par = IDLE.getInstance().paramenter;
+            /*if(!IDLE.getInstance().tablaSimbolos.checkParameter(function,par )){
+                IDLE.getInstance().errorsContextual.add(
+                        new Error(-1, -1,
+                                "Call Function '" + name + "' wasn't declared with " + par + " parameters",
+                                "SINTAX ERROR  "));
+            }
+
+             */
+
         }
         return null;
     }
@@ -182,6 +202,7 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitCallExpressionAST(MonkeyParser.CallExpressionASTContext ctx) {
         if(ctx.expressionList()!=null){
+            //System.out.println("->" + ctx.expressionList().getText());
             visit(ctx.expressionList());
         }
         return null;
@@ -201,10 +222,10 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
     public Object visitPrimitiveExpression_identAST(MonkeyParser.PrimitiveExpression_identASTContext ctx) {
         //TODO: DEBUG: To Check Method, to verify if exist to **rewrite**
         boolean function  = false;
-        boolean  parameter = false;
-        boolean  variable = false;
-        boolean  list  = false;
-        boolean  hash = false;
+        boolean parameter = false;
+        boolean variable = false;
+        boolean list  = false;
+        boolean hash = false;
         /*if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT(), TYPE.FUNCTION, level) == null){
             IDLE.getInstance().errorsContextual.add(
                     new Error(ctx.IDENT().getSymbol().getLine(),
@@ -341,6 +362,8 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitFunctionParametersAST(MonkeyParser.FunctionParametersASTContext ctx) {
+        IDLE.getInstance().parameters = ( ArrayList<TerminalNode> ) ctx.IDENT();
+        IDLE.getInstance().paramenter = ctx.IDENT().size();
         return ctx.IDENT().size();
     }
 
@@ -365,13 +388,15 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitExpressionList_expressionAST(MonkeyParser.ExpressionList_expressionASTContext ctx) {
-
+        ArrayList<Object> list = new ArrayList<>();
         for(int i = 0; i < ctx.expression().size();i++){
-
+           list.add(ctx.expression(i));
         }
         for(int i = 0; i < ctx.COMMA().size();i++){
 
         }
+        IDLE.getInstance().paramenter = ctx.expression().size();
+        IDLE.getInstance().auxParam = list;
         return null;
     }
 

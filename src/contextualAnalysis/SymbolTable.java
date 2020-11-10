@@ -57,6 +57,11 @@ public class SymbolTable {
                 function.getParameters().add(parameter);
                 table.add(parameter);
             }
+            if(IDLE.getInstance().existReturn){
+                function.setReturnValue(IDLE.getInstance().returnStatement);
+                IDLE.getInstance().existReturn = false;
+            }
+
             table.add(function);
 
         }else{
@@ -136,6 +141,7 @@ public class SymbolTable {
                     if(table.get(i).getToken().getText().equals(token.getText())){
                         //if same level
                         if(table.get(i).getLevel() == level){
+                            Collections.reverse(table);
                             return table.get(i);
                         }
                     }
@@ -156,6 +162,7 @@ public class SymbolTable {
                 if(table.get(i).getToken().getText().equals(token.getText())){
                     //if same level
                     if(table.get(i).getLevel() == level){
+                        Collections.reverse(table);
                         return table.get(i);
                     }
                 }
@@ -175,6 +182,7 @@ public class SymbolTable {
                 if(table.get(i).getToken().getText().equals(token.getText())){
                     //if same level
                     if(table.get(i).getLevel() == level){
+                        Collections.reverse(table);
                         return table.get(i);
                     }
                 }
@@ -194,6 +202,7 @@ public class SymbolTable {
                 if(table.get(i).getToken().getText().equals(token.getText())){
                     //if same level
                     if(table.get(i).getLevel() == level){
+                        Collections.reverse(table);
                         return table.get(i);
                     }
                 }
@@ -213,6 +222,7 @@ public class SymbolTable {
                 if(table.get(i).getToken().getText().equals(token.getText())){
                     //if same level
                     if(table.get(i).getLevel() == level){
+                        Collections.reverse(table);
                         return table.get(i);
                     }
                 }
@@ -285,4 +295,31 @@ public class SymbolTable {
         }
         return false;
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+    //Method to Search Function
+    public Boolean checkParameter(String name, int par){
+        Collections.reverse(table);
+        for(int i = 0; i<table.size(); i++){
+            if(table.get(i).getType() == TYPE.FUNCTION){
+                //If same name
+                if(table.get(i).getToken().getText().equals(name)){
+                    //if same parameters
+                    Function function = (Function) table.get(i);
+                    if(function.getParameters().size() == par){
+                        Collections.reverse(table);
+                        return true;
+                    }
+                }
+            }
+        }
+        Collections.reverse(table);
+
+        //System.out.println("(X) Different parameters");
+        //System.out.println("Give: " + par);
+
+        return false;
+    }
+
+
 }

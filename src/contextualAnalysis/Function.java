@@ -11,23 +11,23 @@ import java.util.ArrayList;
 //Class Function, will represent "Iden" as method's declaration
 public class Function extends Ident {
     public ArrayList<Ident> parameters;
-    public Object returnValue;
+        public String returnValue;
 
     //------------------------------------------------------------------------------------------------------------------
     //Constructor
     public Function(TerminalNode token, TYPE type, int level, ParserRuleContext declCtx) {
         super(token, type, level, declCtx);
         this.parameters = new ArrayList<>();
-        this.returnValue = null;
+        this.returnValue = "VOID";
     }
 
     public Function(TerminalNode token, TYPE type, int level, ParserRuleContext declCtx, ArrayList<Ident> parameters) {
         super(token, type, level, declCtx);
         this.parameters = parameters;
-        this.returnValue = null;
+        this.returnValue = "VOID";
     }
 
-    public Function(TerminalNode token, TYPE type, int level, ParserRuleContext declCtx,ArrayList<Ident> parameters,  Object returnValue) {
+    public Function(TerminalNode token, TYPE type, int level, ParserRuleContext declCtx,ArrayList<Ident> parameters,  String returnValue) {
         super(token, type, level, declCtx);
         this.parameters = parameters;
         this.returnValue = returnValue;
@@ -47,14 +47,14 @@ public class Function extends Ident {
         return returnValue;
     }
 
-    public void setReturnValue(Object returnValue) {
+    public void setReturnValue(String returnValue) {
         this.returnValue = returnValue;
     }
 
     //------------------------------------------------------------------------------------------------------------------
     @Override
     public String toString() {
-        return "\n(" + token.getSymbol().getLine()+ "," + token.getSymbol().getCharPositionInLine()  + ") ID = " + super.getId() +", Name = " + token.getText() + ", Level = " + level +  ", Type = " + type  + ", Parameters = " + parameters.size() + ", Declaration Context=" + declCtx.getText();
+        return "\n(" + token.getSymbol().getLine()+ "," + token.getSymbol().getCharPositionInLine()  + ") ID = " + super.getId() +", Name = " + token.getText() + ", Level = " + level +  ", Type = " + type  + ", Parameters = " + parameters.size() + ", Return = " + returnValue + ", Declaration Context=" + declCtx.getText();
     }
 
     //------------------------------------------------------------------------------------------------------------------

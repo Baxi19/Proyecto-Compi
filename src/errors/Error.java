@@ -14,6 +14,13 @@ public class Error {
         this.type = type;
     }
 
+    public Error(String msj, String type) {
+        this.row = -1;
+        this.colum = -1;
+        this.msj = msj;
+        this.type = type;
+    }
+
     public int getRow() {
         return row;
     }
