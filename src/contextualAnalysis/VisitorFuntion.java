@@ -1,6 +1,7 @@
 package contextualAnalysis;
 
 import backend.IDLE;
+import errors.Error;
 import generated.MonkeyParser;
 import generated.MonkeyParserBaseVisitor;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -42,7 +43,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitCallExpressionStatementAST(MonkeyParser.CallExpressionStatementASTContext ctx) {
-        //IDLE.getInstance().existReturn = false;
         visit(ctx.expressionStatement());
         return null;
     }
@@ -52,6 +52,8 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
         IDLE.getInstance().existReturn = false;
         level++;
         visit(ctx.expression());
+
+        IDLE.getInstance().tablaSimbolos.rewrite(ctx.IDENT(), level); // TODO: Metodo para sobre escribir idents si se vuelven a asignar con let
         if(ctx.getText().split("\\=")[1].startsWith("fn(")){
             IDLE.getInstance().tablaSimbolos.insertMet(ctx.IDENT(), TYPE.FUNCTION, level, ctx);
         }
@@ -87,21 +89,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
         for(int i = 0; i < ctx.additionExpression().size();i++){
             visit(ctx.additionExpression(i));
         }
-        for(int i = 0; i < ctx.LT().size();i++){
-
-        }
-        for(int i = 0; i < ctx.GT().size();i++){
-
-        }
-        for(int i = 0; i < ctx.LE().size();i++){
-
-        }
-        for(int i = 0; i < ctx.GE().size();i++){
-
-        }
-        for(int i = 0; i < ctx.EQUAL().size();i++){
-
-        }
         return null;
     }
 
@@ -116,12 +103,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
     public Object visitAdditionFactorAST(MonkeyParser.AdditionFactorASTContext ctx) {
         for(int i = 0; i < ctx.multiplicationExpression().size();i++){
             visit(ctx.multiplicationExpression(i));
-        }
-        for(int i = 0; i < ctx.ADD().size();i++){
-
-        }
-        for(int i = 0; i < ctx.SUB().size();i++){
-
         }
         return null;
     }
@@ -139,15 +120,8 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitMultiplicationFactorAST(MonkeyParser.MultiplicationFactorASTContext ctx) {
-
         for(int i = 0; i < ctx.elementExpression().size();i++){
             visit(ctx.elementExpression(i));
-        }
-        for(int i = 0; i < ctx.MUL().size();i++){
-
-        }
-        for(int i = 0; i < ctx.DIV().size();i++){
-
         }
         return null;
     }
@@ -163,6 +137,7 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
         if(ctx.callExpression()!=null){
             visit(ctx.callExpression());
             //TODO: check funtion parameter if are equal at declared
+            //System.out.println("-->" + ctx.callExpression().getText());
 
         }
         return null;
@@ -181,7 +156,7 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
         //Get the parameter in every call
         visit(ctx.expressionList());
         IDLE.getInstance().callWith = ctx.expressionList().getText();
-        //System.out.println(ctx.expressionList().getText());
+        //System.out.println("Save: " + IDLE.getInstance().callWith);
         return null;
     }
 
@@ -197,6 +172,13 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitPrimitiveExpression_identAST(MonkeyParser.PrimitiveExpression_identASTContext ctx) {
+        //TODO: Meter checkeo si existe funcion aqui desde visitor Variable por el closeScope
+        //System.out.println(ctx.IDENT().getText());
+        /*if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT(), TYPE.FUNCTION, level) == null){
+            IDLE.getInstance().errorsContextual.add(
+                    new Error(ctx.IDENT().getSymbol().getLine(),
+                            ctx.IDENT().getSymbol().getCharPositionInLine(),"Undefined  " +ctx.IDENT().getText() + " ", "SINTAX ERROR  "));
+        }*/
         return null;
     }
 
@@ -238,7 +220,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitPrimitiveExpression_FunctionLiteralAST(MonkeyParser.PrimitiveExpression_FunctionLiteralASTContext ctx) {
         visit(ctx.functionLiteral());
-        //System.out.println(ctx.functionLiteral().getText());
         return null;
     }
 
@@ -298,10 +279,13 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
         if(ctx.functionParameters()!=null){
             visit(ctx.functionParameters());
+           // System.out.println(">>"+ctx.functionParameters().getText());
+
         }
         if(ctx.blockStatement()!=null){
             visit(ctx.blockStatement());
         }
+        //TODO: Llamar closeScope personalizado y level ?
         return null;
     }
 
@@ -310,8 +294,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
         //Save the parameters
         ctx.IDENT();
         IDLE.getInstance().parameters = ( ArrayList<TerminalNode> ) ctx.IDENT();
-
-        //System.out.println("+++" + ctx.IDENT().toString());
         return null;
     }
 
@@ -325,21 +307,11 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitHashContentAST(MonkeyParser.HashContentASTContext ctx) {
-        for(int i = 0; i < ctx.expression().size();i++){
-            
-        }
         return null;
     }
 
     @Override
     public Object visitExpressionList_expressionAST(MonkeyParser.ExpressionList_expressionASTContext ctx) {
-        for(int i = 0; i < ctx.expression().size();i++){
-
-        }
-        for(int i = 0; i < ctx.COMMA().size();i++){
-
-        }
-
         return null;
     }
 
@@ -377,9 +349,8 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitBlockStatementAST(MonkeyParser.BlockStatementASTContext ctx) {
         for(int i = 0; i < ctx.statement().size();i++){
-            //level++;
             visit(ctx.statement(i));
-            //level--;
+            //TODO: Llamar closeScope personalizado
         }
         return null;
     }

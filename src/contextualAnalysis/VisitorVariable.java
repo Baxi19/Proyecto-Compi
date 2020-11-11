@@ -23,6 +23,7 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
         for(int i = 0; i < ctx.statement().size();i++){
             visit(ctx.statement(i));
         }
+        //IDLE.getInstance().tablaSimbolos.closeScope(level);
         return null;
     }
 
@@ -41,6 +42,9 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitCallExpressionStatementAST(MonkeyParser.CallExpressionStatementASTContext ctx) {
         visit(ctx.expressionStatement());
+        String[] parts = ctx.getText().split("\\(");
+        System.out.println("Call " + parts[0]);
+
         return null;
     }
 
@@ -49,6 +53,7 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
         visit(ctx.expression());
         //if is  NOT a  Funtion
         String[] parts = ctx.getText().split("\\=");
+        IDLE.getInstance().tablaSimbolos.rewrite(ctx.IDENT(), level); // TODO: Metodo para sobre escribir idents si se vuelven a asignar con let
         if(!parts[1].startsWith("fn(")){
             //TODO: call  function declared ejp: let x = fib(5); also check parameters number
 
@@ -78,6 +83,7 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitReturnStatementAST(MonkeyParser.ReturnStatementASTContext ctx) {
         visit(ctx.expression());
+        //System.out.println("Return :" + ctx.expression().getText());
         return null;
     }
 
@@ -178,15 +184,13 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
             String[] name = ctx.getText().split("\\(");
             String function = name[0];
             int par = IDLE.getInstance().paramenter;
-            /*if(!IDLE.getInstance().tablaSimbolos.checkParameter(function,par )){
+            if(!IDLE.getInstance().tablaSimbolos.checkParameter(function,par )){
                 IDLE.getInstance().errorsContextual.add(
-                        new Error(-1, -1,
-                                "Call Function '" + name + "' wasn't declared with " + par + " parameters",
+                        //TODO: Get row and column
+                        new Error(5, 5,
+                                "Call Function :" + function + " wasn't declared with " + par + " parameters",
                                 "SINTAX ERROR  "));
             }
-
-             */
-
         }
         return null;
     }
@@ -220,7 +224,7 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitPrimitiveExpression_identAST(MonkeyParser.PrimitiveExpression_identASTContext ctx) {
-        //TODO: DEBUG: To Check Method, to verify if exist to **rewrite**
+        //TODO: Ya en el let se sobreescribe si ya existe
         boolean function  = false;
         boolean parameter = false;
         boolean variable = false;
@@ -252,6 +256,12 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
                     new Error(ctx.IDENT().getSymbol().getLine(),
                             ctx.IDENT().getSymbol().getCharPositionInLine(),"Undefined  " +ctx.IDENT().getText() + " ", "SINTAX ERROR  "));
         }
+        //TODO: Check double data
+        /*if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT(), TYPE.FUNCTION, level) == null){
+            IDLE.getInstance().errorsContextual.add(new Error(ctx.IDENT().getSymbol().getLine(), ctx.IDENT().getSymbol().getCharPositionInLine(),"Undefined  " +ctx.IDENT().getText() + " ", "SINTAX ERROR  "));
+        }
+
+         */
         return null;
     }
 
@@ -292,13 +302,17 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitPrimitiveExpression_FunctionLiteralAST(MonkeyParser.PrimitiveExpression_FunctionLiteralASTContext ctx) {
+        //Functions
         visit(ctx.functionLiteral());
-        return null;
+        return ctx.functionLiteral().getText();
     }
 
     @Override
     public Object visitPrimitiveExpression_HashLiteralAST(MonkeyParser.PrimitiveExpression_HashLiteralASTContext ctx) {
+        //level++;
         visit(ctx.hashLiteral());
+        //TODO: Llamar closeScope personalizado
+        //level--;
         return null;
     }
 
@@ -356,6 +370,7 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
         if(ctx.blockStatement()!=null){
             visit(ctx.blockStatement());
         }
+        //TODO: Llamar closeScope personalizado
         level--;
         return null;
     }
@@ -369,21 +384,44 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitHashLiteralAST(MonkeyParser.HashLiteralASTContext ctx) {
+        //TODO: Recorre cada elemento de Hash y crea una lista de listas en la que cada elemento de la lista es una lista con pos 0 de key y pos 1 de value
+        ArrayList<ArrayList> hash = new ArrayList<>();
         for(int i = 0; i < ctx.hashContent().size();i++){
-            visit(ctx.hashContent(i));
+            ArrayList HashContent = (ArrayList) visit(ctx.hashContent(i));
+            hash.add(HashContent);
         }
-        for(int i = 0; i < ctx.COMMA().size();i++){
 
+        for(int i = 0;i<hash.size();i++){
+            if(i==0){ // Chequea el primer par del hash
+                if( !((String) hash.get(i).get(0)).startsWith("\"") || !((String) hash.get(i).get(1)).startsWith("\"") ){
+                    try {
+                        double keyI = Double.parseDouble((String) hash.get(i).get(0));
+                        double valueI = Double.parseDouble((String) hash.get(i).get(1));
+                    } catch (NumberFormatException nfe) {
+                        System.out.println("First pair are neither not a number or a string");
+                   }
+                }
+            }
         }
         return null;
     }
 
     @Override
     public Object visitHashContentAST(MonkeyParser.HashContentASTContext ctx) {
+        //TODO: Entrada individual de cada elemento del Hash
         for(int i = 0; i < ctx.expression().size();i++){
-
+            visit(ctx.expression(i));
         }
-        return null;
+
+        ArrayList<Object> Hash = new ArrayList<>();
+        String[] parts = ctx.getText().split(":");
+        if(ctx.expression()==null || parts[0] == "" || parts[1] == ""){
+            System.out.println("Null Position");
+        }
+        Hash.add(parts[0]);
+        Hash.add(parts[1]);
+
+        return Hash;
     }
 
     @Override
@@ -435,6 +473,7 @@ public class VisitorVariable extends MonkeyParserBaseVisitor<Object> {
         for(int i = 0; i < ctx.statement().size();i++){
             //level++;
             visit(ctx.statement(i));
+            //TODO: Llamar closeScope personalizado
             //level--;
         }
         return null;

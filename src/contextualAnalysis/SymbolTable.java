@@ -113,7 +113,11 @@ public class SymbolTable {
          */
         switch (type) {
             case FUNCTION:
-                return searchFunction(token,level);
+                if(searchFunction(token,level) != null){
+                    return searchFunction(token,level);
+                }else{
+                    return callFunction(token,level);
+                }
             case VARIABLE:
                 return searchVariable(token,level);
             case PARAMETER:
@@ -165,6 +169,26 @@ public class SymbolTable {
                         Collections.reverse(table);
                         return table.get(i);
                     }
+                }
+            }
+        }
+        Collections.reverse(table);
+        return null;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    //Method to Search Function
+    public Ident callFunction(TerminalNode token, int level){
+        Collections.reverse(table);
+        for(int i = 0; i<table.size(); i++){
+            if(table.get(i).getType() == TYPE.FUNCTION){
+                //If same name
+                if(table.get(i).getToken().getText().equals(token.getText())){
+                    //if same level
+
+                        Collections.reverse(table);
+                        return table.get(i);
+
                 }
             }
         }
@@ -314,12 +338,33 @@ public class SymbolTable {
             }
         }
         Collections.reverse(table);
-
         //System.out.println("(X) Different parameters");
         //System.out.println("Give: " + par);
-
         return false;
     }
 
+    public Ident rewrite(TerminalNode token, int level){
+        Collections.reverse(table);
+        for(int i = 0; i<table.size(); i++){
+            if(table.get(i).getToken().getText().equals(token.getText())){
+                if(table.get(i).level == level){
+                    table.remove(i);
+                }
+                return null;
+            }
 
+        }
+        Collections.reverse(table);
+        return null;
+    }
+
+    public void closeScope(int level){
+        Collections.reverse(table);
+        for(int i = 0; i<table.size(); i++){
+            if(table.get(i).level == level){
+                table.remove(i);
+            }
+        }
+        Collections.reverse(table);
+    }
 }
