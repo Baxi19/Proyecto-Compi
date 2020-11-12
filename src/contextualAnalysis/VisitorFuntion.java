@@ -1,6 +1,7 @@
 package contextualAnalysis;
 
 import backend.IDLE;
+import errors.Error;
 import generated.MonkeyParser;
 import generated.MonkeyParserBaseVisitor;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -15,10 +16,10 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitProgramAST(MonkeyParser.ProgramASTContext ctx) {
-        //TODO: Clean the values used by visitors
         IDLE.getInstance().tableId = 0;
         IDLE.getInstance().tablaSimbolos = new SymbolTable();
         IDLE.getInstance().parameters = new ArrayList<>();
+        IDLE.getInstance().paramenter = 0;
 
         for(int i = 0; i < ctx.statement().size();i++){
             visit(ctx.statement(i));
@@ -34,6 +35,7 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitStatement_returnAST(MonkeyParser.Statement_returnASTContext ctx) {
+        IDLE.getInstance().existReturn = true;
         visit(ctx.returnStatement());
         return null;
     }
@@ -46,8 +48,11 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitLetStatementAST(MonkeyParser.LetStatementASTContext ctx) {
+        IDLE.getInstance().existReturn = false;
         level++;
         visit(ctx.expression());
+
+        IDLE.getInstance().tablaSimbolos.rewrite(ctx.IDENT(), level);
         if(ctx.getText().split("\\=")[1].startsWith("fn(")){
             IDLE.getInstance().tablaSimbolos.insertMet(ctx.IDENT(), TYPE.FUNCTION, level, ctx);
         }
@@ -57,15 +62,15 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitReturnStatementAST(MonkeyParser.ReturnStatementASTContext ctx) {
+        //return
         visit(ctx.expression());
-        return null;
+        IDLE.getInstance().returnStatement = ctx.expression().getText();
+        return ctx.expression();
     }
 
     @Override
     public Object visitExpressionStatementAST(MonkeyParser.ExpressionStatementASTContext ctx) {
         visit(ctx.expression());
-        //TODO: Call expresion
-        //System.out.println("Expresion: " + ctx.expression().getText());
         return null;
     }
 
@@ -81,21 +86,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
         for(int i = 0; i < ctx.additionExpression().size();i++){
             visit(ctx.additionExpression(i));
         }
-        for(int i = 0; i < ctx.LT().size();i++){
-
-        }
-        for(int i = 0; i < ctx.GT().size();i++){
-
-        }
-        for(int i = 0; i < ctx.LE().size();i++){
-
-        }
-        for(int i = 0; i < ctx.GE().size();i++){
-
-        }
-        for(int i = 0; i < ctx.EQUAL().size();i++){
-
-        }
         return null;
     }
 
@@ -110,12 +100,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
     public Object visitAdditionFactorAST(MonkeyParser.AdditionFactorASTContext ctx) {
         for(int i = 0; i < ctx.multiplicationExpression().size();i++){
             visit(ctx.multiplicationExpression(i));
-        }
-        for(int i = 0; i < ctx.ADD().size();i++){
-
-        }
-        for(int i = 0; i < ctx.SUB().size();i++){
-
         }
         return null;
     }
@@ -133,15 +117,8 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitMultiplicationFactorAST(MonkeyParser.MultiplicationFactorASTContext ctx) {
-
         for(int i = 0; i < ctx.elementExpression().size();i++){
             visit(ctx.elementExpression(i));
-        }
-        for(int i = 0; i < ctx.MUL().size();i++){
-
-        }
-        for(int i = 0; i < ctx.DIV().size();i++){
-
         }
         return null;
     }
@@ -156,8 +133,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
         }
         if(ctx.callExpression()!=null){
             visit(ctx.callExpression());
-            //TODO: check funtion parameter if are equal at declared
-            System.out.println(ctx.callExpression().getText());
         }
         return null;
     }
@@ -190,7 +165,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitPrimitiveExpression_identAST(MonkeyParser.PrimitiveExpression_identASTContext ctx) {
-
         return null;
     }
 
@@ -316,22 +290,11 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitHashContentAST(MonkeyParser.HashContentASTContext ctx) {
-        for(int i = 0; i < ctx.expression().size();i++){
-            
-        }
         return null;
     }
 
-    //LIST
     @Override
     public Object visitExpressionList_expressionAST(MonkeyParser.ExpressionList_expressionASTContext ctx) {
-        //TODO: Check first parameter
-        for(int i = 0; i < ctx.expression().size();i++){
-            //System.out.println(ctx.expression().get(i).getText());
-        }
-        for(int i = 0; i < ctx.COMMA().size();i++){
-
-        }
         return null;
     }
 
@@ -369,9 +332,7 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitBlockStatementAST(MonkeyParser.BlockStatementASTContext ctx) {
         for(int i = 0; i < ctx.statement().size();i++){
-            //level++;
             visit(ctx.statement(i));
-            //level--;
         }
         return null;
     }

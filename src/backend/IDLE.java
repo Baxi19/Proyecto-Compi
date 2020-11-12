@@ -65,12 +65,16 @@ public class IDLE {
     protected String path = "";
     protected JFileChooser fileChooser = new JFileChooser();
 
-    //TODO: Set vars in the first value every time when visitor run
     //Contextual Analysis
     public int tableId = 0;
     public SymbolTable tablaSimbolos = new SymbolTable();
     public ArrayList<TerminalNode> parameters = new ArrayList<>();
+    public ArrayList<Object> auxParam = new ArrayList<>();
     public String callWith = "";
+    public int paramenter = 0;
+    public String returnStatement ;
+    public Boolean existReturn = false;
+
 
     //Singleton
     public static IDLE getInstance(){
@@ -105,9 +109,13 @@ public class IDLE {
     private void markContextErrors() throws BadLocationException {
         for (int i = 0; i < errorsContextual.size() ; i++) {
             int row = errorsContextual.get(i).getRow();
-            int startIndex = codeArea.getLineStartOffset(row-1);
-            int endIndex = codeArea.getLineEndOffset(row-1);
-            codeArea.getHighlighter().addHighlight(startIndex, endIndex, painter);
+            if(row != -1){
+                int startIndex = codeArea.getLineStartOffset(row-1);
+                int endIndex = codeArea.getLineEndOffset(row-1);
+                codeArea.getHighlighter().addHighlight(startIndex, endIndex, painter);
+            }
+
+
         }
 
     }

@@ -3,11 +3,8 @@ package utils;
 public enum TYPE {
     FUNCTION,
     VARIABLE,
-    LIST,
-    HASH,
+    HASHCONTENT,
+    HASHLITERAL,
     PARAMETER,
-    INTEGER,
-    STRING,
-    NULL,
     VOID
 }

@@ -1,17 +1,17 @@
 // Bind values to names with let-statements
 let version = 1;
 let name = "Monkey programming language";
-let myArray = [1, 2, 3, 4, 5];
+let myArray = [version, 2, 3, 4, 5];
 let coolBooleanLiteral = true;
 
 // Use expressions to produce values
 let awesomeValue = (10 / 2) * 5 + 30;
-let arrayWithValues = [1 + 1, 2 * 2, 3];
+let arrayWithValues = [name, 2 * 2, 3];
 
-
+let list = [coolBooleanLiteral, 2, 4, fn(y){return y + 1}];
 
 // Define a `fibonacci` function
-let fibonacci = fn(x) {
+let fibonacci = fn(x, x) {
   if (x == 0) {
     0                // Monkey supports implicit returning of values
   } else {
@@ -35,9 +35,14 @@ fibonacci(myArray[4]);
 // We can also access hash elements with index expressions:
 let getName = fn(person) { person["name"]; };
 
+let dic = {people: 24, "age": 24};
+let dic2 = {"Hello": 24, "age": 24};
+let dic3 = {getName(name): 24, "age": 24};
+let dic4 = {1: 24, "age": 24};
+
 // And here we access array elements and call a function with the element as
 // argument:
-getName(people[0]); // => "Anna"
+getName(people[0], newParameter); // => "Anna"
 getName(people[1]); // => "Bob"
 
 // Define the higher-order function `map`, that calls the given function `f`
@@ -54,19 +59,17 @@ let map = fn(arr, f) {
   iter(arr, []);
 };
 
+return iter(1, []);
 // Now let's take the `people` array and the `getName` function from above and
 // use them with `map`.
 map(people, getName); // => ["Anna", "Bob"]
 
 // newGreeter returns a new function, that greets a `name` with the given
 // `greeting`.
-let newGreeter = fn(greeting) {
+let newGreeter = fn(greeting, name) {
   // `puts` is a built-in function we add to the interpreter
-  return fn(name) { puts(greeting + " " + name); }
+  let funt = fn(greeting) {
+  	puts(greeting + " " + name);
+  }
+  return y;
 };
-
-// `hello` is a greeter function that says "Hello"
-let hello = newGreeter("Hello");
-
-// Calling it outputs the greeting:
-hello("dear, future Reader!"); // => Hello dear, future Reader!
