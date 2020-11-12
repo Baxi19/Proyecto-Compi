@@ -6,8 +6,5 @@ public enum TYPE {
     HASHCONTENT,
     HASHLITERAL,
     PARAMETER,
-    INTEGER,
-    STRING,
-    NULL,
     VOID
 }

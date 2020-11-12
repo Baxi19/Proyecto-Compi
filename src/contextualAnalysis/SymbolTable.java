@@ -8,7 +8,6 @@ import utils.TYPE;
 
 import java.util.Collections;
 import java.util.ArrayList;
-import java.util.regex.*;
 
 // Symbols Table
 public class SymbolTable {
@@ -103,14 +102,6 @@ public class SymbolTable {
     //------------------------------------------------------------------------------------------------------------------
     //Method to Search Methods or Vars in table
     public Ident search(TerminalNode token, TYPE type, int level){
-        /*Collections.reverse(table);
-        for(int i = 0; i<table.size(); i++){
-            if(table.get(i).getToken().getText().equals(token.getText()) &&  (table.get(i).getType() == type || table.get(i).getType() == TYPE.PARAMETER)){
-                return table.get(i);
-            }
-        }
-        Collections.reverse(table);
-         */
         switch (type) {
             case FUNCTION:
                 if(searchFunction(token,level) != null){
@@ -165,7 +156,7 @@ public class SymbolTable {
                 //If same name
                 if(table.get(i).getToken().getText().equals(token.getText())){
                     //if same level
-                    if(table.get(i).getLevel() == level){
+                    if(table.get(i).getLevel() >= level){
                         Collections.reverse(table);
                         return table.get(i);
                     }
@@ -338,8 +329,6 @@ public class SymbolTable {
             }
         }
         Collections.reverse(table);
-        //System.out.println("(X) Different parameters");
-        //System.out.println("Give: " + par);
         return false;
     }
 
@@ -357,6 +346,7 @@ public class SymbolTable {
         Collections.reverse(table);
         return null;
     }
+
 
     public void closeScope(int level){
         Collections.reverse(table);

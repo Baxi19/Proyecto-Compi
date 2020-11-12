@@ -184,8 +184,8 @@ public class Window extends JFrame {
         // add menu to menu bar
         menu.add(file);
         menu.add(edit);
-        menu.add(run);
         menu.add(view);
+        menu.add(run);
         return menu;
     }
 

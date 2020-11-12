@@ -16,7 +16,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitProgramAST(MonkeyParser.ProgramASTContext ctx) {
-        //TODO: Clean the values used by visitors
         IDLE.getInstance().tableId = 0;
         IDLE.getInstance().tablaSimbolos = new SymbolTable();
         IDLE.getInstance().parameters = new ArrayList<>();
@@ -53,7 +52,7 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
         level++;
         visit(ctx.expression());
 
-        IDLE.getInstance().tablaSimbolos.rewrite(ctx.IDENT(), level); // TODO: Metodo para sobre escribir idents si se vuelven a asignar con let
+        IDLE.getInstance().tablaSimbolos.rewrite(ctx.IDENT(), level);
         if(ctx.getText().split("\\=")[1].startsWith("fn(")){
             IDLE.getInstance().tablaSimbolos.insertMet(ctx.IDENT(), TYPE.FUNCTION, level, ctx);
         }
@@ -72,8 +71,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitExpressionStatementAST(MonkeyParser.ExpressionStatementASTContext ctx) {
         visit(ctx.expression());
-        //TODO: Call expresion
-        //System.out.println("Expresion: " + ctx.expression().getText());
         return null;
     }
 
@@ -136,9 +133,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
         }
         if(ctx.callExpression()!=null){
             visit(ctx.callExpression());
-            //TODO: check funtion parameter if are equal at declared
-            //System.out.println("-->" + ctx.callExpression().getText());
-
         }
         return null;
     }
@@ -156,7 +150,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
         //Get the parameter in every call
         visit(ctx.expressionList());
         IDLE.getInstance().callWith = ctx.expressionList().getText();
-        //System.out.println("Save: " + IDLE.getInstance().callWith);
         return null;
     }
 
@@ -172,13 +165,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitPrimitiveExpression_identAST(MonkeyParser.PrimitiveExpression_identASTContext ctx) {
-        //TODO: Meter checkeo si existe funcion aqui desde visitor Variable por el closeScope
-        //System.out.println(ctx.IDENT().getText());
-        /*if(IDLE.getInstance().tablaSimbolos.search(ctx.IDENT(), TYPE.FUNCTION, level) == null){
-            IDLE.getInstance().errorsContextual.add(
-                    new Error(ctx.IDENT().getSymbol().getLine(),
-                            ctx.IDENT().getSymbol().getCharPositionInLine(),"Undefined  " +ctx.IDENT().getText() + " ", "SINTAX ERROR  "));
-        }*/
         return null;
     }
 
@@ -279,13 +265,10 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
         if(ctx.functionParameters()!=null){
             visit(ctx.functionParameters());
-           // System.out.println(">>"+ctx.functionParameters().getText());
-
         }
         if(ctx.blockStatement()!=null){
             visit(ctx.blockStatement());
         }
-        //TODO: Llamar closeScope personalizado y level ?
         return null;
     }
 
@@ -350,7 +333,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
     public Object visitBlockStatementAST(MonkeyParser.BlockStatementASTContext ctx) {
         for(int i = 0; i < ctx.statement().size();i++){
             visit(ctx.statement(i));
-            //TODO: Llamar closeScope personalizado
         }
         return null;
     }
