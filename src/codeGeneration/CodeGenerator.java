@@ -1,29 +1,38 @@
-package contextualAnalysis;
+package codeGeneration;
 
-import backend.IDLE;
-import errors.Error;
 import generated.MonkeyParser;
 import generated.MonkeyParserBaseVisitor;
-import org.antlr.v4.runtime.tree.TerminalNode;
-import utils.TYPE;
 
 import java.util.ArrayList;
 
+public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
 
-//Visitor, Used by Save the symbols table
-public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
-    public int level =1;
+    private int index;
+    private ArrayList<String> code;
 
+    //Constructor
+    public CodeGenerator() {
+        this.index=0;
+        this.code= new ArrayList<>();
+    }
+
+    //Method to generate Monkey Virtual Machine code
+    private void generate(int index, String instruction, Object param){
+        if(param != null){
+            this.code.add(index +" "+ instruction + " " +param);
+        }else{
+            this.code.add(index +" "+ instruction);
+        }
+        this.index++;
+    }
+
+    // Override Methods
     @Override
     public Object visitProgramAST(MonkeyParser.ProgramASTContext ctx) {
-        IDLE.getInstance().tableId = 0;
-        IDLE.getInstance().tablaSimbolos = new SymbolTable();
-        IDLE.getInstance().parameters = new ArrayList<>();
-        IDLE.getInstance().paramenter = 0;
-
         for(int i = 0; i < ctx.statement().size();i++){
             visit(ctx.statement(i));
         }
+        System.out.println(toString());
         return null;
     }
 
@@ -35,7 +44,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitStatement_returnAST(MonkeyParser.Statement_returnASTContext ctx) {
-        IDLE.getInstance().existReturn = true;
         visit(ctx.returnStatement());
         return null;
     }
@@ -48,23 +56,13 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitLetStatementAST(MonkeyParser.LetStatementASTContext ctx) {
-        IDLE.getInstance().existReturn = false;
-        level++;
         visit(ctx.expression());
-
-        IDLE.getInstance().tablaSimbolos.rewrite(ctx.IDENT(), level);
-        if(ctx.getText().split("\\=")[1].startsWith("fn(")){
-            IDLE.getInstance().tablaSimbolos.insertMet(ctx.IDENT(), TYPE.FUNCTION, level, ctx);
-        }
-        level--;
         return null;
     }
 
     @Override
     public Object visitReturnStatementAST(MonkeyParser.ReturnStatementASTContext ctx) {
-        //return
         visit(ctx.expression());
-        IDLE.getInstance().returnStatement = ctx.expression().getText();
         return ctx.expression();
     }
 
@@ -147,9 +145,7 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitCallExpressionAST(MonkeyParser.CallExpressionASTContext ctx) {
-        //Get the parameter in every call
         visit(ctx.expressionList());
-        IDLE.getInstance().callWith = ctx.expressionList().getText();
         return null;
     }
 
@@ -262,7 +258,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitFunctionLiteralAST(MonkeyParser.FunctionLiteralASTContext ctx) {
-
         if(ctx.functionParameters()!=null){
             visit(ctx.functionParameters());
         }
@@ -274,9 +269,7 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitFunctionParametersAST(MonkeyParser.FunctionParametersASTContext ctx) {
-        //Save the parameters
         ctx.IDENT();
-        IDLE.getInstance().parameters = ( ArrayList<TerminalNode> ) ctx.IDENT();
         return null;
     }
 
@@ -313,7 +306,6 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitIfExpressionAST(MonkeyParser.IfExpressionASTContext ctx) {
-
         if(ctx.IF()!=null){
 
         }
@@ -337,4 +329,14 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
         return null;
     }
 
+
+    //Method To String
+    @Override
+    public String toString() {
+        String data = "";
+        for (int i = 0; i < code.size() ; i++) {
+            data += code.get(i) + "\n";
+        }
+        return data;
+    }
 }
