@@ -1,7 +1,9 @@
 package codeGeneration;
 
+import backend.IDLE;
 import generated.MonkeyParser;
 import generated.MonkeyParserBaseVisitor;
+import utils.TYPE;
 
 import java.util.ArrayList;
 
@@ -9,11 +11,13 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
 
     private int index;
     private ArrayList<String> code;
+    public int level;
 
     //Constructor
     public CodeGenerator() {
         this.index=0;
         this.code= new ArrayList<>();
+        this.level = -1;
     }
 
     //Method to generate Monkey Virtual Machine code
@@ -29,9 +33,11 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
     // Override Methods
     @Override
     public Object visitProgramAST(MonkeyParser.ProgramASTContext ctx) {
+        level ++;
         for(int i = 0; i < ctx.statement().size();i++){
             visit(ctx.statement(i));
         }
+        level --;
         System.out.println(toString());
         return null;
     }
@@ -56,7 +62,27 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitLetStatementAST(MonkeyParser.LetStatementASTContext ctx) {
+        level ++;
         visit(ctx.expression());
+
+        // If is function
+        if(ctx.getText().split("\\=")[1].startsWith("fn(")){
+            System.out.println(level +"=> FN()");
+        }
+        // if is List
+        else if(ctx.getText().split("\\=")[1].startsWith("[")){
+            System.out.println(level +"=> []");
+        }
+        // if is hash
+        else if(ctx.getText().split("\\=")[1].startsWith("{")){
+            System.out.println(level +"=> {}");
+        }
+        // if is variable
+        else{
+            System.out.println(level +"=> var");
+        }
+
+        level --;
         return null;
     }
 
@@ -306,15 +332,17 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitIfExpressionAST(MonkeyParser.IfExpressionASTContext ctx) {
-        if(ctx.IF()!=null){
 
-        }
-        if(ctx.ELSE()!=null){
+        if(ctx.IF()!=null){
 
         }
         if(ctx.expression()!=null){
             visit(ctx.expression());
         }
+        if(ctx.ELSE()!=null){
+
+        }
+
         for(int i = 0; i < ctx.blockStatement().size();i++){
             visit(ctx.blockStatement(i));
         }

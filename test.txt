@@ -1,15 +1,15 @@
-// Define a `fibonacci` function
-let fibonacci = fn(x) {
-  if (x == 0) {
-    0                // Monkey supports implicit returning of values
-  } else {
-    if (x == 1) {
-      return 1;      // ... and explicit return statements
-    } else {
-      fibonacci(x - 1) + fibonacci(x - 2); // Recursion! Yay!
+let fib = fn(n) {
+    if (n == 0) {
+        return 0;
     }
-  }
-};
 
-//Main
-fibonacci(5);
+    if (n == 1) {
+        return 1;
+    }
+
+    return fib(n - 1) + fib(n - 2);
+}
+
+let string = gets("Enter n: ");
+let number = int(string);
+puts(string + "th " + "fibonacci term is " + str(fib(number)));
