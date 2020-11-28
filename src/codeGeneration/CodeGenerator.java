@@ -44,18 +44,24 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitStatement_LetAST(MonkeyParser.Statement_LetASTContext ctx) {
+        System.out.println("***********************************************************************************");
+        System.out.println("LET : ");
         visit(ctx.letStatement());
         return null;
     }
 
     @Override
     public Object visitStatement_returnAST(MonkeyParser.Statement_returnASTContext ctx) {
+        System.out.println("***********************************************************************************");
+        System.out.println("RETURN : ");
         visit(ctx.returnStatement());
         return null;
     }
 
     @Override
     public Object visitCallExpressionStatementAST(MonkeyParser.CallExpressionStatementASTContext ctx) {
+        System.out.println("***********************************************************************************");
+        System.out.println("CALL : " + ctx.getText());
         visit(ctx.expressionStatement());
         return null;
     }
@@ -65,7 +71,8 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
         level ++;
 
         //TODO: get best order if this visit at the end, but the problem is Virtual Machine
-        visit(ctx.expression());
+        //visit(ctx.expression());
+        //System.out.println("***********************************************************************************");
         // If is function
         if(ctx.getText().split("\\=")[1].startsWith("fn(")){
             if(ctx.IDENT().getText().toLowerCase().equals("main") && level == 1){
@@ -89,7 +96,7 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
             System.out.println("IDENT: " +ctx.IDENT() +" Level: " + level +" => var");
         }
 
-        //visit(ctx.expression());
+        visit(ctx.expression());
         level --;
         return null;
     }
@@ -97,7 +104,7 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitReturnStatementAST(MonkeyParser.ReturnStatementASTContext ctx) {
         visit(ctx.expression());
-        return ctx.expression();
+        return null;
     }
 
     @Override
@@ -110,7 +117,7 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
     public Object visitExpressionAST(MonkeyParser.ExpressionASTContext ctx) {
         visit(ctx.additionExpression());
         visit(ctx.comparison());
-        return null;
+        return ctx.getText();
     }
 
     @Override
@@ -123,8 +130,13 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitAdditionExpressionAST(MonkeyParser.AdditionExpressionASTContext ctx) {
-        visit(ctx.additionFactor());
-        visit(ctx.multiplicationExpression());
+        if(ctx.additionFactor() != null){
+            visit(ctx.additionFactor());
+        }
+        if(ctx.multiplicationExpression() != null){
+            visit(ctx.multiplicationExpression());
+        }
+
         return null;
     }
 
@@ -185,31 +197,31 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitPrimitiveExpression_numberAST(MonkeyParser.PrimitiveExpression_numberASTContext ctx) {
-        //System.out.println("INT: " + ctx.INTEGER());
+        System.out.println("INT: " + ctx.INTEGER());
         return null;
     }
 
     @Override
     public Object visitPrimitiveExpression_stringAST(MonkeyParser.PrimitiveExpression_stringASTContext ctx) {
-        //System.out.println("STRING: " + ctx.STRING());
+        System.out.println("STRING: " + ctx.STRING());
         return null;
     }
 
     @Override
     public Object visitPrimitiveExpression_identAST(MonkeyParser.PrimitiveExpression_identASTContext ctx) {
-        //System.out.println("ID: " + ctx.IDENT());
+        System.out.println("ID: " + ctx.IDENT());
         return null;
     }
 
     @Override
     public Object visitPrimitiveExpression_trueAST(MonkeyParser.PrimitiveExpression_trueASTContext ctx) {
-        //System.out.println("TRUE: " + ctx.TRUE());
+        System.out.println("TRUE: " + ctx.TRUE());
         return null;
     }
 
     @Override
     public Object visitPrimitiveExpression_falseAST(MonkeyParser.PrimitiveExpression_falseASTContext ctx) {
-        //System.out.println("FALSE: " + ctx.FALSE());
+        System.out.println("FALSE: " + ctx.FALSE());
         return null;
     }
 
@@ -264,6 +276,7 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitArrayFunctions_lenAST(MonkeyParser.ArrayFunctions_lenASTContext ctx) {
+
         return null;
     }
 
@@ -289,6 +302,7 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitArrayLiteralAST(MonkeyParser.ArrayLiteralASTContext ctx) {
+        System.out.println("Array: " + ctx.getText());
         if(ctx.expressionList()!=null){
             visit(ctx.expressionList());
         }
@@ -297,6 +311,7 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitFunctionLiteralAST(MonkeyParser.FunctionLiteralASTContext ctx) {
+        //  Make Type FUNCTION, VM's Instructions
         if(ctx.functionParameters()!=null){
             visit(ctx.functionParameters());
         }
@@ -317,10 +332,9 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitHashLiteralAST(MonkeyParser.HashLiteralASTContext ctx) {
-        System.out.println("Hash content size: " + ctx.hashContent().size());
+        System.out.println("Hash size: " + ctx.hashContent().size());
         for(int i = 0; i < ctx.hashContent().size();i++){
-            visit(ctx.hashContent(i));
-            System.out.println("Data hash content index " + i + " : " + visit(ctx.hashContent(i)));
+            System.out.println("Data hash, index " + i + " : " + visit(ctx.hashContent(i)));
         }
         return null;
     }
@@ -332,6 +346,11 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitExpressionList_expressionAST(MonkeyParser.ExpressionList_expressionASTContext ctx) {
+        System.out.println("Array size: " + ctx.expression().size());
+        for (int i = 0; i < ctx.expression().size(); i++) {
+            System.out.println("Data array, index " + i + " : " + visit(ctx.expression(i)));
+        }
+
         return null;
     }
 
@@ -342,6 +361,7 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitPrintExpressionAST(MonkeyParser.PrintExpressionASTContext ctx) {
+        // Puts
         if(ctx.expression()!=null){
             visit(ctx.expression());
         }
@@ -350,7 +370,7 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitIfExpressionAST(MonkeyParser.IfExpressionASTContext ctx) {
-
+        //  Make Type IF, VM's Instructions
         if(ctx.IF()!=null){
 
         }
@@ -369,6 +389,7 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitBlockStatementAST(MonkeyParser.BlockStatementASTContext ctx) {
+        // {... </> ...}
         for(int i = 0; i < ctx.statement().size();i++){
             visit(ctx.statement(i));
         }
