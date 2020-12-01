@@ -1,9 +1,8 @@
 package codeGeneration;
 
-import backend.IDLE;
 import generated.MonkeyParser;
 import generated.MonkeyParserBaseVisitor;
-import utils.TYPE;
+
 
 import java.util.ArrayList;
 
@@ -13,11 +12,21 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
     private ArrayList<String> code;
     public int level;
 
+    // Aux
+    private MonkeyParser.LetStatementASTContext ctxLet;
+    private boolean isLet;
+    private boolean isReturn;
+    private boolean isCall;
+
+
     //Constructor
     public CodeGenerator() {
         this.index=0;
         this.code= new ArrayList<>();
         this.level = -1;
+        this.isLet = false;
+        this.isReturn = false;
+        this.isCall = false;
     }
 
     //Method to generate Monkey Virtual Machine code
@@ -45,7 +54,9 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitStatement_LetAST(MonkeyParser.Statement_LetASTContext ctx) {
         System.out.println("***********************************************************************************");
-        System.out.println("LET : ");
+        System.out.println("LET : " + ctx.getText());
+        makeAllFalse();
+        isLet = true;
         visit(ctx.letStatement());
         return null;
     }
@@ -54,6 +65,8 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
     public Object visitStatement_returnAST(MonkeyParser.Statement_returnASTContext ctx) {
         System.out.println("***********************************************************************************");
         System.out.println("RETURN : ");
+        makeAllFalse();
+        isReturn = true;
         visit(ctx.returnStatement());
         return null;
     }
@@ -62,6 +75,8 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
     public Object visitCallExpressionStatementAST(MonkeyParser.CallExpressionStatementASTContext ctx) {
         System.out.println("***********************************************************************************");
         System.out.println("CALL : " + ctx.getText());
+        makeAllFalse();
+        isCall = true;
         visit(ctx.expressionStatement());
         return null;
     }
@@ -70,9 +85,11 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
     public Object visitLetStatementAST(MonkeyParser.LetStatementASTContext ctx) {
         level ++;
 
+        //save the ctx as aux
+        ctxLet = ctx;
         //TODO: get best order if this visit at the end, but the problem is Virtual Machine
         //visit(ctx.expression());
-        //System.out.println("***********************************************************************************");
+
         // If is function
         if(ctx.getText().split("\\=")[1].startsWith("fn(")){
             if(ctx.IDENT().getText().toLowerCase().equals("main") && level == 1){
@@ -94,6 +111,12 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
         // if is variable
         else{
             System.out.println("IDENT: " +ctx.IDENT() +" Level: " + level +" => var");
+            if(level == 1){
+                this.generate(this.index,"PUSH_GLOBAL_I",ctx.IDENT().getText());
+            }else{
+                this.generate(this.index,"PUSH_LOCAL_I",ctx.IDENT().getText());
+            }
+
         }
 
         visit(ctx.expression());
@@ -136,7 +159,6 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
         if(ctx.multiplicationExpression() != null){
             visit(ctx.multiplicationExpression());
         }
-
         return null;
     }
 
@@ -197,6 +219,12 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitPrimitiveExpression_numberAST(MonkeyParser.PrimitiveExpression_numberASTContext ctx) {
+
+        if(isLet){
+            this.generate(this.index,"LOAD_CONST", ctx.INTEGER());
+            this.generate(this.index,"STORE_FAST", ctxLet.IDENT().getText());
+        }
+
         System.out.println("INT: " + ctx.INTEGER());
         return null;
     }
@@ -396,7 +424,6 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
         return null;
     }
 
-
     //Method To String
     @Override
     public String toString() {
@@ -406,4 +433,11 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
         }
         return data;
     }
+
+    public void makeAllFalse(){
+        isLet = false;
+        isCall = false;
+        isReturn = false;
+    }
+
 }
