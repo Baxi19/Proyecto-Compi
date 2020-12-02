@@ -1,6 +1,7 @@
 package backend;
 
 
+import codeGeneration.CodeGenerator;
 import contextualAnalysis.SymbolTable;
 import contextualAnalysis.VisitorFuntion;
 import contextualAnalysis.VisitorVariable;
@@ -183,6 +184,9 @@ public class IDLE {
                     terminalText +=  "\n\n*******************************************************************************************\n\n";
                     showConsoleTree = false;
                 }
+
+                CodeGenerator codeGenerator = new CodeGenerator();
+                codeGenerator.visit(tree);
 
                 //Normal Run
                 if(IDLE.getInstance().errorsContextual.isEmpty()){

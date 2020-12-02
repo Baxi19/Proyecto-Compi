@@ -1,71 +1,148 @@
-package contextualAnalysis;
+package codeGeneration;
 
-import backend.IDLE;
-import errors.Error;
 import generated.MonkeyParser;
 import generated.MonkeyParserBaseVisitor;
-import org.antlr.v4.runtime.tree.TerminalNode;
-import utils.TYPE;
+
 
 import java.util.ArrayList;
 
+public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
 
-//Visitor, Used by Save the symbols table
-public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
-    public int level =1;
+    private int index;
+    private ArrayList<String> code;
+    public int level;
 
+    // Aux
+    private MonkeyParser.LetStatementASTContext ctxLet;
+    private boolean isLet;
+    private boolean isReturn;
+    private boolean isCall;
+
+    private boolean isVar;
+    private boolean isFunct;
+    private boolean isList;
+    private boolean isHash;
+
+
+    //Constructor
+    public CodeGenerator() {
+        this.index=0;
+        this.code= new ArrayList<>();
+        this.level = -1;
+
+        this.isLet = false;
+        this.isReturn = false;
+        this.isCall = false;
+
+        this.isVar = false;
+        this.isFunct = false;
+        this.isList = false;
+        this.isHash = false;
+    }
+
+    //Method to generate Monkey Virtual Machine code
+    private void generate(int index, String instruction, Object param){
+        if(param != null){
+            this.code.add(index +" "+ instruction + " " +param);
+        }else{
+            this.code.add(index +" "+ instruction);
+        }
+        this.index++;
+    }
+
+    // Override Methods
     @Override
     public Object visitProgramAST(MonkeyParser.ProgramASTContext ctx) {
-        IDLE.getInstance().tableId = 0;
-        IDLE.getInstance().tablaSimbolos = new SymbolTable();
-        IDLE.getInstance().parameters = new ArrayList<>();
-        IDLE.getInstance().paramenter = 0;
-
+        level ++;
         for(int i = 0; i < ctx.statement().size();i++){
             visit(ctx.statement(i));
         }
+        level --;
+        System.out.println(toString());
         return null;
     }
 
     @Override
     public Object visitStatement_LetAST(MonkeyParser.Statement_LetASTContext ctx) {
+        System.out.println("***********************************************************************************");
+        System.out.println("LET : " + ctx.getText());
+        makeAllFalse();
+        isLet = true;
         visit(ctx.letStatement());
         return null;
     }
 
     @Override
     public Object visitStatement_returnAST(MonkeyParser.Statement_returnASTContext ctx) {
-        IDLE.getInstance().existReturn = true;
+        System.out.println("***********************************************************************************");
+        System.out.println("RETURN : ");
+        makeAllFalse();
+        isReturn = true;
         visit(ctx.returnStatement());
         return null;
     }
 
     @Override
     public Object visitCallExpressionStatementAST(MonkeyParser.CallExpressionStatementASTContext ctx) {
+        System.out.println("***********************************************************************************");
+        System.out.println("CALL : " + ctx.getText());
+        makeAllFalse();
+        isCall = true;
         visit(ctx.expressionStatement());
         return null;
     }
 
     @Override
     public Object visitLetStatementAST(MonkeyParser.LetStatementASTContext ctx) {
-        IDLE.getInstance().existReturn = false;
-        level++;
-        visit(ctx.expression());
+        level ++;
+        forgetType();
+        //save the ctx as aux
+        ctxLet = ctx;
+        //TODO: get best order if this visit at the end, but the problem is Virtual Machine
+        //visit(ctx.expression());
 
-        IDLE.getInstance().tablaSimbolos.rewrite(ctx.IDENT(), level);
+        // If is function
         if(ctx.getText().split("\\=")[1].startsWith("fn(")){
-            IDLE.getInstance().tablaSimbolos.insertMet(ctx.IDENT(), TYPE.FUNCTION, level, ctx);
+            isFunct = true;
+            if(ctx.IDENT().getText().toLowerCase().equals("main") && level == 1){
+                System.out.println("**>MAIN<** IDENT: " +ctx.IDENT() +" Level: " + level +" => FN()");
+            }else{
+                //TODO: DEF ...</> ... END
+                System.out.println("IDENT: " +ctx.IDENT() +" Level: " + level +" => FN()");
+            }
+
         }
-        level--;
+        // if is List
+        else if(ctx.getText().split("\\=")[1].startsWith("[")){
+            isList = true;
+            System.out.println("IDENT: " +ctx.IDENT() +" Level: " + level +" => []");
+        }
+        // if is hash
+        else if(ctx.getText().split("\\=")[1].startsWith("{")){
+            isHash = true;
+            System.out.println("IDENT: " +ctx.IDENT() +" Level: " + level +" => {}");
+        }
+        // if is variable
+        else{
+            isVar = true;
+            System.out.println("IDENT: " +ctx.IDENT() +" Level: " + level +" => var");
+            if(level == 1){
+                this.generate(this.index,"PUSH_GLOBAL_I",ctx.IDENT().getText());
+            }else{
+                this.generate(this.index,"PUSH_LOCAL_I",ctx.IDENT().getText());
+            }
+
+        }
+
+        visit(ctx.expression());
+        level --;
         return null;
     }
 
     @Override
     public Object visitReturnStatementAST(MonkeyParser.ReturnStatementASTContext ctx) {
-        //return
         visit(ctx.expression());
-        IDLE.getInstance().returnStatement = ctx.expression().getText();
-        return ctx.expression();
+        return null;
     }
 
     @Override
@@ -78,7 +155,7 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
     public Object visitExpressionAST(MonkeyParser.ExpressionASTContext ctx) {
         visit(ctx.additionExpression());
         visit(ctx.comparison());
-        return null;
+        return ctx.getText();
     }
 
     @Override
@@ -91,8 +168,12 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitAdditionExpressionAST(MonkeyParser.AdditionExpressionASTContext ctx) {
-        visit(ctx.additionFactor());
-        visit(ctx.multiplicationExpression());
+        if(ctx.additionFactor() != null){
+            visit(ctx.additionFactor());
+        }
+        if(ctx.multiplicationExpression() != null){
+            visit(ctx.multiplicationExpression());
+        }
         return null;
     }
 
@@ -147,34 +228,59 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitCallExpressionAST(MonkeyParser.CallExpressionASTContext ctx) {
-        //Get the parameter in every call
         visit(ctx.expressionList());
-        IDLE.getInstance().callWith = ctx.expressionList().getText();
         return null;
     }
 
     @Override
     public Object visitPrimitiveExpression_numberAST(MonkeyParser.PrimitiveExpression_numberASTContext ctx) {
+        if(isLet && isVar){
+            if(level == 1){
+                this.generate(this.index,"LOAD_CONST", ctx.INTEGER());
+                this.generate(this.index,"STORE_GLOBAL", ctxLet.IDENT().getText());
+            }else{
+                this.generate(this.index,"LOAD_CONST", ctx.INTEGER());
+                this.generate(this.index,"STORE_FAST", ctxLet.IDENT().getText());
+            }
+
+        }
+
+        System.out.println("INT: " + ctx.INTEGER());
         return null;
     }
 
     @Override
     public Object visitPrimitiveExpression_stringAST(MonkeyParser.PrimitiveExpression_stringASTContext ctx) {
+        if(isLet && isVar){
+            if(level == 1){
+                this.generate(this.index,"LOAD_CONST", ctx.STRING());
+                this.generate(this.index,"STORE_GLOBAL", ctxLet.IDENT().getText());
+            }else{
+                this.generate(this.index,"LOAD_CONST", ctx.STRING());
+                this.generate(this.index,"STORE_FAST", ctxLet.IDENT().getText());
+            }
+
+        }
+
+        System.out.println("STRING: " + ctx.STRING());
         return null;
     }
 
     @Override
     public Object visitPrimitiveExpression_identAST(MonkeyParser.PrimitiveExpression_identASTContext ctx) {
+        System.out.println("ID: " + ctx.IDENT());
         return null;
     }
 
     @Override
     public Object visitPrimitiveExpression_trueAST(MonkeyParser.PrimitiveExpression_trueASTContext ctx) {
+        System.out.println("TRUE: " + ctx.TRUE());
         return null;
     }
 
     @Override
     public Object visitPrimitiveExpression_falseAST(MonkeyParser.PrimitiveExpression_falseASTContext ctx) {
+        System.out.println("FALSE: " + ctx.FALSE());
         return null;
     }
 
@@ -229,6 +335,7 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitArrayFunctions_lenAST(MonkeyParser.ArrayFunctions_lenASTContext ctx) {
+
         return null;
     }
 
@@ -254,6 +361,7 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitArrayLiteralAST(MonkeyParser.ArrayLiteralASTContext ctx) {
+        System.out.println("Array: " + ctx.getText());
         if(ctx.expressionList()!=null){
             visit(ctx.expressionList());
         }
@@ -262,7 +370,7 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitFunctionLiteralAST(MonkeyParser.FunctionLiteralASTContext ctx) {
-
+        //  Make Type FUNCTION, VM's Instructions
         if(ctx.functionParameters()!=null){
             visit(ctx.functionParameters());
         }
@@ -274,27 +382,34 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitFunctionParametersAST(MonkeyParser.FunctionParametersASTContext ctx) {
-        //Save the parameters
-        ctx.IDENT();
-        IDLE.getInstance().parameters = ( ArrayList<TerminalNode> ) ctx.IDENT();
+        System.out.println("Should call function with " +ctx.IDENT().size() + " parameters");
+        for (int i = 0; i < ctx.IDENT().size(); i++) {
+            System.out.println("Parameter: " +ctx.IDENT(i));
+        }
         return null;
     }
 
     @Override
     public Object visitHashLiteralAST(MonkeyParser.HashLiteralASTContext ctx) {
+        System.out.println("Hash size: " + ctx.hashContent().size());
         for(int i = 0; i < ctx.hashContent().size();i++){
-            visit(ctx.hashContent(i));
+            System.out.println("Data hash, index " + i + " : " + visit(ctx.hashContent(i)));
         }
         return null;
     }
 
     @Override
     public Object visitHashContentAST(MonkeyParser.HashContentASTContext ctx) {
-        return null;
+        return ctx.getText();
     }
 
     @Override
     public Object visitExpressionList_expressionAST(MonkeyParser.ExpressionList_expressionASTContext ctx) {
+        System.out.println("Array size: " + ctx.expression().size());
+        for (int i = 0; i < ctx.expression().size(); i++) {
+            System.out.println("Data array, index " + i + " : " + visit(ctx.expression(i)));
+        }
+
         return null;
     }
 
@@ -305,6 +420,13 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitPrintExpressionAST(MonkeyParser.PrintExpressionASTContext ctx) {
+        // Puts
+
+        this.generate(this.index,"LOAD_GLOBAL", ctx.expression().getText());
+        this.generate(this.index,"LOAD_GLOBAL", "write");
+        this.generate(this.index,"CALL_FUNCTION", "1");
+
+
         if(ctx.expression()!=null){
             visit(ctx.expression());
         }
@@ -313,16 +435,17 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitIfExpressionAST(MonkeyParser.IfExpressionASTContext ctx) {
-
+        //  Make Type IF, VM's Instructions
         if(ctx.IF()!=null){
-
-        }
-        if(ctx.ELSE()!=null){
 
         }
         if(ctx.expression()!=null){
             visit(ctx.expression());
         }
+        if(ctx.ELSE()!=null){
+
+        }
+
         for(int i = 0; i < ctx.blockStatement().size();i++){
             visit(ctx.blockStatement(i));
         }
@@ -331,10 +454,34 @@ public class VisitorFuntion extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitBlockStatementAST(MonkeyParser.BlockStatementASTContext ctx) {
+        // {... </> ...}
         for(int i = 0; i < ctx.statement().size();i++){
             visit(ctx.statement(i));
         }
         return null;
+    }
+
+    //Method To String
+    @Override
+    public String toString() {
+        String data = "";
+        for (int i = 0; i < code.size() ; i++) {
+            data += code.get(i) + "\n";
+        }
+        return data;
+    }
+
+    public void makeAllFalse(){
+        isLet = false;
+        isCall = false;
+        isReturn = false;
+    }
+
+    public void forgetType(){
+        isVar = false;
+        isFunct = false;
+        isList = false;
+        isHash = false;
     }
 
 }
