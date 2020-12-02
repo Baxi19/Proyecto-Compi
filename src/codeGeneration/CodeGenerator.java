@@ -235,8 +235,14 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitPrimitiveExpression_numberAST(MonkeyParser.PrimitiveExpression_numberASTContext ctx) {
         if(isLet && isVar){
-            this.generate(this.index,"LOAD_CONST", ctx.INTEGER());
-            this.generate(this.index,"STORE_FAST", ctxLet.IDENT().getText());
+            if(level == 1){
+                this.generate(this.index,"LOAD_CONST", ctx.INTEGER());
+                this.generate(this.index,"STORE_GLOBAL", ctxLet.IDENT().getText());
+            }else{
+                this.generate(this.index,"LOAD_CONST", ctx.INTEGER());
+                this.generate(this.index,"STORE_FAST", ctxLet.IDENT().getText());
+            }
+
         }
 
         System.out.println("INT: " + ctx.INTEGER());
@@ -245,6 +251,17 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitPrimitiveExpression_stringAST(MonkeyParser.PrimitiveExpression_stringASTContext ctx) {
+        if(isLet && isVar){
+            if(level == 1){
+                this.generate(this.index,"LOAD_CONST", ctx.STRING());
+                this.generate(this.index,"STORE_GLOBAL", ctxLet.IDENT().getText());
+            }else{
+                this.generate(this.index,"LOAD_CONST", ctx.STRING());
+                this.generate(this.index,"STORE_FAST", ctxLet.IDENT().getText());
+            }
+
+        }
+
         System.out.println("STRING: " + ctx.STRING());
         return null;
     }
@@ -404,6 +421,12 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitPrintExpressionAST(MonkeyParser.PrintExpressionASTContext ctx) {
         // Puts
+
+        this.generate(this.index,"LOAD_GLOBAL", ctx.expression().getText());
+        this.generate(this.index,"LOAD_GLOBAL", "write");
+        this.generate(this.index,"CALL_FUNCTION", "1");
+
+
         if(ctx.expression()!=null){
             visit(ctx.expression());
         }
