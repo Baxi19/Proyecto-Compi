@@ -18,15 +18,26 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
     private boolean isReturn;
     private boolean isCall;
 
+    private boolean isVar;
+    private boolean isFunct;
+    private boolean isList;
+    private boolean isHash;
+
 
     //Constructor
     public CodeGenerator() {
         this.index=0;
         this.code= new ArrayList<>();
         this.level = -1;
+
         this.isLet = false;
         this.isReturn = false;
         this.isCall = false;
+
+        this.isVar = false;
+        this.isFunct = false;
+        this.isList = false;
+        this.isHash = false;
     }
 
     //Method to generate Monkey Virtual Machine code
@@ -84,7 +95,7 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitLetStatementAST(MonkeyParser.LetStatementASTContext ctx) {
         level ++;
-
+        forgetType();
         //save the ctx as aux
         ctxLet = ctx;
         //TODO: get best order if this visit at the end, but the problem is Virtual Machine
@@ -92,6 +103,7 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
 
         // If is function
         if(ctx.getText().split("\\=")[1].startsWith("fn(")){
+            isFunct = true;
             if(ctx.IDENT().getText().toLowerCase().equals("main") && level == 1){
                 System.out.println("**>MAIN<** IDENT: " +ctx.IDENT() +" Level: " + level +" => FN()");
             }else{
@@ -102,14 +114,17 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
         }
         // if is List
         else if(ctx.getText().split("\\=")[1].startsWith("[")){
+            isList = true;
             System.out.println("IDENT: " +ctx.IDENT() +" Level: " + level +" => []");
         }
         // if is hash
         else if(ctx.getText().split("\\=")[1].startsWith("{")){
+            isHash = true;
             System.out.println("IDENT: " +ctx.IDENT() +" Level: " + level +" => {}");
         }
         // if is variable
         else{
+            isVar = true;
             System.out.println("IDENT: " +ctx.IDENT() +" Level: " + level +" => var");
             if(level == 1){
                 this.generate(this.index,"PUSH_GLOBAL_I",ctx.IDENT().getText());
@@ -219,8 +234,7 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitPrimitiveExpression_numberAST(MonkeyParser.PrimitiveExpression_numberASTContext ctx) {
-
-        if(isLet){
+        if(isLet && isVar){
             this.generate(this.index,"LOAD_CONST", ctx.INTEGER());
             this.generate(this.index,"STORE_FAST", ctxLet.IDENT().getText());
         }
@@ -438,6 +452,13 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
         isLet = false;
         isCall = false;
         isReturn = false;
+    }
+
+    public void forgetType(){
+        isVar = false;
+        isFunct = false;
+        isList = false;
+        isHash = false;
     }
 
 }
