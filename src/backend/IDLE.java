@@ -2,6 +2,8 @@ package backend;
 
 
 import codeGeneration.CodeGenerator;
+import codeGeneration.CodeVM;
+import com.sun.org.apache.bcel.internal.classfile.Code;
 import contextualAnalysis.SymbolTable;
 import contextualAnalysis.VisitorFuntion;
 import contextualAnalysis.VisitorVariable;
@@ -76,6 +78,8 @@ public class IDLE {
     public String returnStatement ;
     public Boolean existReturn = false;
 
+    // Virtual Machine Code
+    public String instructions = "";
 
     //Singleton
     public static IDLE getInstance(){
@@ -185,13 +189,18 @@ public class IDLE {
                     showConsoleTree = false;
                 }
 
-                CodeGenerator codeGenerator = new CodeGenerator();
-                codeGenerator.visit(tree);
+                //TODO: try another time
+               //CodeGenerator codeGenerator = new CodeGenerator();
+               //codeGenerator.visit(tree);
+
+                CodeVM code = new CodeVM();
+                code.visit(tree);
+
 
                 //Normal Run
                 if(IDLE.getInstance().errorsContextual.isEmpty()){
                     terminalPass();
-                    terminal.setText(terminalText += "\n\n=>COMPILATION: SUCCESSFUL");
+                    terminal.setText(terminalText += "\n\n=>COMPILATION: SUCCESSFUL" + "\n\n" + instructions);
                 }else{
                     markContextErrors();
                     terminalFail();
@@ -300,7 +309,8 @@ public class IDLE {
 
         //terminal
         terminal  = new RSyntaxTextArea("Terminal");
-        terminal.setEnabled(false);
+        terminal.setEnabled(true);
+        terminal.setEditable(false);
         terminal.setBackground(Color.black);
         terminal.setForeground(Color.BLUE);
         terminal.setMargin(new Insets(10,10,10,10));
@@ -391,5 +401,18 @@ public class IDLE {
         }else{
             return false;
         }
+    }
+
+    //Method to check function info
+    public String getValue(String value){
+        try {
+            ScriptEngineManager mgr = new ScriptEngineManager();
+            ScriptEngine engine = mgr.getEngineByName("JavaScript");
+            String data = engine.eval(value).toString();
+            return data;
+        } catch (ScriptException e) {
+            return "";
+        }
+
     }
 }
