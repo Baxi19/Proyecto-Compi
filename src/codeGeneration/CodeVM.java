@@ -8,7 +8,8 @@ import java.util.ArrayList;
 
 public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
-    private int letmain;
+    //private int letmain;
+    private boolean letmain;
     private TablaSimbolos tablaIDS;
 
     private int index;
@@ -33,7 +34,8 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
         IDLE.getInstance().instructions = "";
         IDLE.getInstance().functions = new ArrayList<>();
 
-        this.letmain=-1;
+        //this.letmain=-1;
+        this.letmain=false;
         this.tablaIDS = new TablaSimbolos();
 
         this.index=0;
@@ -79,7 +81,7 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
         isReturn = true;
 
         visit(ctx.returnStatement());
-        //this.generate(this.index,"RETURN_VALUE",null);
+
         return null;
     }
 
@@ -105,20 +107,20 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
         // If is function
         if(ctx.getText().split("\\=")[1].startsWith("fn(")){
             isFunct = true;
+            this.tablaIDS.insertar(ctx.IDENT().getSymbol(),0,ctx);
+
             if(ctx.IDENT().getText().toLowerCase().equals("main") && level == 0){
-                letmain ++;
+                letmain  = true;
                 IDLE.getInstance().functions.add(new Funct(this.index, "Main", 0));
                 this.generate(this.index,"DEF Main", null);
                 visit(ctx.expression());
                 this.generate(this.index,"END",null);
-                letmain --;
+//                letmain = false;
             }else{
                 IDLE.getInstance().functions.add(new Funct(this.index, ctx.IDENT().getText(), 0));
                 this.generate(this.index,"DEF", ctx.IDENT().getText());
                 visit(ctx.expression());
                 this.generate(this.index,"END",null);
-                //TODO: DEF ...</> ... END
-                //System.out.println("IDENT: " +ctx.IDENT() +" Level: " + level +" => FN()");
             }
         }
         // if is List
@@ -137,7 +139,7 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
         else{
             isVar = true;
             this.tablaIDS.insertar(ctx.IDENT().getSymbol(),0,ctx);
-            if(level == 0 | letmain == 0){
+            if(level == 0 | letmain){
                 this.generate(this.index,"PUSH_GLOBAL_I",ctx.IDENT().getText());
             }else{
                 this.generate(this.index,"PUSH_LOCAL_I",ctx.IDENT().getText());
@@ -148,7 +150,7 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
         this.tablaIDS.closeScope();
         level --;
-
+        letmain = false;
         return null;
     }
 
@@ -156,6 +158,8 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
     public Object visitReturnStatementAST(MonkeyParser.ReturnStatementASTContext ctx) {
         // Return Statement
         visit(ctx.expression());
+        //TODO: return value and assignment
+        //this.generate(this.index,"RETURN_VALUE",null);
         return null;
     }
 
@@ -426,9 +430,9 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
     public Object visitFunctionParametersAST(MonkeyParser.FunctionParametersASTContext ctx) {
         //System.out.println("Should call function with " +ctx.IDENT().size() + " parameters");
 
-        //TODO: Parameters was declared with value -1
+        //TODO:ONLY in Main, Parameters was declared with value 0, but have to assign the value when are called
         for (int i = 0; i < ctx.IDENT().size(); i++) {
-            if(letmain == 0){
+            if(letmain){
                 this.generate(this.index,"LOAD_CONST", 0);
                 this.generate(this.index,"STORE_GLOBAL", ctx.IDENT(i));
             }else{
@@ -478,11 +482,9 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
     public Object visitPrintExpressionAST(MonkeyParser.PrintExpressionASTContext ctx) {
         // Puts
         //this.generate(this.index,"LOAD_GLOBAL", ctx.expression().getText());
-
-        if(ctx.expression()!=null){
+        if(ctx.expression() != null){
             visit(ctx.expression());
         }
-
 
         this.generate(this.index,"LOAD_GLOBAL", "write");
         this.generate(this.index,"CALL_FUNCTION", "1");
@@ -493,19 +495,47 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitIfExpressionAST(MonkeyParser.IfExpressionASTContext ctx) {
-        //  Make Type IF, VM's Instructions
-        if(ctx.IF()!=null){
+        //TODO:  Make Type IF, VM's Instructions
+        int tag1Index = -1;
+        int tag2Index = -1;
+        int tag3Index = -1;
+        int tag4Index = -1;
 
+
+        if(ctx.IF()!=null){
+            visit(ctx.IF());
+            /*tag1Index = this.index;
+            System.err.println("IF: "+tag1Index);
+            this.generate(this.index,"JUMP_IF_FALSE",-1);
+
+             */
         }
+
         if(ctx.expression()!=null){
             visit(ctx.expression());
-        }
-        if(ctx.ELSE()!=null){
+            /*tag2Index = this.index;
+            System.err.println("EXP: "+tag2Index);
+            this.generate(this.index,"JUMP_ABSOLUTE",-1);
+            this.code.set(tag1Index, tag1Index+" "+"JUMP_IF_FALSE"+ " "+this.index);
 
+             */
+        }
+
+        if(ctx.ELSE()!=null){
+            visit(ctx.ELSE());
+            /*tag3Index = this.index;
+            System.err.println("ELSE: "+tag3Index);
+            this.code.set(tag2Index, tag2Index+" "+"JUMP_ABSOLUTE"+ " "+this.index);
+
+             */
         }
 
         for(int i = 0; i < ctx.blockStatement().size();i++){
             visit(ctx.blockStatement(i));
+            /*tag4Index = this.index;
+            System.err.println("END, BLOCK ELSE: "+tag4Index);
+
+             */
         }
         return null;
     }
@@ -527,6 +557,7 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
         }
         return result;
     }
+
     //-------------------------------------------------------------------------------
     //Method to generate Monkey Virtual Machine code
     private void generate(int index, String instruction, Object param){
