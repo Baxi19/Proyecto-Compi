@@ -221,7 +221,7 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
                 this.generate(this.index,"BINARY_SUBSTRACT", null);
             }
         }
-        
+
         return null;
     }
 
@@ -477,16 +477,17 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitPrintExpressionAST(MonkeyParser.PrintExpressionASTContext ctx) {
         // Puts
-
-
         //this.generate(this.index,"LOAD_GLOBAL", ctx.expression().getText());
-        //this.generate(this.index,"LOAD_GLOBAL", "write");
-        //this.generate(this.index,"CALL_FUNCTION", "1");
-
 
         if(ctx.expression()!=null){
             visit(ctx.expression());
         }
+
+
+        this.generate(this.index,"LOAD_GLOBAL", "write");
+        this.generate(this.index,"CALL_FUNCTION", "1");
+
+
         return null;
     }
 
