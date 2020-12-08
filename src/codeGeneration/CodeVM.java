@@ -17,6 +17,8 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
     // Aux
     private MonkeyParser.LetStatementASTContext ctxLet;
+    private MonkeyParser.CallExpressionStatementASTContext ctxCall;
+
     private boolean isLet;
     private boolean isReturn;
     private boolean isCall;
@@ -29,6 +31,8 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
     //Constructor
     public CodeVM() {
         IDLE.getInstance().instructions = "";
+        IDLE.getInstance().functions = new ArrayList<>();
+
         this.letmain=-1;
         this.tablaIDS = new TablaSimbolos();
 
@@ -84,6 +88,7 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
         // Call expressions
         makeAllFalse();
         isCall = true;
+        ctxCall = ctx;
 
         visit(ctx.expressionStatement());
         return null;
@@ -93,51 +98,57 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
     public Object visitLetStatementAST(MonkeyParser.LetStatementASTContext ctx) {
         // Let Statement, Here will check the type
         level ++;
+        this.tablaIDS.openScope();
         forgetType();
         ctxLet = ctx; //save the ctx as aux
-
-
 
         // If is function
         if(ctx.getText().split("\\=")[1].startsWith("fn(")){
             isFunct = true;
             if(ctx.IDENT().getText().toLowerCase().equals("main") && level == 0){
+                letmain ++;
+                IDLE.getInstance().functions.add(new Funct(this.index, "Main", 0));
                 this.generate(this.index,"DEF Main", null);
-                //System.out.println("**>MAIN<** IDENT: " +ctx.IDENT() +" Level: " + level +" => FN()");
+                visit(ctx.expression());
+                this.generate(this.index,"END",null);
+                letmain --;
             }else{
-                this.generate(this.index,"DEF", ctx.IDENT());
+                IDLE.getInstance().functions.add(new Funct(this.index, ctx.IDENT().getText(), 0));
+                this.generate(this.index,"DEF", ctx.IDENT().getText());
+                visit(ctx.expression());
+                this.generate(this.index,"END",null);
                 //TODO: DEF ...</> ... END
                 //System.out.println("IDENT: " +ctx.IDENT() +" Level: " + level +" => FN()");
             }
-
         }
         // if is List
         else if(ctx.getText().split("\\=")[1].startsWith("[")){
             isList = true;
+            visit(ctx.expression());
             //System.out.println("IDENT: " +ctx.IDENT() +" Level: " + level +" => []");
         }
         // if is hash
         else if(ctx.getText().split("\\=")[1].startsWith("{")){
             isHash = true;
+            visit(ctx.expression());
             //System.out.println("IDENT: " +ctx.IDENT() +" Level: " + level +" => {}");
         }
         // if is variable
         else{
             isVar = true;
-            //System.out.println("IDENT: " +ctx.IDENT() +" Level: " + level +" => var");
-            if(level == 0){
-            //    this.generate(this.index,"PUSH_GLOBAL_I",ctx.IDENT().getText());
+            this.tablaIDS.insertar(ctx.IDENT().getSymbol(),0,ctx);
+            if(level == 0 | letmain == 0){
+                this.generate(this.index,"PUSH_GLOBAL_I",ctx.IDENT().getText());
             }else{
-            //    this.generate(this.index,"PUSH_LOCAL_I",ctx.IDENT().getText());
+                this.generate(this.index,"PUSH_LOCAL_I",ctx.IDENT().getText());
             }
+            visit(ctx.expression());
 
         }
 
-        visit(ctx.expression());
-        if(isFunct){
-            this.generate(this.index,"END",null);
-        }
+        this.tablaIDS.closeScope();
         level --;
+
         return null;
     }
 
@@ -188,9 +199,29 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitAdditionFactorAST(MonkeyParser.AdditionFactorASTContext ctx) {
-        for(int i = 0; i < ctx.multiplicationExpression().size();i++){
-            visit(ctx.multiplicationExpression(i));
+        //mult expr
+        if(!ctx.multiplicationExpression().isEmpty()){
+            for(int i = 0; i < ctx.multiplicationExpression().size();i++){
+                visit(ctx.multiplicationExpression(i));
+            }
         }
+
+        //Add
+        if(!ctx.ADD().isEmpty()){
+            for (int i = 0; i < ctx.ADD().size(); i++) {
+                visit(ctx.ADD(i));
+                this.generate(this.index,"BINARY_ADD", null);
+            }
+        }
+
+        //Subst
+        if(!ctx.SUB().isEmpty()){
+            for (int i = 0; i < ctx.SUB().size(); i++) {
+                visit(ctx.SUB(i));
+                this.generate(this.index,"BINARY_SUBSTRACT", null);
+            }
+        }
+        
         return null;
     }
 
@@ -207,9 +238,30 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitMultiplicationFactorAST(MonkeyParser.MultiplicationFactorASTContext ctx) {
-        for(int i = 0; i < ctx.elementExpression().size();i++){
-            visit(ctx.elementExpression(i));
+        //elementExpression
+        if(!ctx.elementExpression().isEmpty()){
+            for(int i = 0; i < ctx.elementExpression().size();i++){
+                visit(ctx.elementExpression(i));
+            }
         }
+
+        //Mul
+        if(!ctx.MUL().isEmpty()){
+            for (int i = 0; i < ctx.MUL().size(); i++) {
+                visit(ctx.MUL(i));
+                this.generate(this.index,"BINARY_MULTIPLY", null);
+            }
+        }
+
+        //Div
+        if(!ctx.DIV().isEmpty()){
+            for (int i = 0; i < ctx.DIV().size(); i++) {
+                visit(ctx.DIV(i));
+                this.generate(this.index,"BINARY_DIVIDE", null);
+            }
+        }
+
+
         return null;
     }
 
@@ -243,35 +295,35 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitPrimitiveExpression_numberAST(MonkeyParser.PrimitiveExpression_numberASTContext ctx) {
         // Number
-
+        this.generate(this.index,"LOAD_CONST", ctx.INTEGER());
         return null;
     }
 
     @Override
     public Object visitPrimitiveExpression_stringAST(MonkeyParser.PrimitiveExpression_stringASTContext ctx) {
-        // String
-
+        // String, if is Variable
+        this.generate(this.index,"LOAD_CONST", ctx.STRING());
         return null;
     }
 
     @Override
     public Object visitPrimitiveExpression_identAST(MonkeyParser.PrimitiveExpression_identASTContext ctx) {
         // Ident
-
+        this.generate(this.index,"LOAD_CONST", ctx.IDENT().getText());
         return null;
     }
 
     @Override
     public Object visitPrimitiveExpression_trueAST(MonkeyParser.PrimitiveExpression_trueASTContext ctx) {
         // True
-
+        this.generate(this.index,"LOAD_CONST", ctx.TRUE());
         return null;
     }
 
     @Override
     public Object visitPrimitiveExpression_falseAST(MonkeyParser.PrimitiveExpression_falseASTContext ctx) {
         // False
-
+        this.generate(this.index,"LOAD_CONST", ctx.FALSE());
         return null;
     }
 
@@ -373,9 +425,24 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitFunctionParametersAST(MonkeyParser.FunctionParametersASTContext ctx) {
         //System.out.println("Should call function with " +ctx.IDENT().size() + " parameters");
+
+        //TODO: Parameters was declared with value -1
         for (int i = 0; i < ctx.IDENT().size(); i++) {
-            //System.out.println("Parameter: " +ctx.IDENT(i));
+            if(letmain == 0){
+                this.generate(this.index,"LOAD_CONST", 0);
+                this.generate(this.index,"STORE_GLOBAL", ctx.IDENT(i));
+            }else{
+                this.generate(this.index,"LOAD_CONST", 0);
+                this.generate(this.index,"STORE_FAST", ctx.IDENT(i));
+            }
+
         }
+
+
+        //Will be used to call function
+        //this.generate(this.index, "LOAD_GLOBAL", "(Funtion Name)");
+        //this.generate(this.index, "CALL_FUNCTION", ctx.IDENT().size());
+
         return null;
     }
 
@@ -410,9 +477,12 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitPrintExpressionAST(MonkeyParser.PrintExpressionASTContext ctx) {
         // Puts
+
+
         //this.generate(this.index,"LOAD_GLOBAL", ctx.expression().getText());
         //this.generate(this.index,"LOAD_GLOBAL", "write");
         //this.generate(this.index,"CALL_FUNCTION", "1");
+
 
         if(ctx.expression()!=null){
             visit(ctx.expression());
