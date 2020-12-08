@@ -1,9 +1,9 @@
 package backend;
 
 
-import codeGeneration.CodeGenerator;
 import codeGeneration.CodeVM;
-import com.sun.org.apache.bcel.internal.classfile.Code;
+import codeGeneration.Funct;
+import contextualAnalysis.Ident;
 import contextualAnalysis.SymbolTable;
 import contextualAnalysis.VisitorFuntion;
 import contextualAnalysis.VisitorVariable;
@@ -79,7 +79,9 @@ public class IDLE {
     public Boolean existReturn = false;
 
     // Virtual Machine Code
+    public ArrayList<Funct> functions ;
     public String instructions = "";
+
 
     //Singleton
     public static IDLE getInstance(){
@@ -414,5 +416,15 @@ public class IDLE {
             return "";
         }
 
+    }
+
+    //Method to get id from name
+    public int getFunctId(String name){
+        for (int i = 0; i < functions.size(); i++) {
+            if(functions.get(i).getName().equals(name)){
+                return ( int ) functions.get(i).getId();
+            }
+        }
+        return 0;
     }
 }
