@@ -184,9 +184,35 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitComparisonAST(MonkeyParser.ComparisonASTContext ctx) {
-        for(int i = 0; i < ctx.additionExpression().size();i++){
-            visit(ctx.additionExpression(i));
+        if(!ctx.additionExpression().isEmpty()){
+            for(int i = 0; i < ctx.additionExpression().size();i++){
+                visit(ctx.additionExpression(i));
+
+                // <=
+                if(ctx.LE(i) != null){
+                    this.generate(this.index,"COMPARE_OP", ctx.LE(i));
+                }
+                // >=
+                if(ctx.GE(i) != null){
+                    this.generate(this.index,"COMPARE_OP", ctx.GE(i));
+                }
+                // ==
+                if(ctx.EQUAL(i) != null){
+                    this.generate(this.index,"COMPARE_OP", ctx.EQUAL(i));
+                }
+                // >
+                if(ctx.GT(i) != null){
+                    this.generate(this.index,"COMPARE_OP", ctx.GT(i));
+                }
+                // <
+                if(ctx.LT(i) != null){
+                    this.generate(this.index,"COMPARE_OP", ctx.LT(i));
+                }
+            }
         }
+
+
+
         return null;
     }
 
