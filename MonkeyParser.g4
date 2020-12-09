@@ -31,7 +31,7 @@ expressionStatement             : expression (PYCOMMA | )                       
 expression                      : additionExpression comparison                                                         #expressionAST;
 
 //-------------------------------------------------------------------------------------------------------------------
-comparison                      : ((LT|GT|LE|GE|EQUAL) additionExpression)*                                             #comparisonAST;
+comparison                      : ((LT|GT|LE|GE|EQUAL|NOT_EQUAL) additionExpression)*                                             #comparisonAST;
 
 //-------------------------------------------------------------------------------------------------------------------
 additionExpression	            : multiplicationExpression additionFactor                                               #additionExpressionAST;

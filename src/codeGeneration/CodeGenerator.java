@@ -112,9 +112,8 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
             }else{
                 this.generate(this.index,"DEF", ctx.IDENT());
                 //TODO: DEF ...</> ... END
-                //System.out.println("IDENT: " +ctx.IDENT() +" Level: " + level +" => FN()");
-            }
 
+            }
         }
         // if is List
         else if(ctx.getText().split("\\=")[1].startsWith("[")){
@@ -129,7 +128,6 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
         // if is variable
         else{
             isVar = true;
-            //System.out.println("IDENT: " +ctx.IDENT() +" Level: " + level +" => var");
             if(level == 1){
                 this.generate(this.index,"PUSH_GLOBAL_I",ctx.IDENT().getText());
             }else{
@@ -254,10 +252,7 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
                 this.generate(this.index,"LOAD_CONST", ctx.INTEGER());
                 this.generate(this.index,"STORE_FAST", ctxLet.IDENT().getText());
             }
-
         }
-
-        //System.out.println("INT: " + ctx.INTEGER());
         return null;
     }
 
@@ -271,10 +266,7 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
                 this.generate(this.index,"LOAD_CONST", ctx.STRING());
                 this.generate(this.index,"STORE_FAST", ctxLet.IDENT().getText());
             }
-
         }
-
-        //System.out.println("STRING: " + ctx.STRING());
         return null;
     }
 
@@ -421,7 +413,6 @@ public class CodeGenerator extends MonkeyParserBaseVisitor<Object> {
         for (int i = 0; i < ctx.expression().size(); i++) {
             System.out.println("Data array, index " + i + " : " + visit(ctx.expression(i)));
         }
-
         return null;
     }
 
