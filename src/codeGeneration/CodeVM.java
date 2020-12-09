@@ -6,6 +6,7 @@ import generated.MonkeyParserBaseVisitor;
 
 import java.util.ArrayList;
 
+
 public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
     //private int letmain;
@@ -104,10 +105,12 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
         forgetType();
         ctxLet = ctx; //save the ctx as aux
 
+        this.tablaIDS.insertar(ctx.IDENT().getSymbol(),0,ctx);
+
         // If is function
         if(ctx.getText().split("\\=")[1].startsWith("fn(")){
             isFunct = true;
-            this.tablaIDS.insertar(ctx.IDENT().getSymbol(),0,ctx);
+            //this.tablaIDS.insertar(ctx.IDENT().getSymbol(),0,ctx);
 
             if(ctx.IDENT().getText().toLowerCase().equals("main") && level == 0){
                 letmain  = true;
@@ -126,8 +129,17 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
         // if is List
         else if(ctx.getText().split("\\=")[1].startsWith("[")){
             isList = true;
-            visit(ctx.expression());
-            //System.out.println("IDENT: " +ctx.IDENT() +" Level: " + level +" => []");
+            if(level == 0 | letmain){
+                this.generate(this.index,"PUSH_GLOBAL_I",ctx.IDENT().getText());
+                visit(ctx.expression());
+                this.generate(this.index,"STORE_GLOBAL",ctx.IDENT().getText());
+            }else{
+                this.generate(this.index,"PUSH_LOCAL_I",ctx.IDENT().getText());
+                visit(ctx.expression());
+                this.generate(this.index,"STORE_FAST",ctx.IDENT().getText());
+            }
+
+
         }
         // if is hash
         else if(ctx.getText().split("\\=")[1].startsWith("{")){
@@ -429,6 +441,8 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitArrayFunctions_pushAST(MonkeyParser.ArrayFunctions_pushASTContext ctx) {
+        // Este el profe dijo que no habia que implementarlo por el chat de Whatsapp, 9/12/2020, 09:28 am
+
         return null;
     }
 
@@ -487,15 +501,30 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitHashContentAST(MonkeyParser.HashContentASTContext ctx) {
+        if(!ctx.expression().isEmpty()){
+            for (int i = 0; i < ctx.expression().size(); i++) {
+                visit(ctx.expression(i));
+            }
+        }
+        //System.err.println(ctx.getText());
         return ctx.getText();
     }
 
     @Override
     public Object visitExpressionList_expressionAST(MonkeyParser.ExpressionList_expressionASTContext ctx) {
         //System.out.println("Array size: " + ctx.expression().size());
-        for (int i = 0; i < ctx.expression().size(); i++) {
-            //System.out.println("Data array, index " + i + " : " + visit(ctx.expression(i)));
+        if(!ctx.expression().isEmpty()){
+            for (int i = 0; i < ctx.expression().size(); i++) {
+                visit(ctx.expression(i));
+            }
         }
+
+        // if is let & list 
+        if(isList && isLet){
+            System.out.println("Size: " + ctx.expression().size());
+            this.generate(this.index, "BUILD_LIST", ctx.expression().size());
+        }
+
         return null;
     }
 
