@@ -1,0 +1,58 @@
+/*
+    permite almacenar tuplas de variables y 
+    valores (enteros y chars) que serán utilizados por el intérprete para resolver las operaciones de busqueda y
+    almacenamiento de identificadores. 
+    Así mismo debe almacenar referencias a métodos que deben llevar la "dirección" en el código que tiene dicho método.
+     */
+
+     //Notas: 
+     /* 
+        hacer una instancia de variables globales y locales.
+        callfuntion: es el metodo mas complejo debido a que tiene que volver su metodo original
+    */
+
+
+    /*
+     0 DEF inter
+     void inter(){
+         1 PUSH_LOCAL_I x 
+         int x; # cuano se almacena se agrega un clave valor = 0; en caso de ser char ='';
+        
+         2 PUSH_LOCAL_I y
+         int y;#igual que arriba
+
+         3 PUSH_LOCAL_I temp
+         int temp;#igual que arriba
+
+         4 LOAD_CONST 10
+         5 STORE_FAST x
+         x = 10;
+
+         6 LOAD_CONST 20
+         7 STORE_FAST y
+         x = 10;
+
+         8 LOAD_FAST x
+         9 STORE_FAST temp
+         temp = x ;
+         ...
+         
+        }
+
+
+        
+
+     }
+
+     */
+    
+
+    /*
+    Tabla de simbolos
+
+    {id:algo, valor: int/char}
+
+    listas: global/local
+    
+    
+    */

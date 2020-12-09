@@ -1,0 +1,14 @@
+{
+  "ProjectFilePath": "c:\\Users\\oviquez\\Documents\\00.Cursos\\Compiladores (IC-5701)\\2018\\II Semestre\\VM_CS\\VMCS.csproj",
+  "TargetFramework": "v4.0",
+  "TagHelpers": [],
+  "Configuration": {
+    "ConfigurationName": "UnsupportedRazor",
+    "LanguageVersion": "1.0",
+    "Extensions": [
+      {
+        "ExtensionName": "UnsupportedRazorExtension"
+      }
+    ]
+  }
+}
