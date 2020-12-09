@@ -342,6 +342,61 @@ namespace InstructionsNameSpace{
             }
         }
         
+        //FIRST (list)
+        private void runCALL_FIRST(){
+            try
+            {
+                //se obtiene la lista
+                List<dynamic> list = pilaExprs.pop();
+                //se guarda el primer valor
+                list.Reverse();
+                pilaExprs.push(list[0]);
+                
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error metodo FIRST(): "+e.Message);
+                throw;
+            }
+        }
+        
+        //LAST (list)
+        private void runCALL_LAST(){
+            try
+            {
+                //se obtiene la lista
+                List<dynamic> list = pilaExprs.pop();
+                //se guarda el ultimo valor
+                pilaExprs.push(list[0]);
+                
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error metodo LAST(): "+e.Message);
+                throw;
+            }
+        }
+        
+        //PUSH (list, DATA)
+        private void runCALL_PUSH(){
+            try
+            {
+                //se obtiene la lista
+                dynamic data = pilaExprs.pop();
+                List<dynamic> list = pilaExprs.pop();
+                list.Reverse();
+                list.Add(data);
+                list.Reverse();
+                pilaExprs.push(list);
+                
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error metodo PUSH(): "+e.Message);
+                throw;
+            }
+        }
+        
 
         //método principal para correr todas las instrucciones de la lista... Este método debe recorrer la lista solo para agregar en el almacen global 
         //las variables y métodos que hayan y cuando se encuentre el Main, este método si debe ejecutarse línea por línea porque es el punto de inicio
@@ -406,8 +461,16 @@ namespace InstructionsNameSpace{
                             if (instSet[actualInstrIndex].Value.Equals("len"))
                             {
                                 runCALL_LEN();
-                            }
-                            else
+                            }else if (instSet[actualInstrIndex].Value.Equals("first"))
+                            {
+                                runCALL_FIRST();
+                            }else if (instSet[actualInstrIndex].Value.Equals("last"))
+                            {
+                                runCALL_LAST();
+                            }else if (instSet[actualInstrIndex].Value.Equals("push"))
+                            {
+                                runCALL_PUSH();
+                            }else
                             {
                                 runLOAD_GLOBAL(instSet[actualInstrIndex].Value);   
                             }
