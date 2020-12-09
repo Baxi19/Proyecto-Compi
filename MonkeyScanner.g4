@@ -23,6 +23,7 @@ COLON   : ':';
 LE      : '<=';
 GE      : '>=';
 EQUAL   : '==';
+NOT_EQUAL : '!=';
 GT      : '>';
 LT      : '<';
 ASSIGN  : '=';

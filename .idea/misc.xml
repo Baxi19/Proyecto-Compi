@@ -26,7 +26,7 @@
         <PerGrammarGenerationSettings>
           <option name="fileName" value="$PROJECT_DIR$/MonkeyScanner.g4" />
           <option name="autoGen" value="true" />
-          <option name="outputDir" value="C:\Users\Baxi\Desktop\Proyecto Compi\src" />
+          <option name="outputDir" value="C:\Users\Baxi\Desktop\Compi\Proyecto-Compi\src" />
           <option name="libDir" value="" />
           <option name="encoding" value="" />
           <option name="pkg" value="generated" />
@@ -37,7 +37,7 @@
         <PerGrammarGenerationSettings>
           <option name="fileName" value="$PROJECT_DIR$/MonkeyParser.g4" />
           <option name="autoGen" value="true" />
-          <option name="outputDir" value="C:\Users\Baxi\Desktop\Proyecto Compi\src" />
+          <option name="outputDir" value="C:\Users\Baxi\Desktop\Compi\Proyecto-Compi\src" />
           <option name="libDir" value="" />
           <option name="encoding" value="" />
           <option name="pkg" value="generated" />

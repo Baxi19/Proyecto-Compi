@@ -1,4 +1,4 @@
-// Generated from C:/Users/Baxi/Desktop/Proyecto Compi\MonkeyParser.g4 by ANTLR 4.8
+// Generated from C:/Users/Baxi/Desktop/Compi/Proyecto-Compi\MonkeyParser.g4 by ANTLR 4.8
 package generated;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 

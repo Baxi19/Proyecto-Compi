@@ -184,8 +184,34 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitComparisonAST(MonkeyParser.ComparisonASTContext ctx) {
-        for(int i = 0; i < ctx.additionExpression().size();i++){
-            visit(ctx.additionExpression(i));
+        if(!ctx.additionExpression().isEmpty()){
+            for(int i = 0; i < ctx.additionExpression().size();i++){
+                visit(ctx.additionExpression(i));
+                // <=
+                if(ctx.LE(i) != null){
+                    this.generate(this.index,"COMPARE_OP", ctx.LE(i));
+                }
+                // >=
+                if(ctx.GE(i) != null){
+                    this.generate(this.index,"COMPARE_OP", ctx.GE(i));
+                }
+                // ==
+                if(ctx.EQUAL(i) != null){
+                    this.generate(this.index,"COMPARE_OP", ctx.EQUAL(i));
+                }
+                // !=
+                if(ctx.EQUAL(i) != null){
+                    this.generate(this.index,"COMPARE_OP", ctx.NOT_EQUAL(i));
+                }
+                // >
+                if(ctx.GT(i) != null){
+                    this.generate(this.index,"COMPARE_OP", ctx.GT(i));
+                }
+                // <
+                if(ctx.LT(i) != null){
+                    this.generate(this.index,"COMPARE_OP", ctx.LT(i));
+                }
+            }
         }
         return null;
     }
@@ -497,46 +523,38 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
     public Object visitIfExpressionAST(MonkeyParser.IfExpressionASTContext ctx) {
         //TODO:  Make Type IF, VM's Instructions
         int tag1Index = -1;
-        int tag2Index = -1;
-        int tag3Index = -1;
-        int tag4Index = -1;
-
-
-        if(ctx.IF()!=null){
-            visit(ctx.IF());
-            /*tag1Index = this.index;
-            System.err.println("IF: "+tag1Index);
-            this.generate(this.index,"JUMP_IF_FALSE",-1);
-
-             */
-        }
 
         if(ctx.expression()!=null){
             visit(ctx.expression());
-            /*tag2Index = this.index;
-            System.err.println("EXP: "+tag2Index);
-            this.generate(this.index,"JUMP_ABSOLUTE",-1);
-            this.code.set(tag1Index, tag1Index+" "+"JUMP_IF_FALSE"+ " "+this.index);
+            tag1Index = this.index;
+            this.generate(this.index,"JUMP_IF_FALSE", tag1Index);
 
-             */
         }
 
-        if(ctx.ELSE()!=null){
-            visit(ctx.ELSE());
-            /*tag3Index = this.index;
-            System.err.println("ELSE: "+tag3Index);
+        // if true
+        visit(ctx.blockStatement(0));
+        int tag2Index = this.index;
+        this.generate(this.index,"JUMP_ABSOLUTE",-1);
+        this.code.set(tag1Index, tag1Index+" "+"JUMP_IF_FALSE"+ " "+this.index);
+
+
+        if(ctx.ELSE() != null){
+            // if false (else)
+            visit(ctx.blockStatement(1));
             this.code.set(tag2Index, tag2Index+" "+"JUMP_ABSOLUTE"+ " "+this.index);
 
-             */
         }
 
-        for(int i = 0; i < ctx.blockStatement().size();i++){
+
+        /*for(int i = 0; i < ctx.blockStatement().size();i++){
+            if(i==1){
+                this.code.set(tag1Index, tag1Index+" "+"JUMP_IF_TRUE"+ " "+this.index);
+            }
             visit(ctx.blockStatement(i));
-            /*tag4Index = this.index;
-            System.err.println("END, BLOCK ELSE: "+tag4Index);
-
-             */
-        }
+            if(i==0){
+                this.code.set(tag1Index, tag1Index+" "+"JUMP_IF_TRUE"+ " "+this.index);
+            }
+        }*/
         return null;
     }
 
