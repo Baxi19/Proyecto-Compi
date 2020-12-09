@@ -56,10 +56,15 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitProgramAST(MonkeyParser.ProgramASTContext ctx) {
         // Program
+        level ++;
+        tablaIDS.openScope();
+
         for(int i = 0; i < ctx.statement().size();i++){
             visit(ctx.statement(i));
         }
 
+        level --;
+        tablaIDS.closeScope();
 
         IDLE.getInstance().instructions = toString();
         return null;
@@ -100,35 +105,43 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitLetStatementAST(MonkeyParser.LetStatementASTContext ctx) {
         // Let Statement, Here will check the type
-        level ++;
-        this.tablaIDS.openScope();
+        //level ++;
+        //this.tablaIDS.openScope();
         forgetType();
         ctxLet = ctx; //save the ctx as aux
 
-        this.tablaIDS.insertar(ctx.IDENT().getSymbol(),0,ctx);
+        //this.tablaIDS.insertar(ctx.IDENT().getSymbol(),0,ctx);
 
         // If is function
         if(ctx.getText().split("\\=")[1].startsWith("fn(")){
             isFunct = true;
             //this.tablaIDS.insertar(ctx.IDENT().getSymbol(),0,ctx);
-
             if(ctx.IDENT().getText().toLowerCase().equals("main") && level == 0){
                 letmain  = true;
+                this.tablaIDS.insertar(ctx.IDENT().getSymbol(),0,ctx);
                 IDLE.getInstance().functions.add(new Funct(this.index, "Main", 0));
                 this.generate(this.index,"DEF Main", null);
                 visit(ctx.expression());
                 this.generate(this.index,"END",null);
-//                letmain = false;
+                letmain = false;
             }else{
+                level ++;
+                tablaIDS.openScope();
+                this.tablaIDS.insertar(ctx.IDENT().getSymbol(),0,ctx);
+
                 IDLE.getInstance().functions.add(new Funct(this.index, ctx.IDENT().getText(), 0));
                 this.generate(this.index,"DEF", ctx.IDENT().getText());
                 visit(ctx.expression());
                 this.generate(this.index,"END",null);
+
+                level--;
+                tablaIDS.closeScope();
             }
         }
         // if is List
         else if(ctx.getText().split("\\=")[1].startsWith("[")){
             isList = true;
+            this.tablaIDS.insertar(ctx.IDENT().getSymbol(),0,ctx);
             if(level == 0 | letmain){
                 this.generate(this.index,"PUSH_GLOBAL_I",ctx.IDENT().getText());
                 visit(ctx.expression());
@@ -144,6 +157,7 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
         // if is hash
         else if(ctx.getText().split("\\=")[1].startsWith("{")){
             isHash = true;
+            this.tablaIDS.insertar(ctx.IDENT().getSymbol(),0,ctx);
             visit(ctx.expression());
             //System.out.println("IDENT: " +ctx.IDENT() +" Level: " + level +" => {}");
         }
@@ -153,16 +167,17 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
             this.tablaIDS.insertar(ctx.IDENT().getSymbol(),0,ctx);
             if(level == 0 | letmain){
                 this.generate(this.index,"PUSH_GLOBAL_I",ctx.IDENT().getText());
+                visit(ctx.expression());
             }else{
                 this.generate(this.index,"PUSH_LOCAL_I",ctx.IDENT().getText());
+                visit(ctx.expression());
             }
-            visit(ctx.expression());
 
         }
 
-        this.tablaIDS.closeScope();
-        level --;
-        letmain = false;
+        //this.tablaIDS.closeScope();
+        //level --;
+        //letmain = false;
         return null;
     }
 
@@ -311,6 +326,7 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
     public Object visitElementExpressionAST(MonkeyParser.ElementExpressionASTContext ctx) {
 
         visit(ctx.primitiveExpression());
+
         if(ctx.elementAccess()!=null){
             visit(ctx.elementAccess());
         }
@@ -351,7 +367,12 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitPrimitiveExpression_identAST(MonkeyParser.PrimitiveExpression_identASTContext ctx) {
         // Ident
-        this.generate(this.index,"LOAD_CONST", ctx.IDENT().getText());
+        if(letmain | level == 0){
+            this.generate(this.index,"LOAD_GLOBAL", ctx.IDENT().getText());
+        }else{
+            this.generate(this.index,"LOAD_FAST", ctx.IDENT().getText());
+        }
+
         return null;
     }
 
@@ -386,11 +407,11 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitPrimitiveExpression_ArrayFunctionsAST(MonkeyParser.PrimitiveExpression_ArrayFunctionsASTContext ctx) {
-        if(ctx.arrayFunctions()!=null){
-            visit(ctx.arrayFunctions());
-        }
         if(ctx.expressionList()!=null){
             visit(ctx.expressionList());
+        }
+        if(ctx.arrayFunctions()!=null){
+            visit(ctx.arrayFunctions());
         }
         return null;
     }
@@ -421,6 +442,9 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitArrayFunctions_lenAST(MonkeyParser.ArrayFunctions_lenASTContext ctx) {
+        //TODO: Change position
+        this.generate(this.index,"LOAD_GLOBAL", ctx.LEN());
+        //this.generate(this.index,"CALL_LEN", null);
         return null;
     }
 
@@ -519,9 +543,8 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
             }
         }
 
-        // if is let & list 
+        // if is let & list
         if(isList && isLet){
-            System.out.println("Size: " + ctx.expression().size());
             this.generate(this.index, "BUILD_LIST", ctx.expression().size());
         }
 
@@ -573,17 +596,6 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
             this.code.set(tag2Index, tag2Index+" "+"JUMP_ABSOLUTE"+ " "+this.index);
 
         }
-
-
-        /*for(int i = 0; i < ctx.blockStatement().size();i++){
-            if(i==1){
-                this.code.set(tag1Index, tag1Index+" "+"JUMP_IF_TRUE"+ " "+this.index);
-            }
-            visit(ctx.blockStatement(i));
-            if(i==0){
-                this.code.set(tag1Index, tag1Index+" "+"JUMP_IF_TRUE"+ " "+this.index);
-            }
-        }*/
         return null;
     }
 
