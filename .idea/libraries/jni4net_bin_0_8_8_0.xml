@@ -1,0 +1,26 @@
+<component name="libraryTable">
+  <library name="jni4net-bin-0.8.8.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libs/jni4net-bin-0.8.8.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/libs/jni4net-bin-0.8.8.0.jar!/samples/circular/circular1/src" />
+      <root url="jar://$PROJECT_DIR$/libs/jni4net-bin-0.8.8.0.jar!/samples/circular/circular2/src" />
+      <root url="jar://$PROJECT_DIR$/libs/jni4net-bin-0.8.8.0.jar!/samples/circular/circular3/src" />
+      <root url="jar://$PROJECT_DIR$/libs/jni4net-bin-0.8.8.0.jar!/samples/circular/circular4/src" />
+      <root url="jar://$PROJECT_DIR$/libs/jni4net-bin-0.8.8.0.jar!/samples/circular/circular5/src" />
+      <root url="jar://$PROJECT_DIR$/libs/jni4net-bin-0.8.8.0.jar!/samples/circular/circular5/src5" />
+      <root url="jar://$PROJECT_DIR$/libs/jni4net-bin-0.8.8.0.jar!/samples/circular/circular6/src" />
+      <root url="jar://$PROJECT_DIR$/libs/jni4net-bin-0.8.8.0.jar!/samples/circular/circular6/src5" />
+      <root url="jar://$PROJECT_DIR$/libs/jni4net-bin-0.8.8.0.jar!/samples/circular/circular7/src" />
+      <root url="jar://$PROJECT_DIR$/libs/jni4net-bin-0.8.8.0.jar!/samples/circular/circular7/src5" />
+      <root url="jar://$PROJECT_DIR$/libs/jni4net-bin-0.8.8.0.jar!/samples/drools/domain.j4n/jvm" />
+      <root url="jar://$PROJECT_DIR$/libs/jni4net-bin-0.8.8.0.jar!/samples/drools/drools-api-5.1.1.j4n/jvm" />
+      <root url="jar://$PROJECT_DIR$/libs/jni4net-bin-0.8.8.0.jar!/samples/helloWorldFromJVM/java" />
+      <root url="jar://$PROJECT_DIR$/libs/jni4net-bin-0.8.8.0.jar!/samples/myCSharpDemoCalc" />
+      <root url="jar://$PROJECT_DIR$/libs/jni4net-bin-0.8.8.0.jar!/samples/runtimeSelection/java" />
+      <root url="jar://$PROJECT_DIR$/libs/jni4net-bin-0.8.8.0.jar!/samples/winforms/java" />
+    </SOURCES>
+  </library>
+</component>
