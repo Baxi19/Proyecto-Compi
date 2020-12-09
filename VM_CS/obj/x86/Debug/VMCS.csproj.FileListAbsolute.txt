@@ -1,0 +1,57 @@
+C:\Users\oviquez\Documents\00.Cursos\Compiladores (IC-5701)\2018\II Semestre\VM_CS\bin\Debug\Minics.exe
+C:\Users\oviquez\Documents\00.Cursos\Compiladores (IC-5701)\2018\II Semestre\VM_CS\bin\Debug\Minics.pdb
+C:\Users\oviquez\Documents\00.Cursos\Compiladores (IC-5701)\2018\II Semestre\VM_CS\obj\x86\Debug\Minics.exe
+C:\Users\oviquez\Documents\00.Cursos\Compiladores (IC-5701)\2018\II Semestre\VM_CS\obj\x86\Debug\Minics.pdb
+C:\Users\oviquez\Documents\00.Cursos\Compiladores (IC-5701)\2018\II Semestre\VM_CS\obj\x86\Debug\VMCS.csprojResolveAssemblyReference.cache
+C:\Users\oviquez\Documents\00.Cursos\Compiladores (IC-5701)\2018\II Semestre (Mini C#)\VM_CS - copia\bin\Debug\Minics.exe
+C:\Users\oviquez\Documents\00.Cursos\Compiladores (IC-5701)\2018\II Semestre (Mini C#)\VM_CS - copia\bin\Debug\Minics.pdb
+C:\Users\oviquez\Documents\00.Cursos\Compiladores (IC-5701)\2018\II Semestre (Mini C#)\VM_CS - copia\obj\x86\Debug\VMCS.csprojResolveAssemblyReference.cache
+C:\Users\oviquez\Documents\00.Cursos\Compiladores (IC-5701)\2018\II Semestre (Mini C#)\VM_CS - copia\obj\x86\Debug\Minics.exe
+C:\Users\oviquez\Documents\00.Cursos\Compiladores (IC-5701)\2018\II Semestre (Mini C#)\VM_CS - copia\obj\x86\Debug\Minics.pdb
+C:\Users\oviquez\Documents\00.Cursos\Compiladores (IC-5701)\2018\II Semestre (Mini C#)\VM_CS - copia\bin\Debug\desensamblador_codigo\text.txt
+C:\Users\oviquez\Documents\00.Cursos\Compiladores (IC-5701)\2020\I Semestre\VM_CS\bin\Debug\desensamblador_codigo\fact_iter.txt
+C:\Users\oviquez\Documents\00.Cursos\Compiladores (IC-5701)\2020\I Semestre\VM_CS\bin\Debug\desensamblador_codigo\test2.txt
+C:\Users\oviquez\Documents\00.Cursos\Compiladores (IC-5701)\2020\I Semestre\VM_CS\bin\Debug\desensamblador_codigo\text.txt
+C:\Users\oviquez\Documents\00.Cursos\Compiladores (IC-5701)\2020\I Semestre\VM_CS\bin\Debug\Minics.exe
+C:\Users\oviquez\Documents\00.Cursos\Compiladores (IC-5701)\2020\I Semestre\VM_CS\bin\Debug\Minics.pdb
+C:\Users\oviquez\Documents\00.Cursos\Compiladores (IC-5701)\2020\I Semestre\VM_CS\obj\x86\Debug\VMCS.csprojResolveAssemblyReference.cache
+C:\Users\oviquez\Documents\00.Cursos\Compiladores (IC-5701)\2020\I Semestre\VM_CS\obj\x86\Debug\Minics.exe
+C:\Users\oviquez\Documents\00.Cursos\Compiladores (IC-5701)\2020\I Semestre\VM_CS\obj\x86\Debug\Minics.pdb
+C:\Users\oviquez\Documents\00.Cursos\Compiladores (IC-5701)\2020\I Semestre\VM_CS\bin\Debug\desensamblador_codigo\prueba.txt
+C:\Users\oviquez\Documents\00.Cursos\Compiladores (IC-5701)\2020\I Semestre\VM_CS\bin\Debug\desensamblador_codigo\new.txt
+C:\Users\Baxi\Downloads\OneDrive_1_16-11-2020\VM_CS\VM_CS\bin\Debug\desensamblador_codigo\fact_iter.txt
+C:\Users\Baxi\Downloads\OneDrive_1_16-11-2020\VM_CS\VM_CS\bin\Debug\desensamblador_codigo\new.txt
+C:\Users\Baxi\Downloads\OneDrive_1_16-11-2020\VM_CS\VM_CS\bin\Debug\desensamblador_codigo\prueba.txt
+C:\Users\Baxi\Downloads\OneDrive_1_16-11-2020\VM_CS\VM_CS\bin\Debug\desensamblador_codigo\test2.txt
+C:\Users\Baxi\Downloads\OneDrive_1_16-11-2020\VM_CS\VM_CS\bin\Debug\desensamblador_codigo\text.txt
+C:\Users\Baxi\Downloads\OneDrive_1_16-11-2020\VM_CS\VM_CS\bin\Debug\Minics.exe
+C:\Users\Baxi\Downloads\OneDrive_1_16-11-2020\VM_CS\VM_CS\bin\Debug\Minics.pdb
+C:\Users\Baxi\Downloads\OneDrive_1_16-11-2020\VM_CS\VM_CS\obj\x86\Debug\VMCS.csprojResolveAssemblyReference.cache
+C:\Users\Baxi\Downloads\OneDrive_1_16-11-2020\VM_CS\VM_CS\obj\x86\Debug\Minics.exe
+C:\Users\Baxi\Downloads\OneDrive_1_16-11-2020\VM_CS\VM_CS\obj\x86\Debug\Minics.pdb
+C:\Users\Baxi\Downloads\OneDrive_1_16-11-2020\VM_CS\VM_CS\bin\Debug\desensamblador_codigo\alpha1.txt
+C:\Users\Baxi\Downloads\OneDrive_1_16-11-2020\VM_CS\VM_CS\bin\Debug\desensamblador_codigo\monkey_fact.txt
+C:\Users\Baxi\Desktop\Compi\VM_CS\VM_CS\bin\Debug\desensamblador_codigo\alpha1.txt
+C:\Users\Baxi\Desktop\Compi\VM_CS\VM_CS\bin\Debug\desensamblador_codigo\fact_iter.txt
+C:\Users\Baxi\Desktop\Compi\VM_CS\VM_CS\bin\Debug\desensamblador_codigo\monkey_fact.txt
+C:\Users\Baxi\Desktop\Compi\VM_CS\VM_CS\bin\Debug\desensamblador_codigo\new.txt
+C:\Users\Baxi\Desktop\Compi\VM_CS\VM_CS\bin\Debug\desensamblador_codigo\prueba.txt
+C:\Users\Baxi\Desktop\Compi\VM_CS\VM_CS\bin\Debug\desensamblador_codigo\test2.txt
+C:\Users\Baxi\Desktop\Compi\VM_CS\VM_CS\bin\Debug\desensamblador_codigo\text.txt
+C:\Users\Baxi\Desktop\Compi\VM_CS\VM_CS\bin\Debug\Minics.exe
+C:\Users\Baxi\Desktop\Compi\VM_CS\VM_CS\bin\Debug\Minics.pdb
+C:\Users\Baxi\Desktop\Compi\VM_CS\VM_CS\obj\x86\Debug\VMCS.csprojResolveAssemblyReference.cache
+C:\Users\Baxi\Desktop\Compi\VM_CS\VM_CS\obj\x86\Debug\Minics.exe
+C:\Users\Baxi\Desktop\Compi\VM_CS\VM_CS\obj\x86\Debug\Minics.pdb
+C:\Users\Baxi\Desktop\Compi\Proyecto-Compi\VM_CS\bin\Debug\desensamblador_codigo\alpha1.txt
+C:\Users\Baxi\Desktop\Compi\Proyecto-Compi\VM_CS\bin\Debug\desensamblador_codigo\fact_iter.txt
+C:\Users\Baxi\Desktop\Compi\Proyecto-Compi\VM_CS\bin\Debug\desensamblador_codigo\monkey_fact.txt
+C:\Users\Baxi\Desktop\Compi\Proyecto-Compi\VM_CS\bin\Debug\desensamblador_codigo\new.txt
+C:\Users\Baxi\Desktop\Compi\Proyecto-Compi\VM_CS\bin\Debug\desensamblador_codigo\prueba.txt
+C:\Users\Baxi\Desktop\Compi\Proyecto-Compi\VM_CS\bin\Debug\desensamblador_codigo\test2.txt
+C:\Users\Baxi\Desktop\Compi\Proyecto-Compi\VM_CS\bin\Debug\desensamblador_codigo\text.txt
+C:\Users\Baxi\Desktop\Compi\Proyecto-Compi\VM_CS\bin\Debug\Minics.exe
+C:\Users\Baxi\Desktop\Compi\Proyecto-Compi\VM_CS\bin\Debug\Minics.pdb
+C:\Users\Baxi\Desktop\Compi\Proyecto-Compi\VM_CS\obj\x86\Debug\VMCS.csprojResolveAssemblyReference.cache
+C:\Users\Baxi\Desktop\Compi\Proyecto-Compi\VM_CS\obj\x86\Debug\Minics.exe
+C:\Users\Baxi\Desktop\Compi\Proyecto-Compi\VM_CS\obj\x86\Debug\Minics.pdb

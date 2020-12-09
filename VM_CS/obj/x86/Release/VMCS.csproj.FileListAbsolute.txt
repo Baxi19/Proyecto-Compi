@@ -1,0 +1,8 @@
+C:\Users\oviquez\Documents\00.Cursos\Compiladores (IC-5701)\2020\I Semestre\VM_CS\bin\Release\desensamblador_codigo\fact_iter.txt
+C:\Users\oviquez\Documents\00.Cursos\Compiladores (IC-5701)\2020\I Semestre\VM_CS\bin\Release\desensamblador_codigo\test2.txt
+C:\Users\oviquez\Documents\00.Cursos\Compiladores (IC-5701)\2020\I Semestre\VM_CS\bin\Release\desensamblador_codigo\text.txt
+C:\Users\oviquez\Documents\00.Cursos\Compiladores (IC-5701)\2020\I Semestre\VM_CS\bin\Release\Minics.exe
+C:\Users\oviquez\Documents\00.Cursos\Compiladores (IC-5701)\2020\I Semestre\VM_CS\bin\Release\Minics.pdb
+C:\Users\oviquez\Documents\00.Cursos\Compiladores (IC-5701)\2020\I Semestre\VM_CS\obj\x86\Release\VMCS.csprojResolveAssemblyReference.cache
+C:\Users\oviquez\Documents\00.Cursos\Compiladores (IC-5701)\2020\I Semestre\VM_CS\obj\x86\Release\Minics.exe
+C:\Users\oviquez\Documents\00.Cursos\Compiladores (IC-5701)\2020\I Semestre\VM_CS\obj\x86\Release\Minics.pdb
