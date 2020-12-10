@@ -81,6 +81,7 @@ public class IDLE {
     // Virtual Machine Code
     public ArrayList<Funct> functions ;
     public String instructions = "";
+    public int parameterQuantity = 0;
 
 
     //Singleton
