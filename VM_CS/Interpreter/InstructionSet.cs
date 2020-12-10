@@ -333,7 +333,10 @@ namespace InstructionsNameSpace{
             {
                 //se obtiene la lista
                 List<dynamic> list = pilaExprs.pop();
-                pilaExprs.push(list.Count);
+                list.Reverse();
+                dynamic count = list.Count;
+                list.Reverse();
+                pilaExprs.push(count);
             }
             catch (Exception e)
             {
@@ -350,8 +353,9 @@ namespace InstructionsNameSpace{
                 List<dynamic> list = pilaExprs.pop();
                 //se guarda el primer valor
                 list.Reverse();
-                pilaExprs.push(list[0]);
-                
+                dynamic value = list[0];
+                list.Reverse();
+                pilaExprs.push(value);
             }
             catch (Exception e)
             {
@@ -366,9 +370,8 @@ namespace InstructionsNameSpace{
             {
                 //se obtiene la lista
                 List<dynamic> list = pilaExprs.pop();
-                //se guarda el ultimo valor
-                pilaExprs.push(list[0]);
-                
+                dynamic value = list[0];
+                pilaExprs.push(value);
             }
             catch (Exception e)
             {
@@ -388,7 +391,6 @@ namespace InstructionsNameSpace{
                 list.Add(data);
                 list.Reverse();
                 pilaExprs.push(list);
-                
             }
             catch (Exception e)
             {
@@ -397,6 +399,23 @@ namespace InstructionsNameSpace{
             }
         }
         
+        //REST (list)
+        private void runCALL_REST(){
+            try
+            {
+                //se obtiene la lista
+                List<dynamic> list = pilaExprs.pop();
+                list.Reverse();
+                list.RemoveAt(0);
+                list.Reverse();
+                pilaExprs.push(list);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error metodo REST(): "+e.Message);
+                throw;
+            }
+        }
 
         //método principal para correr todas las instrucciones de la lista... Este método debe recorrer la lista solo para agregar en el almacen global 
         //las variables y métodos que hayan y cuando se encuentre el Main, este método si debe ejecutarse línea por línea porque es el punto de inicio
@@ -470,6 +489,9 @@ namespace InstructionsNameSpace{
                             }else if (instSet[actualInstrIndex].Value.Equals("push"))
                             {
                                 runCALL_PUSH();
+                            }else if (instSet[actualInstrIndex].Value.Equals("rest"))
+                            {
+                                runCALL_REST();
                             }else
                             {
                                 runLOAD_GLOBAL(instSet[actualInstrIndex].Value);   

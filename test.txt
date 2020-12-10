@@ -1,15 +1,58 @@
-let fib = fn(n) {
-    if (n == 0) {
-        return 0;
-    }
+let programName = "List Usage Examples";
 
-    if (n == 1) {
-        return 1;
-    }
-
-    return fib(n - 1) + fib(n - 2);
+let fib = fn(n){
+    if(n < 2){
+		return n;
+	}
+	return fib(n-1) + fib(n - 2);
 }
 
-let string = gets("Enter n: ");
-let number = int(string);
-puts(string + "th " + "fibonacci term is " + str(fib(number)));
+let main = fn(programName){
+	//test expresions asignament
+	//let a = (((1+12)-3)/5)*2; //4
+
+	//test call expre
+	//puts(fib(5));
+
+	//test impresions
+	//puts((((1+12)-3)/5)*2);
+
+	//test lists
+	let lista = ["Hola",1,2,3,4,5];
+	let lista2 = [1,2,3];
+
+	// test len funct
+	puts("LEN");
+	puts(len(lista));
+	puts(len(lista2));
+
+	// test first funct
+	puts("FIRST");
+	puts(first(lista));
+	puts(first(lista2));
+
+	// test last funct
+	puts("LAST");
+	puts(last(lista));
+	puts(last(lista2));
+
+	//test push(lista, INPUT_DATA)
+	puts("PUSH");
+	push(lista, 420);
+	push(lista2, 421);
+
+	// test len funct
+	puts("LEN");
+	puts(len(lista));
+	puts(len(lista2));
+
+	// test first funct
+	puts("FIRST");
+	puts(first(lista));
+	puts(first(lista2));
+
+	// test last funct
+	puts("LAST");
+	puts(last(lista));
+	puts(last(lista2));
+}

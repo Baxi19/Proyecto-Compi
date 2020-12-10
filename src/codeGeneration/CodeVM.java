@@ -194,11 +194,6 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitExpressionAST(MonkeyParser.ExpressionASTContext ctx) {
-        // Here, can evaluate the expression
-        //if(isLet){
-            //System.err.println(IDLE.getInstance().getValue(ctx.getText()));
-       // }
-
         visit(ctx.additionExpression());
         visit(ctx.comparison());
         return null;
@@ -457,12 +452,14 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitArrayFunctions_restAST(MonkeyParser.ArrayFunctions_restASTContext ctx) {
+        this.generate(this.index,"LOAD_GLOBAL", ctx.REST());
         return null;
     }
 
     @Override
     public Object visitArrayFunctions_pushAST(MonkeyParser.ArrayFunctions_pushASTContext ctx) {
-        // Este el profe dijo que no habia que implementarlo por el chat de Whatsapp, 9/12/2020, 09:28 am
+        // IMPORTANTE: Este el profe dijo que no habia que implementarlo por el chat de Whatsapp, 9/12/2020, 09:28 am,
+        // Talvez nos reconoce puntos extra debido a que si funciona =)
         this.generate(this.index,"LOAD_GLOBAL", ctx.PUSH());
         return null;
     }
@@ -493,10 +490,12 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
         //TODO:ONLY in Main, Parameters was declared with value 0, but have to assign the value when are called
         for (int i = 0; i < ctx.IDENT().size(); i++) {
-            if(letmain){
+            if(letmain | level == 0){
+                visit(ctx.IDENT(i));
                 this.generate(this.index,"LOAD_CONST", 0);
                 this.generate(this.index,"STORE_GLOBAL", ctx.IDENT(i));
             }else{
+                visit(ctx.IDENT(i));
                 this.generate(this.index,"LOAD_CONST", 0);
                 this.generate(this.index,"STORE_FAST", ctx.IDENT(i));
             }
