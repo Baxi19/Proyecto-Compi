@@ -1,46 +1,67 @@
-let programName = "List Usage Examples";
+let programName = "Factorial";
 
-let fib = fn(n){
-    if(n < 2){
+let fib = fn(n){
+	if(n < 2){
 		return n;
 	}
 	return fib(n-1) + fib(n - 2);
 }
 
 let main = fn(programName){
+
+	//test HASH
+	puts("HASH");
+	let dic = {1+5: 24, "age": 24};
+	let dic2 = {"Hello": 24, "age": 24};
+	let dic3 = {"hola": 24, "age": 24};
+	let dic4 = {1: 24, "age": 24};
+	puts(dic);
+	puts(dic2);
+	puts(dic3);
+	puts(dic4);
+
 	//test expresions asignament
 	//let a = (((1+12)-3)/5)*2; //4
 
 	//test call expre
 	//puts(fib(5));
 
-	//test impresions
-	//puts((((1+12)-3)/5)*2);
+	//test expresions impresions
+	puts("EXPRESIONS");
+	puts((((1+12)-3)/5)*2);
+
+
+	//test String impresions
+	puts("STRING");
+	puts("HelloString");
+
+	//test bool impresions
+	puts("BOOLEAN");
+	puts(true);
+	puts(false);
+
 
 	//test lists
+	puts("LIST");
 	let lista = ["Hola",1,2,3,4,5];
 	let lista2 = [1,2,3];
+
+	puts(lista);
+	puts(lista2);
 
 	// test len funct
 	puts("LEN");
 	puts(len(lista));
 	puts(len(lista2));
-
-	// test first funct
-	puts("FIRST");
-	puts(first(lista));
-	puts(first(lista2));
-
-	// test last funct
-	puts("LAST");
-	puts(last(lista));
-	puts(last(lista2));
 
 	//test push(lista, INPUT_DATA)
 	puts("PUSH");
 	push(lista, 420);
 	push(lista2, 421);
 
+	puts(lista);
+	puts(lista2);
+
 	// test len funct
 	puts("LEN");
 	puts(len(lista));
@@ -55,4 +76,24 @@ let main = fn(programName){
 	puts("LAST");
 	puts(last(lista));
 	puts(last(lista2));
+
+	// test last funct
+	puts("REST");
+	rest(lista);
+	rest(lista2);
+
+	puts(lista);
+	puts(lista2);
+
+
+	// test first funct
+	puts("FIRST");
+	puts(first(lista));
+	puts(first(lista2));
+
+	// test last funct
+	puts("LAST");
+	puts(last(lista));
+	puts(last(lista2));
+
 }

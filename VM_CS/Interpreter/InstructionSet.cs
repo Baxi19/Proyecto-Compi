@@ -109,7 +109,7 @@ namespace InstructionsNameSpace{
                 else if (data.GetType() == typeof(List<dynamic>))
                 {
                     data.Reverse();
-                    Console.Write("\n[ ");
+                    Console.Write("[ ");
                     for (int i = 0; i < data.Count; i++)
                     {
                         Console.Write(" " + data[i].ToString());
@@ -118,13 +118,13 @@ namespace InstructionsNameSpace{
                             Console.Write(", ");
                         }
                     }
-                    Console.Write(" ]");
+                    Console.WriteLine(" ]");
                     data.Reverse();
                 }
                 //if HASH
                 else if (data.GetType() == typeof(Dictionary<dynamic, dynamic>))
                 {
-                    Console.Write("\n{ ");
+                    Console.Write("{ ");
                     int index = 0;
                     foreach (KeyValuePair<dynamic, dynamic> kvp in data)
                     {
@@ -136,9 +136,9 @@ namespace InstructionsNameSpace{
 
                         index++;
                     }
-                    Console.Write(" }");
+                    Console.WriteLine(" }");
                 }
-                //if String
+                //if bool
                 else if (data.GetType() == typeof(bool))
                 {
                     Console.WriteLine(data.ToString());
