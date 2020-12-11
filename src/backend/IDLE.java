@@ -203,7 +203,8 @@ public class IDLE {
                 //Normal Run
                 if(IDLE.getInstance().errorsContextual.isEmpty()){
                     terminalPass();
-                    terminal.setText(terminalText += "\n\n=>COMPILATION: SUCCESSFUL" + "\n\n" + instructions);
+                    //terminal.setText(terminalText += "\n\n=>COMPILATION: SUCCESSFUL" + "\n\n" + instructions);
+                    terminal.setText(instructions);
                 }else{
                     markContextErrors();
                     terminalFail();
