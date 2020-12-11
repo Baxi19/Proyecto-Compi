@@ -12,12 +12,162 @@ let main = fn(programName){
 	//test call expre
 	//puts(fib(5));
 
-	//test asing values
-	let x = 1+420;
+
+	//test expresions asignament
+	//let test = (((1+12)-3)/5)*2; //4
+	let x = 1+418+5;
+	let y = 420;
+	let a = 100;
+	let b = 100;
+
+
+	// Testing if
+	// <
 	puts(x);
+	puts("Menor?");
+	puts(y);
+
+	if(x < y){
+		puts("=>Menor");
+	}else{
+		puts("=>Mayor");
+	}
+
+	puts("");
+	puts(a);
+	puts("Menor?");
+	puts(y);
+
+	if(a < y){
+		puts("=>Menor");
+	}else{
+		puts("=>Mayor");
+	}
+
+
+	// >
+	puts("");
+	puts(x);
+	puts("Mayor?");
+	puts(y);
+	if(x > y){
+		puts("=>Menor");
+	}else{
+		puts("=>Mayor");
+	}
+
+	puts("");
+	puts(a);
+	puts("Mayor?");
+	puts(y);
+
+	if(a > y){
+		puts("=>Menor");
+	}else{
+		puts("=>Mayor");
+	}
+
+
+	// ==
+	puts("");
+	let z = y+5;
+	puts(x);
+	puts("Igual?");
+	puts(z);
+
+	if(x == z){
+		puts("=>Igual");
+	}else{
+		puts("=>Diferente");
+	}
+
+	puts("");
+	puts(a);
+	puts("Igual?");
+	puts(b);
+
+	if(a == b){
+		puts("=>Igual");
+	}else{
+		puts("=>Diferente");
+	}
+
+
+	// !=
+	puts("");
+	puts(x);
+	puts("Diferente?");
+	puts(z);
+
+	if(x == z){
+		puts("=>Igual");
+	}else{
+		puts("=>Diferente");
+	}
+
+	puts("");
+	puts(a);
+	puts("Diferente?");
+	puts(b);
+
+	if(a == b){
+		puts("=>Igual");
+	}else{
+		puts("=>Diferente");
+	}
+
+
+	// <=
+	puts("");
+	puts(x);
+	puts("Menor_o_igual?");
+	puts(z);
+
+	if(x <= z){
+		puts("=>Menor_o_igual");
+	}else{
+		puts("=>Mayor");
+	}
+
+	puts("");
+	puts(z);
+	puts("Menor_o_igual?");
+	puts(a);
+
+	if(z <= a){
+		puts("=>Menor_o_igual");
+	}else{
+		puts("=>Mayor");
+	}
+
+
+	// >=
+	puts("");
+	puts(x);
+	puts("Mayor_o_igual?");
+	puts(z);
+
+	if(x >= z){
+		puts("=>Mayor_o_igual");
+	}else{
+		puts("=>Menor");
+	}
+
+	puts("");
+	puts(b);
+	puts("Mayor_o_igual?");
+	puts(a);
+
+	if(b >= a){
+		puts("=>Mayor_o_igual");
+	}else{
+		puts("=>Menor");
+	}
+
 
 
 	//test HASH
+	puts("");
 	puts("HASH");
 	let dic = {1+5: 24, "age": 24};
 	let dic2 = {"Hello": 24, "age": 24};
@@ -28,26 +178,27 @@ let main = fn(programName){
 	puts(dic3);
 	puts(dic4);
 
-	//test expresions asignament
-	//let a = (((1+12)-3)/5)*2; //4
-
 
 	//test expresions impresions
+	puts("");
 	puts("EXPRESIONS");
 	puts((((1+12)-3)/5)*2);
 
 
 	//test String impresions
+	puts("");
 	puts("STRING");
 	puts("HelloString");
 
 	//test bool impresions
+	puts("");
 	puts("BOOLEAN");
 	puts(true);
 	puts(false);
 
 
 	//test lists
+	puts("");
 	puts("LIST");
 	let lista = ["Hola",1,2,3,4,5];
 	let lista2 = [1,2,3];
@@ -56,11 +207,13 @@ let main = fn(programName){
 	puts(lista2);
 
 	// test len funct
+	puts("");
 	puts("LEN");
 	puts(len(lista));
 	puts(len(lista2));
 
 	//test push(lista, INPUT_DATA)
+	puts("");
 	puts("PUSH");
 	push(lista, 420);
 	push(lista2, 421);
@@ -69,21 +222,25 @@ let main = fn(programName){
 	puts(lista2);
 
 	// test len funct
+	puts("");
 	puts("LEN");
 	puts(len(lista));
 	puts(len(lista2));
 
 	// test first funct
+	puts("");
 	puts("FIRST");
 	puts(first(lista));
 	puts(first(lista2));
 
 	// test last funct
+	puts("");
 	puts("LAST");
 	puts(last(lista));
 	puts(last(lista2));
 
 	// test last funct
+	puts("");
 	puts("REST");
 	rest(lista);
 	rest(lista2);
@@ -93,11 +250,13 @@ let main = fn(programName){
 
 
 	// test first funct
+	puts("");
 	puts("FIRST");
 	puts(first(lista));
 	puts(first(lista2));
 
 	// test last funct
+	puts("");
 	puts("LAST");
 	puts(last(lista));
 	puts(last(lista2));
