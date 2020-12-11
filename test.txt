@@ -14,15 +14,51 @@ let main = fn(programName){
 
 
 	//test expresions asignament
-	//let test = (((1+12)-3)/5)*2; //4
-	let x = 1+418+5;
 	let y = 420;
 	let a = 100;
 	let b = 100;
 
+	//test more dificult's expressions
+	let test = (((1+12)-3)/5)*2; //4
+	let x = 1+418+5;
 
-	// Testing if
+
+	//test expresions like String + (test + x)
+	puts("");
+	puts("TEST:_STRING_+_(EXPRESION)*");
+	puts("x=1+418+5");
+	puts("test=(((1+12)-3)/5)*2");
+	puts("Result_:+(test+x)?");
+	puts("=>Result_:"+(test+x));
+
+
+	// test if
+	puts("");
+	puts("TEST_IF");
+	puts(test);
+	puts("(Dos,_Tres,_Cuatro,_Cinco)?");
+
+	if(test == 2){
+		puts("=>Dos");
+	}
+
+	if(test == 3){
+		puts("=>Tres");
+	}
+
+	if(test == 4){
+		puts("=>Cuatro");
+	}
+
+	if(test == 5){
+		puts("=>Cinco");
+	}
+
+
+	// Testing if with else
 	// <
+	puts("");
+	puts("TEST_IF_ELSE");
 	puts(x);
 	puts("Menor?");
 	puts(y);
@@ -188,7 +224,7 @@ let main = fn(programName){
 	//test String impresions
 	puts("");
 	puts("STRING");
-	puts("HelloString");
+	puts("Hello_String");
 
 	//test bool impresions
 	puts("");
@@ -260,5 +296,6 @@ let main = fn(programName){
 	puts("LAST");
 	puts(last(lista));
 	puts(last(lista2));
+
 
 }
