@@ -72,7 +72,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el metodo PUSH_LOCAL: (" + actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo PUSH_LOCAL: " + e.Message);
                 throw;
             }
 
@@ -87,7 +87,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el metodo PUSH_GLOBAL: (" + actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo PUSH_GLOBAL: " + e.Message);
                 throw;
             }
 
@@ -101,7 +101,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el metodo DEF: (" + actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo DEF: " + e.Message);
                 throw;
             }
 
@@ -116,7 +116,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el metodo LOAD_CONST: (" + actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo LOAD_CONST: " + e.Message);
                 throw;
             }
 
@@ -135,7 +135,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el metodo LOAD_FAST: (" + actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo LOAD_FAST: " + e.Message);
                 throw;
             }
 
@@ -153,7 +153,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el metodo STORE_FAST: (" + actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo STORE_FAST: " + e.Message);
                 throw;
             }
         }
@@ -169,7 +169,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el metodo STORE_GLOBAL: (" + actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo STORE_GLOBAL: " + e.Message);
                 throw;
             }
 
@@ -187,7 +187,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el metodo LOAD_GLOBAL: (" + actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo LOAD_GLOBAL: " + e.Message);
                 throw;
             }
         }
@@ -277,7 +277,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el metodo CALL_FUNCTION: (" + actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo CALL_FUNCTION: " + e.Message);
                 throw;
             }
 
@@ -300,7 +300,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el metodo RETURN_VALUE: (" + actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo RETURN_VALUE: " + e.Message);
                 throw;
             }
 
@@ -319,7 +319,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el metodo RETURN: (" + actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo RETURN: " + e.Message);
                 throw;
             }
         }
@@ -328,34 +328,10 @@ namespace InstructionsNameSpace{
         {
             //acaba la corrida y limpia/elimina las estructuras según sea el caso
         }
-
-        /*private void runCOMPARE_OP(string op)
-        {
-
-            dynamic opn2 = pilaExprs.pop();
-            dynamic opn1 = pilaExprs.pop();
-
-            if (op.Equals("=="))
-                pilaExprs.push(opn1 == opn2);
-            else if (op.Equals("!="))
-                pilaExprs.push(opn1 != opn2);
-            else if (op.Equals("<"))
-                pilaExprs.push(opn1 < opn2);
-            else if (op.Equals("<="))
-                pilaExprs.push(opn1 <= opn2);
-            else if (op.Equals(">"))
-                pilaExprs.push(opn1 > opn2);
-            else if (op.Equals(">="))
-                pilaExprs.push(opn1 >= opn2);
-        }
-*/
-
-        
+   
         private void runCOMPARE_OP(string op)
         {
-        //dynamic opn1= pilaExprs.pop();
-        //dynamic opn2= pilaExprs.pop();
-
+   
         //obtiene dos operandos de la pila, opera según el operador y finalmente inserta el resultados de la operación en la pila
         //se asume que los valores de los operandos son del mismo tipo, si no, se cae feo pero así debe ser... no hay mensajes de error
         dynamic opn2= pilaExprs.pop();
@@ -431,7 +407,7 @@ namespace InstructionsNameSpace{
         }
         catch (Exception e)
         {
-            Console.WriteLine("Error en el metodo COMPARE_OP, Imposible comparar ' "+opn1.ToString() +" con " +opn2.ToString() +" ' : (" +actualInstrIndex + " )" + e.Message);
+            Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo COMPARE_OP, Imposible comparar ' "+opn1.ToString() +" con " +opn2.ToString() +"' :" + e.Message);
         }
         }
           
@@ -448,7 +424,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el metodo BINARY_SUBSTRACT: (" +actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo BINARY_SUBSTRACT: " + e.Message);
                 throw;
             }
         }
@@ -463,7 +439,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el metodo BINARY_ADD: (" +actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo BINARY_ADD: " + e.Message);
                 throw;
             }
         }
@@ -478,7 +454,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el metodo BINARY_MULTIPLY: (" +actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo BINARY_MULTIPLY: " + e.Message);
                 throw;
             }
         }
@@ -493,7 +469,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el metodo BINARY_DIVIDE: (" +actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo BINARY_DIVIDE: " + e.Message);
                 throw;
             }
         }
@@ -508,7 +484,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el metodo BINARY_AND: (" +actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo BINARY_AND: " + e.Message);
                 throw;
             }
         }
@@ -523,7 +499,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el metodo BINARY_OR: (" +actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo BINARY_OR: " + e.Message);
                 throw;
             }
         }
@@ -538,7 +514,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el metodo BINARY_MODULO: (" +actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo BINARY_MODULO: " + e.Message);
                 throw;
             }
         }
@@ -550,7 +526,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el metodo JUMP_ABSOLUTE: (" +actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo JUMP_ABSOLUTE: " + e.Message);
                 throw;
             }
         }
@@ -576,7 +552,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el metodo JUMP_IF_TRUE: (" +actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo JUMP_IF_TRUE: " + e.Message);
                 throw;
             }
             //if(pilaExprs.pop()==true)
@@ -603,7 +579,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el metodo JUMP_IF_FALSE: (" +actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo JUMP_IF_FALSE: " + e.Message);
                 throw;
             }
         }
@@ -614,26 +590,18 @@ namespace InstructionsNameSpace{
         {
             try
             {
-                //Console.Write("\nHASH Almacenado en Pila = { ");
-                //se declara la estructura
                 Dictionary<dynamic, dynamic> hash = new Dictionary<dynamic, dynamic>();
                 for (int i = 0; i < size; i++)
                 {
                     dynamic value = pilaExprs.pop();
-                    dynamic key = pilaExprs.pop();    
-                    //Console.Write("" + key + ": " + value);
-                    //if (i != size-1)
-                    //{
-                    //    Console.Write(", ");
-                    //}
+                    dynamic key = pilaExprs.pop();
                     hash.Add(key,value); //adding a key/value using the Add() method
                 }
                 pilaExprs.push(hash);
-                //Console.Write(" }");
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el metodo BUILD_CONST_KEY_MAP: (" +actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo BUILD_CONST_KEY_MAP: " + e.Message);
                 throw;
             }
         }
@@ -643,9 +611,7 @@ namespace InstructionsNameSpace{
         private void runBUILD_LIST(int size){
             try
             {
-                //se declara la lista
                 List<dynamic> list = new List<dynamic>();
-                // se llena la lista
                 for (int i = 0; i < size; i++)
                 {
                     list.Add(pilaExprs.pop());
@@ -654,17 +620,15 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el metodo BUILD_LIST: (" +actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo BUILD_LIST: " + e.Message);
                 throw;
             }
-
         }
         
         //LEN (list)
         private void runCALL_LEN(){
             try
             {
-                //se obtiene la lista
                 List<dynamic> list = pilaExprs.pop();
                 list.Reverse();
                 dynamic count = list.Count;
@@ -673,7 +637,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el metodo CALL_LEN: (" +actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo CALL_LEN: " + e.Message);
                 throw;
             }
         }
@@ -682,9 +646,7 @@ namespace InstructionsNameSpace{
         private void runCALL_FIRST(){
             try
             {
-                //se obtiene la lista
                 List<dynamic> list = pilaExprs.pop();
-                //se guarda el primer valor
                 list.Reverse();
                 dynamic value = list[0];
                 list.Reverse();
@@ -692,7 +654,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el metodo FIRST: (" +actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo FIRST: " + e.Message);
                 throw;
             }
         }
@@ -701,14 +663,13 @@ namespace InstructionsNameSpace{
         private void runCALL_LAST(){
             try
             {
-                //se obtiene la lista
                 List<dynamic> list = pilaExprs.pop();
                 dynamic value = list[0];
                 pilaExprs.push(value);
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el metodo LAST: (" +actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo LAST: " + e.Message);
                 throw;
             }
         }
@@ -717,7 +678,6 @@ namespace InstructionsNameSpace{
         private void runCALL_PUSH(){
             try
             {
-                //se obtiene la lista
                 dynamic data = pilaExprs.pop();
                 List<dynamic> list = pilaExprs.pop();
                 list.Reverse();
@@ -727,7 +687,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el metodo PUSH: (" +actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo PUSH: " + e.Message);
                 throw;
             }
         }
@@ -736,7 +696,6 @@ namespace InstructionsNameSpace{
         private void runCALL_REST(){
             try
             {
-                //se obtiene la lista
                 List<dynamic> list = pilaExprs.pop();
                 list.Reverse();
                 list.RemoveAt(0);
@@ -745,7 +704,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el metodo REST: (" +actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo REST: " + e.Message);
                 throw;
             }
         }
@@ -781,7 +740,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el ciclo RUN: (" +actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el ciclo RUN: " + e.Message);
                 throw;
             }
         }
@@ -892,7 +851,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error en el ciclo RUN MAIN: (" +actualInstrIndex + " )" + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el ciclo MAIN: " + e.Message);
                 throw;
             }
         }
