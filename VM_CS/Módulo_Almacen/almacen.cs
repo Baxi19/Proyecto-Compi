@@ -48,7 +48,7 @@ namespace AlmacenNameSpace
         public void updateValue(string key, dynamic newValue){
             bool found = searchValue(key);
             if(!found){
-                Console.WriteLine("404 Item not found!");
+                Console.WriteLine("404 Item ( "+ key.ToString() +" ) not found!");
             }
             else{
                 this.data[key] = newValue;

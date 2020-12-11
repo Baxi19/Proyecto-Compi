@@ -96,7 +96,7 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
     public Object visitCallExpressionStatementAST(MonkeyParser.CallExpressionStatementASTContext ctx) {
         // Call expressions
         makeAllFalse();
-        //isCall = true;
+        isCall = true;
         ctxCall = ctx;
 
         visit(ctx.expressionStatement());
@@ -368,7 +368,7 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
     public Object visitPrimitiveExpression_identAST(MonkeyParser.PrimitiveExpression_identASTContext ctx) {
         // Ident
         //TODO: check and load the value
-        if(letmain | level == 0 | isCall){
+        if(letmain | level == 0){
             this.generate(this.index,"LOAD_GLOBAL", ctx.IDENT().getText());
         }else{
             this.generate(this.index,"LOAD_FAST", ctx.IDENT().getText());
@@ -501,15 +501,14 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
         IDLE.getInstance().parameterQuantity = ctx.IDENT().size();
         //TODO:ONLY in Main, Parameters was declared with value 0, but have to assign the value when are called
         for (int i = 0; i < ctx.IDENT().size(); i++) {
-            isCall = true;
             if(letmain | level == 0){
                 //visit(ctx.IDENT(i));
-                this.tablaIDS.insertar(ctx.IDENT(i).getSymbol(),0,null);
+                //this.tablaIDS.insertar(ctx.IDENT(i).getSymbol(),0,null);
                 this.generate(this.index,"LOAD_GLOBAL", ctx.IDENT(i));
                 this.generate(this.index,"STORE_GLOBAL", ctx.IDENT(i));
             }else{
                 //visit(ctx.IDENT(i));
-                this.tablaIDS.insertar(ctx.IDENT(i).getSymbol(),0,null);
+                //this.tablaIDS.insertar(ctx.IDENT(i).getSymbol(),0,null);
                 this.generate(this.index,"LOAD_FAST", ctx.IDENT(i));
                 this.generate(this.index,"STORE_FAST", ctx.IDENT(i));
             }
