@@ -9,6 +9,14 @@ let fib = fn(n){
 
 let main = fn(programName){
 
+	//test call expre
+	//puts(fib(5));
+
+	//test asing values
+	let x = 1+420;
+	puts(x);
+
+
 	//test HASH
 	puts("HASH");
 	let dic = {1+5: 24, "age": 24};
@@ -23,8 +31,6 @@ let main = fn(programName){
 	//test expresions asignament
 	//let a = (((1+12)-3)/5)*2; //4
 
-	//test call expre
-	//puts(fib(5));
 
 	//test expresions impresions
 	puts("EXPRESIONS");
