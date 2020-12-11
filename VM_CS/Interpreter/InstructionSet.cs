@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections;
+using System.Linq;
 using AlmacenNameSpace;
 using moduloPila;
 //using static System.Linq.Enumerable;
@@ -92,7 +93,62 @@ namespace InstructionsNameSpace{
         private void runCALL_FUNCTION(int numparams){
             int actualRef = pilaExprs.pop();  //el primer elemento de la pila trae la referencia del método a llamar --REVISAR SI FALTA SUMAR O NO A LA REFERENCIA
             if (actualRef == -1){ // es porque es el método print
-                Console.WriteLine(pilaExprs.pop());
+
+                dynamic data = pilaExprs.pop();
+                // if INT
+                if (data.GetType() == typeof(int))
+                {
+                    Console.WriteLine(data.ToString());
+                }
+                //if String
+                else if (data.GetType() == typeof(string))
+                {
+                    Console.WriteLine(data);
+                }
+                //if LIST
+                else if (data.GetType() == typeof(List<dynamic>))
+                {
+                    data.Reverse();
+                    Console.Write("\n[ ");
+                    for (int i = 0; i < data.Count; i++)
+                    {
+                        Console.Write(" " + data[i].ToString());
+                        if (i != data.Count-1)
+                        {
+                            Console.Write(", ");
+                        }
+                    }
+                    Console.Write(" ]");
+                    data.Reverse();
+                }
+                //if HASH
+                else if (data.GetType() == typeof(Dictionary<dynamic, dynamic>))
+                {
+                    Console.Write("\n{ ");
+                    int index = 0;
+                    foreach (KeyValuePair<dynamic, dynamic> kvp in data)
+                    {
+                        Console.Write(" Key = {0}: Value = {1} ", kvp.Key.ToString(), kvp.Value.ToString());
+                        if (index != data.Count-1)
+                        {
+                            Console.Write(", ");
+                        }
+
+                        index++;
+                    }
+                    Console.Write(" }");
+                }
+                //if String
+                else if (data.GetType() == typeof(bool))
+                {
+                    Console.WriteLine(data.ToString());
+                }
+                else
+                {
+                    Console.WriteLine(data.ToString());    
+                }
+
+                //Console.WriteLine(pilaExprs.pop());
             }
             else{ 
                 int latestInstr = actualInstrIndex;
@@ -128,6 +184,7 @@ namespace InstructionsNameSpace{
         private void runEND(){
             //acaba la corrida y limpia/elimina las estructuras según sea el caso
         }
+        
         private void runCOMPARE_OP(string op)
         {
             
@@ -136,8 +193,8 @@ namespace InstructionsNameSpace{
 
             //obtiene dos operandos de la pila, opera según el operador y finalmente inserta el resultados de la operación en la pila
             //se asume que los valores de los operandos son del mismo tipo, si no, se cae feo pero así debe ser... no hay mensajes de error
-            //opn2= pilaExprs.pop();
-            //opn1= pilaExprs.pop();
+            //dynamic opn2= pilaExprs.pop();
+            //dynamic opn1= pilaExprs.pop();
             try
             {
                 if (op.Equals("=="))
@@ -213,6 +270,7 @@ namespace InstructionsNameSpace{
             }
                 
         }
+        
         private void runBINARY_SUBSTRACT(){
             //obtiene dos operandos de la pila, opera según el operador y finalmente inserta el resultados de la operación en la pila
             //se asume que los valores son enteros, si no, se cae feo pero así debe ser... no hay mensajes de error
@@ -306,6 +364,36 @@ namespace InstructionsNameSpace{
         }
         
          
+        // Hash
+        private void runBUILD_CONST_KEY_MAP(int size)
+        {
+            try
+            {
+                //Console.Write("\nHASH Almacenado en Pila = { ");
+                //se declara la estructura
+                Dictionary<dynamic, dynamic> hash = new Dictionary<dynamic, dynamic>();
+                for (int i = 0; i < size; i++)
+                {
+                    dynamic value = pilaExprs.pop();
+                    dynamic key = pilaExprs.pop();    
+                    //Console.Write("" + key + ": " + value);
+                    //if (i != size-1)
+                    //{
+                    //    Console.Write(", ");
+                    //}
+                    hash.Add(key,value); //adding a key/value using the Add() method
+                }
+                pilaExprs.push(hash);
+                //Console.Write(" }");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error al crear el hash: "+e.Message);
+                throw;
+            }
+        }
+
+
         // Array
         private void runBUILD_LIST(int size){
             try
@@ -545,9 +633,9 @@ namespace InstructionsNameSpace{
                         case "BUILD_LIST":
                             runBUILD_LIST(instSet[actualInstrIndex].Value);
                             break;
-                        //case "CALL_LEN":
-                        //    runCALL_LEN();
-                        //    break;
+                        case "BUILD_CONST_KEY_MAP":
+                            runBUILD_CONST_KEY_MAP(instSet[actualInstrIndex].Value); 
+                            break;
                         default:
                             throw new Exception("Instrucción no conocida");
                 }

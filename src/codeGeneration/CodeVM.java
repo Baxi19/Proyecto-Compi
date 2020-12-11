@@ -154,7 +154,15 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
         else if(ctx.getText().split("\\=")[1].startsWith("{")){
             isHash = true;
             this.tablaIDS.insertar(ctx.IDENT().getSymbol(),0,ctx);
-            visit(ctx.expression());
+            if(level == 0 | letmain){
+                this.generate(this.index,"PUSH_GLOBAL_I",ctx.IDENT().getText());
+                visit(ctx.expression());
+                this.generate(this.index,"STORE_GLOBAL",ctx.IDENT().getText());
+            }else{
+                this.generate(this.index,"PUSH_LOCAL_I",ctx.IDENT().getText());
+                visit(ctx.expression());
+                this.generate(this.index,"STORE_FAST",ctx.IDENT().getText());
+            }
 
         }
 
@@ -218,7 +226,7 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
                     this.generate(this.index,"COMPARE_OP", ctx.EQUAL(i));
                 }
                 // !=
-                if(ctx.EQUAL(i) != null){
+                if(ctx.NOT_EQUAL(i) != null){
                     this.generate(this.index,"COMPARE_OP", ctx.NOT_EQUAL(i));
                 }
                 // >
@@ -417,7 +425,9 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitPrimitiveExpression_HashLiteralAST(MonkeyParser.PrimitiveExpression_HashLiteralASTContext ctx) {
-        visit(ctx.hashLiteral());
+        if(ctx.hashLiteral() != null){
+            visit(ctx.hashLiteral());
+        }
         return null;
     }
 
@@ -515,9 +525,12 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitHashLiteralAST(MonkeyParser.HashLiteralASTContext ctx) {
-        //System.out.println("Hash size: " + ctx.hashContent().size());
-        for(int i = 0; i < ctx.hashContent().size();i++){
-            //System.out.println("Data hash, index " + i + " : " + visit(ctx.hashContent(i)));
+        // HASH
+        if(!ctx.hashContent().isEmpty()){
+            for(int i = 0; i < ctx.hashContent().size();i++){
+                visit(ctx.hashContent(i));
+            }
+            this.generate(this.index, "BUILD_CONST_KEY_MAP", ctx.hashContent().size());
         }
         return null;
     }
@@ -545,6 +558,10 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
         if(isList && isLet){
             this.generate(this.index, "BUILD_LIST", ctx.expression().size());
         }
+
+        /*if(isHash && isLet){
+            this.generate(this.index, "BUILD_CONST_KEY_MAP", ctx.expression().size());
+        }*/
 
         return null;
     }
@@ -578,14 +595,19 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
             visit(ctx.expression());
             tag1Index = this.index;
             this.generate(this.index,"JUMP_IF_FALSE", tag1Index);
-
         }
 
         // if true
         visit(ctx.blockStatement(0));
         int tag2Index = this.index;
-        this.generate(this.index,"JUMP_ABSOLUTE",-1);
+
+        if(ctx.ELSE() != null){
+            // if false (else)
+            this.generate(this.index,"JUMP_ABSOLUTE",-1);
+        }
+
         this.code.set(tag1Index, tag1Index+" "+"JUMP_IF_FALSE"+ " "+this.index);
+
 
 
         if(ctx.ELSE() != null){
@@ -594,6 +616,8 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
             this.code.set(tag2Index, tag2Index+" "+"JUMP_ABSOLUTE"+ " "+this.index);
 
         }
+
+
         return null;
     }
 
