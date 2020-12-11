@@ -12,7 +12,9 @@ let main = fn(programName){
 	//test call expre
 	//puts(fib(5));
 
-	//test asing values
+
+	//test expresions asignament
+	//let test = (((1+12)-3)/5)*2; //4
 	let x = 1+418+5;
 	let y = 420;
 	let a = 100;
@@ -163,8 +165,9 @@ let main = fn(programName){
 	}
 
 
-	/*
+
 	//test HASH
+	puts("");
 	puts("HASH");
 	let dic = {1+5: 24, "age": 24};
 	let dic2 = {"Hello": 24, "age": 24};
@@ -175,26 +178,27 @@ let main = fn(programName){
 	puts(dic3);
 	puts(dic4);
 
-	//test expresions asignament
-	//let a = (((1+12)-3)/5)*2; //4
-
 
 	//test expresions impresions
+	puts("");
 	puts("EXPRESIONS");
 	puts((((1+12)-3)/5)*2);
 
 
 	//test String impresions
+	puts("");
 	puts("STRING");
 	puts("HelloString");
 
 	//test bool impresions
+	puts("");
 	puts("BOOLEAN");
 	puts(true);
 	puts(false);
 
 
 	//test lists
+	puts("");
 	puts("LIST");
 	let lista = ["Hola",1,2,3,4,5];
 	let lista2 = [1,2,3];
@@ -203,11 +207,13 @@ let main = fn(programName){
 	puts(lista2);
 
 	// test len funct
+	puts("");
 	puts("LEN");
 	puts(len(lista));
 	puts(len(lista2));
 
 	//test push(lista, INPUT_DATA)
+	puts("");
 	puts("PUSH");
 	push(lista, 420);
 	push(lista2, 421);
@@ -216,21 +222,25 @@ let main = fn(programName){
 	puts(lista2);
 
 	// test len funct
+	puts("");
 	puts("LEN");
 	puts(len(lista));
 	puts(len(lista2));
 
 	// test first funct
+	puts("");
 	puts("FIRST");
 	puts(first(lista));
 	puts(first(lista2));
 
 	// test last funct
+	puts("");
 	puts("LAST");
 	puts(last(lista));
 	puts(last(lista2));
 
 	// test last funct
+	puts("");
 	puts("REST");
 	rest(lista);
 	rest(lista2);
@@ -240,13 +250,15 @@ let main = fn(programName){
 
 
 	// test first funct
+	puts("");
 	puts("FIRST");
 	puts(first(lista));
 	puts(first(lista2));
 
 	// test last funct
+	puts("");
 	puts("LAST");
 	puts(last(lista));
 	puts(last(lista2));
-	*/
+
 }
