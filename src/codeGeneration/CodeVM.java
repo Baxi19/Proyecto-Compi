@@ -582,29 +582,22 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitIfExpressionAST(MonkeyParser.IfExpressionASTContext ctx) {
         //TODO:  Make Type IF, VM's Instructions
-        int tag1Index = -1;
 
-        if(ctx.expression()!=null){
-            visit(ctx.expression());
-            tag1Index = this.index;
-            this.generate(this.index,"JUMP_IF_FALSE", tag1Index);
-        }
+        // if
+        visit(ctx.expression());
+        int tag1Index = this.index;
+        this.generate(this.index,"JUMP_IF_FALSE", -1);
 
         // if true
         visit(ctx.blockStatement(0));
         int tag2Index = this.index;
-
-        if(ctx.ELSE() != null){
-            // if false (else)
-            this.generate(this.index,"JUMP_ABSOLUTE",-1);
-        }
+        this.generate(this.index,"JUMP_ABSOLUTE",-1);
         this.code.set(tag1Index, tag1Index+" "+"JUMP_IF_FALSE"+ " "+this.index);
 
+        // else
         if(ctx.ELSE() != null){
-            // if false (else)
             visit(ctx.blockStatement(1));
             this.code.set(tag2Index, tag2Index+" "+"JUMP_ABSOLUTE"+ " "+this.index);
-
         }
 
 

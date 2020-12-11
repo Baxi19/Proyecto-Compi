@@ -13,10 +13,157 @@ let main = fn(programName){
 	//puts(fib(5));
 
 	//test asing values
-	let x = 1+420;
+	let x = 1+418+5;
+	let y = 420;
+	let a = 100;
+	let b = 100;
+
+
+	// Testing if
+	// <
 	puts(x);
+	puts("Menor?");
+	puts(y);
+
+	if(x < y){
+		puts("=>Menor");
+	}else{
+		puts("=>Mayor");
+	}
+
+	puts("");
+	puts(a);
+	puts("Menor?");
+	puts(y);
+
+	if(a < y){
+		puts("=>Menor");
+	}else{
+		puts("=>Mayor");
+	}
 
 
+	// >
+	puts("");
+	puts(x);
+	puts("Mayor?");
+	puts(y);
+	if(x > y){
+		puts("=>Menor");
+	}else{
+		puts("=>Mayor");
+	}
+
+	puts("");
+	puts(a);
+	puts("Mayor?");
+	puts(y);
+
+	if(a > y){
+		puts("=>Menor");
+	}else{
+		puts("=>Mayor");
+	}
+
+
+	// ==
+	puts("");
+	let z = y+5;
+	puts(x);
+	puts("Igual?");
+	puts(z);
+
+	if(x == z){
+		puts("=>Igual");
+	}else{
+		puts("=>Diferente");
+	}
+
+	puts("");
+	puts(a);
+	puts("Igual?");
+	puts(b);
+
+	if(a == b){
+		puts("=>Igual");
+	}else{
+		puts("=>Diferente");
+	}
+
+
+	// !=
+	puts("");
+	puts(x);
+	puts("Diferente?");
+	puts(z);
+
+	if(x == z){
+		puts("=>Igual");
+	}else{
+		puts("=>Diferente");
+	}
+
+	puts("");
+	puts(a);
+	puts("Diferente?");
+	puts(b);
+
+	if(a == b){
+		puts("=>Igual");
+	}else{
+		puts("=>Diferente");
+	}
+
+
+	// <=
+	puts("");
+	puts(x);
+	puts("Menor_o_igual?");
+	puts(z);
+
+	if(x <= z){
+		puts("=>Menor_o_igual");
+	}else{
+		puts("=>Mayor");
+	}
+
+	puts("");
+	puts(z);
+	puts("Menor_o_igual?");
+	puts(a);
+
+	if(z <= a){
+		puts("=>Menor_o_igual");
+	}else{
+		puts("=>Mayor");
+	}
+
+
+	// >=
+	puts("");
+	puts(x);
+	puts("Mayor_o_igual?");
+	puts(z);
+
+	if(x >= z){
+		puts("=>Mayor_o_igual");
+	}else{
+		puts("=>Menor");
+	}
+
+	puts("");
+	puts(b);
+	puts("Mayor_o_igual?");
+	puts(a);
+
+	if(b >= a){
+		puts("=>Mayor_o_igual");
+	}else{
+		puts("=>Menor");
+	}
+
+
+	/*
 	//test HASH
 	puts("HASH");
 	let dic = {1+5: 24, "age": 24};
@@ -101,5 +248,5 @@ let main = fn(programName){
 	puts("LAST");
 	puts(last(lista));
 	puts(last(lista2));
-
+	*/
 }

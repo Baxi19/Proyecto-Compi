@@ -329,7 +329,7 @@ namespace InstructionsNameSpace{
             //acaba la corrida y limpia/elimina las estructuras según sea el caso
         }
 
-        private void runCOMPARE_OP(string op)
+        /*private void runCOMPARE_OP(string op)
         {
 
             dynamic opn2 = pilaExprs.pop();
@@ -348,14 +348,17 @@ namespace InstructionsNameSpace{
             else if (op.Equals(">="))
                 pilaExprs.push(opn1 >= opn2);
         }
+*/
 
-
+        
+        private void runCOMPARE_OP(string op)
+        {
         //dynamic opn1= pilaExprs.pop();
         //dynamic opn2= pilaExprs.pop();
 
         //obtiene dos operandos de la pila, opera según el operador y finalmente inserta el resultados de la operación en la pila
         //se asume que los valores de los operandos son del mismo tipo, si no, se cae feo pero así debe ser... no hay mensajes de error
-        /*dynamic opn2= pilaExprs.pop();
+        dynamic opn2= pilaExprs.pop();
         dynamic opn1= pilaExprs.pop();
         try
         {
@@ -363,44 +366,44 @@ namespace InstructionsNameSpace{
             {
                 if (opn1 == opn2)
                 {
-                    pilaExprs.push(true);
+                    pilaExprs.push(false);
                 }
                 else
                 {
-                    pilaExprs.push(false);   
+                    pilaExprs.push(true);   
                 }
             }
             else if (op.Equals("!="))
             {
                 if (opn1 != opn2)
                 {
-                    pilaExprs.push(true);
+                    pilaExprs.push(false);
                 }
                 else
                 {
-                    pilaExprs.push(false);   
+                    pilaExprs.push(true);   
                 }
             }
             else if (op.Equals("<"))
             {
                 if (opn1 < opn2)
                 {
-                    pilaExprs.push(true);
+                    pilaExprs.push(false);
                 }
                 else
                 {
-                    pilaExprs.push(false);   
+                    pilaExprs.push(true);   
                 }
             }
             else if (op.Equals("<="))
             {
                 if (opn1 <= opn2)
                 {
-                    pilaExprs.push(true);
+                    pilaExprs.push(false);
                 }
                 else
                 {
-                    pilaExprs.push(false);   
+                    pilaExprs.push(true);   
                 }
             }
             else if (op.Equals(">"))
@@ -418,11 +421,11 @@ namespace InstructionsNameSpace{
             {
                 if (opn1 >= opn2)
                 {
-                    pilaExprs.push(true);
+                    pilaExprs.push(false);
                 }
                 else
                 {
-                    pilaExprs.push(false);   
+                    pilaExprs.push(true);   
                 }
             }
         }
@@ -430,7 +433,8 @@ namespace InstructionsNameSpace{
         {
             Console.WriteLine("Error en el metodo COMPARE_OP, Imposible comparar ' "+opn1.ToString() +" con " +opn2.ToString() +" ' : (" +actualInstrIndex + " )" + e.Message);
         }
-          */
+        }
+          
     
         
         private void runBINARY_SUBSTRACT(){
