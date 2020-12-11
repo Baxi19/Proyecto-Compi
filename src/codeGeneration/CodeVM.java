@@ -597,8 +597,9 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
         // else
         if(ctx.ELSE() != null){
             visit(ctx.blockStatement(1));
-            this.code.set(tag2Index, tag2Index+" "+"JUMP_ABSOLUTE"+ " "+this.index);
+            //this.code.set(tag2Index, tag2Index+" "+"JUMP_ABSOLUTE"+ " "+this.index);
         }
+        this.code.set(tag2Index, tag2Index+" "+"JUMP_ABSOLUTE"+ " "+this.index);
 
 
         return null;
