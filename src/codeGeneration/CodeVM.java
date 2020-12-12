@@ -6,7 +6,6 @@ import generated.MonkeyParserBaseVisitor;
 
 import java.util.ArrayList;
 
-
 public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
     private boolean letmain;
@@ -105,6 +104,9 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
             isFunct = true;
             if(ctx.IDENT().getText().toLowerCase().equals("main") && level == 0){
                 letmain  = true;
+                if(this.tablaIDS.buscar(ctx.IDENT().getText()) != null){
+                   this.tablaIDS.eliminar(ctx.IDENT().getText());
+                }
                 this.tablaIDS.insertar(ctx.IDENT().getSymbol(),0,ctx);
                 IDLE.getInstance().functions.add(new Funct(this.index, "Main", 0));
                 this.generate(this.index,"DEF Main", null);
@@ -114,6 +116,9 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
             }else{
                 level ++;
                 tablaIDS.openScope();
+                if(this.tablaIDS.buscar(ctx.IDENT().getText()) != null){
+                    this.tablaIDS.eliminar(ctx.IDENT().getText());
+                }
                 this.tablaIDS.insertar(ctx.IDENT().getSymbol(),0,ctx);
                 IDLE.getInstance().functions.add(new Funct(this.index, ctx.IDENT().getText(), 0));
                 this.generate(this.index,"DEF", ctx.IDENT().getText());
@@ -127,6 +132,9 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
         // if is List
         else if(ctx.getText().split("\\=")[1].startsWith("[")){
             isList = true;
+            if(this.tablaIDS.buscar(ctx.IDENT().getText()) != null){
+                this.tablaIDS.eliminar(ctx.IDENT().getText());
+            }
             this.tablaIDS.insertar(ctx.IDENT().getSymbol(),0,ctx);
             if(level == 0 | letmain){
                 this.generate(this.index,"PUSH_GLOBAL",ctx.IDENT().getText());
@@ -142,6 +150,9 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
         // if is hash
         else if(ctx.getText().split("\\=")[1].startsWith("{")){
             isHash = true;
+            if(this.tablaIDS.buscar(ctx.IDENT().getText()) != null){
+                this.tablaIDS.eliminar(ctx.IDENT().getText());
+            }
             this.tablaIDS.insertar(ctx.IDENT().getSymbol(),0,ctx);
             if(level == 0 | letmain){
                 this.generate(this.index,"PUSH_GLOBAL",ctx.IDENT().getText());
@@ -157,6 +168,9 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
         // if is variable
         else{
             isVar = true;
+            if(this.tablaIDS.buscar(ctx.IDENT().getText()) != null){
+                this.tablaIDS.eliminar(ctx.IDENT().getText());
+            }
             this.tablaIDS.insertar(ctx.IDENT().getSymbol(),0,ctx);
             if(level == 0 | letmain){
                 this.generate(this.index,"PUSH_GLOBAL",ctx.IDENT().getText());
@@ -365,7 +379,6 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
             }else{
                 this.generate(this.index,"LOAD_FAST", ctx.IDENT().getText());
             }
-
         }
         return null;
     }
@@ -493,20 +506,25 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitFunctionParametersAST(MonkeyParser.FunctionParametersASTContext ctx) {
-        //TODO:ONLY in Main, Parameters was declared with value 0, but have to assign the value when are called
         for (int i = 0; i < ctx.IDENT().size(); i++) {
             if(letmain | level == 0){
+                if(this.tablaIDS.buscar(ctx.IDENT(i).getText()) != null){
+                    this.tablaIDS.eliminar(ctx.IDENT(i).getText());
+                }
                 this.tablaIDS.insertar(ctx.IDENT(i).getSymbol(),0,null);
                 this.generate(this.index,"LOAD_GLOBAL", ctx.IDENT(i));
                 this.generate(this.index,"STORE_GLOBAL", ctx.IDENT(i));
             }else{
+                if(this.tablaIDS.buscar(ctx.IDENT(i).getText()) != null){
+                    this.tablaIDS.eliminar(ctx.IDENT(i).getText());
+                }
                 this.tablaIDS.insertar(ctx.IDENT(i).getSymbol(),0,null);
                 this.generate(this.index,"PUSH_LOCAL", ctx.IDENT(i));
             }
         }
         if(isParam){
             IDLE.getInstance().parameterQuantity = ctx.IDENT().size();
-            System.err.println(IDLE.getInstance().parameterQuantity);
+            System.out.println(ctx.getText() + " => "+IDLE.getInstance().parameterQuantity);
         }
         isParam = false;
         return null;
@@ -568,8 +586,6 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitIfExpressionAST(MonkeyParser.IfExpressionASTContext ctx) {
-        //TODO:  Make Type IF, VM's Instructions
-
         // if
         visit(ctx.expression());
         int tag1Index = this.index;

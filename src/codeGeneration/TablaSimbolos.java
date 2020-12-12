@@ -56,6 +56,16 @@ public class TablaSimbolos {
         return temp;
     }
 
+    public boolean eliminar(String nombre){
+        for(Object id : tabla){
+            if (((Ident)id).tok.getText().equals(nombre)){
+                tabla.remove(id);
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void openScope(){
         nivelActual++;
     }
