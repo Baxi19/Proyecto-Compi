@@ -18,7 +18,14 @@ namespace AlmacenNameSpace
 
         // ADD VALUE TO THE DICTIONARY
         public void setValue(string key, dynamic value){
-            this.data.Add(key, value);
+            if (searchValue(key))
+            {
+                updateValue(key, value);
+            }
+            else
+            {
+                this.data.Add(key, value);    
+            }
         }
 
         // RETURN VALUE

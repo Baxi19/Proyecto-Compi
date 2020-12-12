@@ -1,5 +1,6 @@
-let programName = "Factorial";
+let programName = "My_Monkey_App";
 
+// fibonacci
 let fibonacci = fn(x) {
 	if (x == 0) {
 	    	return 0;
@@ -12,33 +13,49 @@ let fibonacci = fn(x) {
 	}
 };
 
-
-let sum = fn(a,b){
-	return (a+b);
-}
-
+// map list to print data recursive
+let map = fn(n){
+    	if (len(n) == 1){
+        	return first(n);
+	}else{
+		puts(first(n));
+        	return map(rest(n));
+    }
+};
 
 
 //Main App
 let main = fn(programName){
 
-	//test call expre
+	puts("");
+	puts("Print_List");
 	let listaTest = [1,2,3,4,5,6,7,8,9];
+	puts(listaTest);
 
+	//recursive methods
+	puts("");
+	puts("Print_List_Recursive");
+	puts(map(listaTest));
 
+	//test call expre
+	puts("");
+	puts("Fibonacci_Recursive_with_last_of_list");
 	let c = last(listaTest);
-	puts(fibonacci(c));
+	puts(c);
+	puts("=>"+fibonacci(c));
 
 
-	let num1 = 10;
-	let num2 = 5;
-	puts(sum(num1, num2));
 
 
 	//test expresions asignament
+	let y = false;
+	let y = true;
+	let y = "String";
+	let y = c;
 	let y = 420;
 	let a = 100;
 	let b = 100;
+
 
 	//test more dificult's expressions
 	let test = (((1+12)-3)/5)*2; //4
@@ -319,4 +336,4 @@ let main = fn(programName){
 	puts(last(lista));
 	puts(last(lista2));
 
-}
+};
