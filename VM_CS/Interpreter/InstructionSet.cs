@@ -310,8 +310,7 @@ namespace InstructionsNameSpace{
         {
             try
             {
-                actualInstrIndex =
-                    pilaExprs.pop(); //si no hay problema, el tope de la pila tiene ahora la dirección a la que de sebe "saltar" que estaba respaldad
+                actualInstrIndex = pilaExprs.pop(); //si no hay problema, el tope de la pila tiene ahora la dirección a la que de sebe "saltar" que estaba respaldad
                 //almacenLocal[almacenLocal.Count-1].printContainer();
 
                 almacenLocal.RemoveAt(almacenLocal.Count - 1); // se elimina el almacenLocaL del método

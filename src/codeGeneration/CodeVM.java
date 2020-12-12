@@ -323,6 +323,19 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitElementExpressionAST(MonkeyParser.ElementExpressionASTContext ctx) {
+        if(ctx.callExpression()!=null){
+            isFunct = true;
+            visit(ctx.callExpression());
+        }
+        visit(ctx.primitiveExpression());
+
+        if(ctx.elementAccess()!=null){
+            visit(ctx.elementAccess());
+        }
+        if(ctx.callExpression()!=null){
+            this.generate(index, "CALL_FUNCTION", IDLE.getInstance().parameterQuantity);
+        }
+        /*
         visit(ctx.primitiveExpression());
 
         if(ctx.elementAccess()!=null){
@@ -333,6 +346,7 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
             //TODO: Check
             this.generate(index, "CALL_FUNCTION", IDLE.getInstance().parameterQuantity);
         }
+         */
         return null;
     }
 
@@ -367,13 +381,30 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitPrimitiveExpression_identAST(MonkeyParser.PrimitiveExpression_identASTContext ctx) {
         // Ident
+        boolean isFunction = false;
+        if(letmain | level == 0){
+            this.generate(this.index,"LOAD_GLOBAL", ctx.IDENT().getText());
+        }else{
+            for(int i = 0; i < IDLE.getInstance().functions.size(); i++){
+                if(IDLE.getInstance().functions.get(i).name.equals(ctx.IDENT().toString())){
+                    isFunction = true;
+                }
+            }
+            if(isFunction){
+                this.generate(this.index,"LOAD_GLOBAL", ctx.IDENT().getText());
+            }else{
+                this.generate(this.index,"LOAD_FAST", ctx.IDENT().getText());
+            }
+
+        }
+        /*
         //TODO: check and load the value
         if(letmain | level == 0){
             this.generate(this.index,"LOAD_GLOBAL", ctx.IDENT().getText());
         }else{
             this.generate(this.index,"LOAD_FAST", ctx.IDENT().getText());
         }
-
+        */
         return null;
     }
 
@@ -458,20 +489,21 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitArrayFunctions_lastAST(MonkeyParser.ArrayFunctions_lastASTContext ctx) {
+        // last()
         this.generate(this.index,"LOAD_GLOBAL", ctx.LAST());
         return null;
     }
 
     @Override
     public Object visitArrayFunctions_restAST(MonkeyParser.ArrayFunctions_restASTContext ctx) {
+        // Rest()
         this.generate(this.index,"LOAD_GLOBAL", ctx.REST());
         return null;
     }
 
     @Override
     public Object visitArrayFunctions_pushAST(MonkeyParser.ArrayFunctions_pushASTContext ctx) {
-        // IMPORTANTE: Este el profe dijo que no habia que implementarlo por el chat de Whatsapp, 9/12/2020, 09:28 am,
-        // Talvez nos reconoce puntos extra debido a que si funciona =)
+        // Push()
         this.generate(this.index,"LOAD_GLOBAL", ctx.PUSH());
         return null;
     }
@@ -498,19 +530,23 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitFunctionParametersAST(MonkeyParser.FunctionParametersASTContext ctx) {
-        IDLE.getInstance().parameterQuantity = ctx.IDENT().size();
         //TODO:ONLY in Main, Parameters was declared with value 0, but have to assign the value when are called
         for (int i = 0; i < ctx.IDENT().size(); i++) {
             if(letmain | level == 0){
                 //visit(ctx.IDENT(i));
-                //this.tablaIDS.insertar(ctx.IDENT(i).getSymbol(),0,null);
+                this.tablaIDS.insertar(ctx.IDENT(i).getSymbol(),0,null);
                 this.generate(this.index,"LOAD_GLOBAL", ctx.IDENT(i));
                 this.generate(this.index,"STORE_GLOBAL", ctx.IDENT(i));
             }else{
                 //visit(ctx.IDENT(i));
-                //this.tablaIDS.insertar(ctx.IDENT(i).getSymbol(),0,null);
-                this.generate(this.index,"LOAD_FAST", ctx.IDENT(i));
-                this.generate(this.index,"STORE_FAST", ctx.IDENT(i));
+                this.tablaIDS.insertar(ctx.IDENT(i).getSymbol(),0,null);
+                this.generate(this.index,"PUSH_LOCAL", ctx.IDENT(i));
+                //this.generate(this.index,"LOAD_FAST", ctx.IDENT(i));
+                //this.generate(this.index,"STORE_FAST", ctx.IDENT(i));
+                if(isFunct){
+                    IDLE.getInstance().parameterQuantity = ctx.IDENT().size();
+                    System.err.println(IDLE.getInstance().parameterQuantity);
+                }
             }
 
         }
@@ -597,7 +633,7 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
         // else
         if(ctx.ELSE() != null){
             visit(ctx.blockStatement(1));
-            //this.code.set(tag2Index, tag2Index+" "+"JUMP_ABSOLUTE"+ " "+this.index);
+            this.code.set(tag2Index, tag2Index+" "+"JUMP_ABSOLUTE"+ " "+this.index);
         }
         this.code.set(tag2Index, tag2Index+" "+"JUMP_ABSOLUTE"+ " "+this.index);
 
