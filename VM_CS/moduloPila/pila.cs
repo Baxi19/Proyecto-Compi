@@ -8,10 +8,11 @@ namespace moduloPila
         public void push (dynamic obj){
             pila.Push(obj);
         }
-        public dynamic pop(){
+        public dynamic pop()
+        {
             return pila.Pop ();
         }
-
+        
         public Boolean exchange()
         {
             try

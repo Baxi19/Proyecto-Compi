@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
-    //private int letmain;
     private boolean letmain;
     private TablaSimbolos tablaIDS;
 
@@ -27,8 +26,10 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
     private boolean isVar;
     private boolean isFunct;
+    private boolean isParam;
     private boolean isList;
     private boolean isHash;
+
 
     //Constructor
     public CodeVM() {
@@ -36,20 +37,17 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
         IDLE.getInstance().functions = new ArrayList<>();
         IDLE.getInstance().parameterQuantity = 0;
 
-        //this.letmain=-1;
         this.letmain=false;
         this.tablaIDS = new TablaSimbolos();
-
         this.index=0;
         this.code= new ArrayList<>();
         this.level = -1;
-
         this.isLet = false;
         this.isReturn = false;
         this.isCall = false;
-
         this.isVar = false;
         this.isFunct = false;
+        this.isParam = false;
         this.isList = false;
         this.isHash = false;
     }
@@ -59,14 +57,11 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
         // Program
         level ++;
         tablaIDS.openScope();
-
         for(int i = 0; i < ctx.statement().size();i++){
             visit(ctx.statement(i));
         }
-
         level --;
         tablaIDS.closeScope();
-
         IDLE.getInstance().instructions = toString();
         return null;
     }
@@ -76,7 +71,6 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
         // Let
         makeAllFalse();
         isLet = true;
-
         visit(ctx.letStatement());
         return null;
     }
@@ -86,9 +80,7 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
         // Return
         makeAllFalse();
         isReturn = true;
-
         visit(ctx.returnStatement());
-
         return null;
     }
 
@@ -98,9 +90,7 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
         makeAllFalse();
         isCall = true;
         ctxCall = ctx;
-
         visit(ctx.expressionStatement());
-        //this.generate(index, "CALL_FUNCTION", IDLE.getInstance().parameterQuantity);
         return null;
     }
 
@@ -129,7 +119,6 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
                 this.generate(this.index,"DEF", ctx.IDENT().getText());
                 visit(ctx.expression());
                 this.generate(this.index,"RETURN",null);
-
                 level--;
                 tablaIDS.closeScope();
             }
@@ -163,7 +152,6 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
                 visit(ctx.expression());
                 this.generate(this.index,"STORE_FAST",ctx.IDENT().getText());
             }
-
         }
 
         // if is variable
@@ -179,9 +167,7 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
                 visit(ctx.expression());
                 this.generate(this.index,"STORE_FAST",ctx.IDENT().getText());
             }
-
         }
-
         return null;
     }
 
@@ -189,7 +175,6 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
     public Object visitReturnStatementAST(MonkeyParser.ReturnStatementASTContext ctx) {
         // Return Statement
         visit(ctx.expression());
-        //TODO: return value and assignment
         this.generate(this.index,"RETURN_VALUE",null);
         return null;
     }
@@ -277,7 +262,6 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
                 this.generate(this.index,"BINARY_SUBSTRACT", null);
             }
         }
-
         return null;
     }
 
@@ -316,21 +300,21 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
                 this.generate(this.index,"BINARY_DIVIDE", null);
             }
         }
-
-
         return null;
     }
 
     @Override
     public Object visitElementExpressionAST(MonkeyParser.ElementExpressionASTContext ctx) {
+        if(ctx.callExpression()!=null){
+            isParam = true;
+            visit(ctx.callExpression());
+        }
         visit(ctx.primitiveExpression());
-
         if(ctx.elementAccess()!=null){
             visit(ctx.elementAccess());
         }
+
         if(ctx.callExpression()!=null){
-            visit(ctx.callExpression());
-            //TODO: Check
             this.generate(index, "CALL_FUNCTION", IDLE.getInstance().parameterQuantity);
         }
         return null;
@@ -367,13 +351,22 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitPrimitiveExpression_identAST(MonkeyParser.PrimitiveExpression_identASTContext ctx) {
         // Ident
-        //TODO: check and load the value
+        boolean isFunction = false;
         if(letmain | level == 0){
             this.generate(this.index,"LOAD_GLOBAL", ctx.IDENT().getText());
         }else{
-            this.generate(this.index,"LOAD_FAST", ctx.IDENT().getText());
-        }
+            for(int i = 0; i < IDLE.getInstance().functions.size(); i++){
+                if(IDLE.getInstance().functions.get(i).name.equals(ctx.IDENT().toString())){
+                    isFunction = true;
+                }
+            }
+            if(isFunction){
+                this.generate(this.index,"LOAD_GLOBAL", ctx.IDENT().getText());
+            }else{
+                this.generate(this.index,"LOAD_FAST", ctx.IDENT().getText());
+            }
 
+        }
         return null;
     }
 
@@ -458,20 +451,21 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitArrayFunctions_lastAST(MonkeyParser.ArrayFunctions_lastASTContext ctx) {
+        // last()
         this.generate(this.index,"LOAD_GLOBAL", ctx.LAST());
         return null;
     }
 
     @Override
     public Object visitArrayFunctions_restAST(MonkeyParser.ArrayFunctions_restASTContext ctx) {
+        // Rest()
         this.generate(this.index,"LOAD_GLOBAL", ctx.REST());
         return null;
     }
 
     @Override
     public Object visitArrayFunctions_pushAST(MonkeyParser.ArrayFunctions_pushASTContext ctx) {
-        // IMPORTANTE: Este el profe dijo que no habia que implementarlo por el chat de Whatsapp, 9/12/2020, 09:28 am,
-        // Talvez nos reconoce puntos extra debido a que si funciona =)
+        // Push()
         this.generate(this.index,"LOAD_GLOBAL", ctx.PUSH());
         return null;
     }
@@ -488,6 +482,7 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
     public Object visitFunctionLiteralAST(MonkeyParser.FunctionLiteralASTContext ctx) {
         //  Make Type FUNCTION, VM's Instructions
         if(ctx.functionParameters()!=null){
+            isParam = true;
             visit(ctx.functionParameters());
         }
         if(ctx.blockStatement()!=null){
@@ -498,28 +493,22 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitFunctionParametersAST(MonkeyParser.FunctionParametersASTContext ctx) {
-        IDLE.getInstance().parameterQuantity = ctx.IDENT().size();
         //TODO:ONLY in Main, Parameters was declared with value 0, but have to assign the value when are called
         for (int i = 0; i < ctx.IDENT().size(); i++) {
             if(letmain | level == 0){
-                //visit(ctx.IDENT(i));
-                //this.tablaIDS.insertar(ctx.IDENT(i).getSymbol(),0,null);
+                this.tablaIDS.insertar(ctx.IDENT(i).getSymbol(),0,null);
                 this.generate(this.index,"LOAD_GLOBAL", ctx.IDENT(i));
                 this.generate(this.index,"STORE_GLOBAL", ctx.IDENT(i));
             }else{
-                //visit(ctx.IDENT(i));
-                //this.tablaIDS.insertar(ctx.IDENT(i).getSymbol(),0,null);
-                this.generate(this.index,"LOAD_FAST", ctx.IDENT(i));
-                this.generate(this.index,"STORE_FAST", ctx.IDENT(i));
+                this.tablaIDS.insertar(ctx.IDENT(i).getSymbol(),0,null);
+                this.generate(this.index,"PUSH_LOCAL", ctx.IDENT(i));
             }
-
         }
-
-        //TODO:
-        //Will be used to call function
-        //this.generate(this.index, "LOAD_GLOBAL", "(Funtion Name)");
-        //this.generate(this.index, "CALL_FUNCTION", ctx.IDENT().size());
-
+        if(isParam){
+            IDLE.getInstance().parameterQuantity = ctx.IDENT().size();
+            System.err.println(IDLE.getInstance().parameterQuantity);
+        }
+        isParam = false;
         return null;
     }
 
@@ -547,7 +536,7 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitExpressionList_expressionAST(MonkeyParser.ExpressionList_expressionASTContext ctx) {
-        //System.out.println("Array size: " + ctx.expression().size());
+        // BUILD_LIST
         if(!ctx.expression().isEmpty()){
             for (int i = 0; i < ctx.expression().size(); i++) {
                 visit(ctx.expression(i));
@@ -558,7 +547,6 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
         if(isList && isLet){
             this.generate(this.index, "BUILD_LIST", ctx.expression().size());
         }
-
         return null;
     }
 
@@ -575,7 +563,6 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
         }
         this.generate(this.index,"LOAD_GLOBAL", "write");
         this.generate(this.index,"CALL_FUNCTION", "1");
-
         return null;
     }
 
@@ -597,11 +584,9 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
         // else
         if(ctx.ELSE() != null){
             visit(ctx.blockStatement(1));
-            //this.code.set(tag2Index, tag2Index+" "+"JUMP_ABSOLUTE"+ " "+this.index);
+            this.code.set(tag2Index, tag2Index+" "+"JUMP_ABSOLUTE"+ " "+this.index);
         }
         this.code.set(tag2Index, tag2Index+" "+"JUMP_ABSOLUTE"+ " "+this.index);
-
-
         return null;
     }
 
