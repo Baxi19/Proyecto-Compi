@@ -1,4 +1,4 @@
-let programName = "My_Monkey_App";
+let programName = "My Monkey App";
 
 // fibonacci
 let fibonacci = fn(x) {
@@ -13,12 +13,23 @@ let fibonacci = fn(x) {
 	}
 };
 
+// fibonacci
+let fibonacci_Fast = fn(number) {
+	if (number < 2) {
+	    	return number;
+	} else {
+	 	return (fibonacci(number-1) + fibonacci(number-2));
+	}
+};
+
+
 // map list to print data recursive
 let map = fn(n){
+	puts(n);
     	if (len(n) == 1){
         	return first(n);
 	}else{
-		puts(first(n));
+		puts("=>"+first(n));
         	return map(rest(n));
     }
 };
@@ -28,23 +39,26 @@ let map = fn(n){
 let main = fn(programName){
 
 	puts("");
-	puts("Print_List");
+	puts("Print List");
 	let listaTest = [1,2,3,4,5,6,7,8,9];
 	puts(listaTest);
 
 	//recursive methods
 	puts("");
-	puts("Print_List_Recursive");
-	puts(map(listaTest));
+	puts("Print List Recursive");
+	puts("=>"+map(listaTest));
 
 	//test call expre
 	puts("");
-	puts("Fibonacci_Recursive_with_last_of_list");
+	puts("Fibonacci Recursive with last of list");
 	let c = last(listaTest);
 	puts(c);
 	puts("=>"+fibonacci(c));
 
 
+	puts("");
+	puts("Fibonacci Recursive fast, with last of list");
+	puts("=>"+fibonacci_Fast(c));
 
 
 	//test expresions asignament
@@ -64,18 +78,18 @@ let main = fn(programName){
 
 	//test expresions like String + (test + x)
 	puts("");
-	puts("TEST:_STRING_+_(EXPRESION)*");
-	puts("x=1+418+5");
-	puts("test=(((1+12)-3)/5)*2");
-	puts("Result_:+(test+x)?");
-	puts("=>Result_:"+(test+x));
+	puts("TEST: STRING + (EXPRESION)*");
+	puts("x = 1 + 418 + 5");
+	puts("test = (((1+12)-3)/5)*2");
+	puts("Result : + ( test + x ) ?");
+	puts("=>Result :"+(test+x));
 
 
 	// test if
 	puts("");
-	puts("TEST_IF");
+	puts("TEST IF");
 	puts(test);
-	puts("(Dos,_Tres,_Cuatro,_Cinco)?");
+	puts("(Dos, Tres, Cuatro, Cinco) ?");
 
 	if(test == 2){
 		puts("=>Dos");
@@ -97,7 +111,7 @@ let main = fn(programName){
 	// Testing if with else
 	// <
 	puts("");
-	puts("TEST_IF_ELSE");
+	puts("TEST IF ELSE");
 	puts(x);
 	puts("Menor?");
 	puts(y);
@@ -199,18 +213,18 @@ let main = fn(programName){
 	puts(z);
 
 	if(x <= z){
-		puts("=>Menor_o_igual");
+		puts("=>Menor o igual");
 	}else{
 		puts("=>Mayor");
 	}
 
 	puts("");
 	puts(z);
-	puts("Menor_o_igual?");
+	puts("Menor o igual?");
 	puts(a);
 
 	if(z <= a){
-		puts("=>Menor_o_igual");
+		puts("=>Menor o igual");
 	}else{
 		puts("=>Mayor");
 	}
@@ -219,22 +233,22 @@ let main = fn(programName){
 	// >=
 	puts("");
 	puts(x);
-	puts("Mayor_o_igual?");
+	puts("Mayor o igual?");
 	puts(z);
 
 	if(x >= z){
-		puts("=>Mayor_o_igual");
+		puts("=>Mayor o igual");
 	}else{
 		puts("=>Menor");
 	}
 
 	puts("");
 	puts(b);
-	puts("Mayor_o_igual?");
+	puts("Mayor o igual?");
 	puts(a);
 
 	if(b >= a){
-		puts("=>Mayor_o_igual");
+		puts("=>Mayor o igual");
 	}else{
 		puts("=>Menor");
 	}
@@ -263,7 +277,7 @@ let main = fn(programName){
 	//test String impresions
 	puts("");
 	puts("STRING");
-	puts("Hello_String");
+	puts("Hello, i'm String");
 
 	//test bool impresions
 	puts("");

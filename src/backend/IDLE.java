@@ -30,6 +30,9 @@ import javax.swing.text.Highlighter;
 import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -194,6 +197,11 @@ public class IDLE {
                     terminalPass();
                     //terminal.setText(terminalText += "\n\n=>COMPILATION: SUCCESSFUL" + "\n\n" + instructions);
                     terminal.setText(terminalText += instructions);
+                    if(sendData(instructions)){
+                        System.out.println("Data Send to Virtual Machine!");
+                    }else{
+                        System.err.println("Error to Send Data to Virtual Machine!");
+                    }
                 }else{
                     markContextErrors();
                     terminalFail();
@@ -413,5 +421,19 @@ public class IDLE {
             }
         }
         return 0;
+    }
+
+    //Method to send data at virtual Machine
+    public Boolean sendData(String data){
+        try {
+            byte[] buffer = data.getBytes();
+            DatagramSocket socket = new DatagramSocket();
+            InetAddress address = InetAddress.getByName("localhost");
+            DatagramPacket datagramPacket = new DatagramPacket(buffer,buffer.length, address, 8888);
+            socket.send(datagramPacket);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 }
