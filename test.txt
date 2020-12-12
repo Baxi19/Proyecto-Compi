@@ -23,8 +23,10 @@ let sum = fn(a,b){
 let main = fn(programName){
 
 	//test call expre
+	let listaTest = [1,2,3,4,5,6,7,8,9];
 
-	let c = 9;
+
+	let c = last(listaTest);
 	puts(fibonacci(c));
 
 
@@ -32,7 +34,7 @@ let main = fn(programName){
 	let num2 = 5;
 	puts(sum(num1, num2));
 
-/*
+
 	//test expresions asignament
 	let y = 420;
 	let a = 100;
@@ -317,5 +319,4 @@ let main = fn(programName){
 	puts(last(lista));
 	puts(last(lista2));
 
-*/
 }

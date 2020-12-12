@@ -1,9 +1,7 @@
 package backend;
 
-
 import codeGeneration.CodeVM;
 import codeGeneration.Funct;
-import contextualAnalysis.Ident;
 import contextualAnalysis.SymbolTable;
 import contextualAnalysis.VisitorFuntion;
 import contextualAnalysis.VisitorVariable;
@@ -36,7 +34,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
 
 //Singleton class will get all important methods
 public class IDLE {
@@ -110,7 +107,6 @@ public class IDLE {
             int endIndex = codeArea.getLineEndOffset(row-1);
             codeArea.getHighlighter().addHighlight(startIndex, endIndex, painter);
         }
-
     }
 
     //Mark all errors Context
@@ -122,10 +118,7 @@ public class IDLE {
                 int endIndex = codeArea.getLineEndOffset(row-1);
                 codeArea.getHighlighter().addHighlight(startIndex, endIndex, painter);
             }
-
-
         }
-
     }
 
     //Update the parser
@@ -192,29 +185,22 @@ public class IDLE {
                     showConsoleTree = false;
                 }
 
-                //TODO: try another time
-               //CodeGenerator codeGenerator = new CodeGenerator();
-               //codeGenerator.visit(tree);
-
+                // Virtual Machine's code generation
                 CodeVM code = new CodeVM();
                 code.visit(tree);
-
 
                 //Normal Run
                 if(IDLE.getInstance().errorsContextual.isEmpty()){
                     terminalPass();
                     //terminal.setText(terminalText += "\n\n=>COMPILATION: SUCCESSFUL" + "\n\n" + instructions);
-                    terminal.setText(instructions);
+                    terminal.setText(terminalText += instructions);
                 }else{
                     markContextErrors();
                     terminalFail();
                     terminal.setText(terminalText += getContextualErrors() + "\n\n=>COMPILATION: FAILED");
                 }
-
             }
-
         } catch(Exception e1){}
-
     }
 
     //Show errors
@@ -237,7 +223,6 @@ public class IDLE {
                 terminal.setText("Can't open file");
             }
         }
-
     }
 
     //Save file

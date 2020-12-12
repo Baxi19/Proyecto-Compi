@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Collections;
-using System.Linq;
 using AlmacenNameSpace;
 using moduloPila;
-//using static System.Linq.Enumerable;
 
 namespace InstructionsNameSpace{
     class InstructionSet
@@ -60,8 +57,7 @@ namespace InstructionsNameSpace{
             {
                 if (actualParamList.Count != 0)
                 {
-                    almacenLocal[almacenLocal.Count - 1]
-                        .setValue(name, actualParamList[0]); //el valor por defecto es el parámetro actual de turno
+                    almacenLocal[almacenLocal.Count - 1].setValue(name, actualParamList[0]); //el valor por defecto es el parámetro actual de turno
                     actualParamList.RemoveAt(0); //se elimina el parámetro actual de turno
                 }
                 else
@@ -75,7 +71,6 @@ namespace InstructionsNameSpace{
                 Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo PUSH_LOCAL: " + e.Message);
                 throw;
             }
-
         }
 
         private void runPUSH_GLOBAL(string name)
@@ -90,7 +85,6 @@ namespace InstructionsNameSpace{
                 Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo PUSH_GLOBAL: " + e.Message);
                 throw;
             }
-
         }
 
         private void runDEF(string name)
@@ -104,7 +98,6 @@ namespace InstructionsNameSpace{
                 Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo DEF: " + e.Message);
                 throw;
             }
-
         }
 
         private void runLOAD_CONST(dynamic constant)
@@ -119,18 +112,15 @@ namespace InstructionsNameSpace{
                 Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo LOAD_CONST: " + e.Message);
                 throw;
             }
-
         }
 
         private void runLOAD_FAST(string varname)
         {
-            //podría recibir el almacen del contexto en caso de que se requiera
             try
             {
                 //busca en el almacén LOCAL el valor asociado a "varname" y lo inserta en la pila
                 dynamic val;
-                val = almacenLocal[almacenLocal.Count - 1]
-                    .getValue(varname); //EL GET VALUE DEBE DEVOLVER UN VALOR PARA PODERLO CARGAR A LA PILA
+                val = almacenLocal[almacenLocal.Count - 1].getValue(varname); //EL GET VALUE DEBE DEVOLVER UN VALOR PARA PODERLO CARGAR A LA PILA
                 pilaExprs.push(val);
             }
             catch (Exception e)
@@ -138,7 +128,6 @@ namespace InstructionsNameSpace{
                 Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo LOAD_FAST: " + e.Message);
                 throw;
             }
-
         }
 
         private void runSTORE_FAST(string varname)
@@ -181,8 +170,7 @@ namespace InstructionsNameSpace{
             {
                 //busca en el almacén GLOBAL el valor asociado a "varname" y lo inserta en la pila
                 dynamic val;
-                val = almacenGlobal
-                    .getValue(varname); //EL GET VALUE DEBE DEVOLVER UN VALOR PARA PODERLO CARGAR A LA PILA
+                val = almacenGlobal.getValue(varname); //EL GET VALUE DEBE DEVOLVER UN VALOR PARA PODERLO CARGAR A LA PILA
                 pilaExprs.push(val);
             }
             catch (Exception e)
@@ -196,12 +184,10 @@ namespace InstructionsNameSpace{
         {
             try
             {
-                int actualRef =
-                    pilaExprs.pop(); //el primer elemento de la pila trae la referencia del método a llamar --REVISAR SI FALTA SUMAR O NO A LA REFERENCIA
+                int actualRef = pilaExprs.pop(); //el primer elemento de la pila trae la referencia del método a llamar --REVISAR SI FALTA SUMAR O NO A LA REFERENCIA
                 if (actualRef == -1)
                 {
                     // es porque es el método print
-
                     dynamic data = pilaExprs.pop();
                     // if INT
                     if (data.GetType() == typeof(int))
@@ -226,7 +212,6 @@ namespace InstructionsNameSpace{
                                 Console.Write(", ");
                             }
                         }
-
                         Console.WriteLine(" ]");
                         data.Reverse();
                     }
@@ -242,10 +227,8 @@ namespace InstructionsNameSpace{
                             {
                                 Console.Write(", ");
                             }
-
                             index++;
                         }
-
                         Console.WriteLine(" }");
                     }
                     //if bool
@@ -267,11 +250,9 @@ namespace InstructionsNameSpace{
                         //carga en una lista, todos los elementos de la pila referentes a parámetros
                         actualParamList.Add(pilaExprs.pop());
                     }
-
                     actualParamList.Reverse(); //queda al revés toda la lista, se le da Vuelta!!!
                     almacenLocal.Add(new Almacen("Local")); // se crea el almacen local para el método a llamar
-                    pilaExprs.push(
-                        latestInstr); //se carga en la pila la dirección de la referencia a la dirección por la que iba antes de cambiarla por la del método a llamar
+                    pilaExprs.push(latestInstr); //se carga en la pila la dirección de la referencia a la dirección por la que iba antes de cambiarla por la del método a llamar
                     //en buena teoría con solo cambiar el índice de la instrucción actual y respaldar el anterior en la pila, ya el ciclo de afuera llama emulando un salto
                 }
             }
@@ -280,7 +261,6 @@ namespace InstructionsNameSpace{
                 Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo CALL_FUNCTION: " + e.Message);
                 throw;
             }
-
         }
 
         private void runRETURN_VALUE()
@@ -289,13 +269,9 @@ namespace InstructionsNameSpace{
             {
                 dynamic returnValue;
                 returnValue = pilaExprs.pop(); // el tope de la pila tiene el elemento a retornar
-                actualInstrIndex =
-                    pilaExprs.pop(); //si no hay problem,a, el tope de la pila tiene ahora la dirección a la que de sebe "saltar" que estaba respaldada
-                pilaExprs.push(
-                    returnValue); //se vuelve a meter en la pila el retorno para lo que corresponda posteriormente
-
+                actualInstrIndex = pilaExprs.pop(); //si no hay problem,a, el tope de la pila tiene ahora la dirección a la que de sebe "saltar" que estaba respaldada
+                pilaExprs.push(returnValue); //se vuelve a meter en la pila el retorno para lo que corresponda posteriormente
                 //almacenLocal[almacenLocal.Count-1].printContainer();
-
                 almacenLocal.RemoveAt(almacenLocal.Count - 1); // se elimina el almacenLocaL del método
             }
             catch (Exception e)
@@ -303,7 +279,6 @@ namespace InstructionsNameSpace{
                 Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo RETURN_VALUE: " + e.Message);
                 throw;
             }
-
         }
 
         private void runRETURN()
@@ -329,89 +304,86 @@ namespace InstructionsNameSpace{
         }
    
         private void runCOMPARE_OP(string op)
-        {
-   
-        //obtiene dos operandos de la pila, opera según el operador y finalmente inserta el resultados de la operación en la pila
-        //se asume que los valores de los operandos son del mismo tipo, si no, se cae feo pero así debe ser... no hay mensajes de error
-        dynamic opn2= pilaExprs.pop();
-        dynamic opn1= pilaExprs.pop();
-        try
-        {
-            if (op.Equals("=="))
+        { 
+            //obtiene dos operandos de la pila, opera según el operador y finalmente inserta el resultados de la operación en la pila
+            //se asume que los valores de los operandos son del mismo tipo, si no, se cae feo pero así debe ser... no hay mensajes de error
+            dynamic opn2= pilaExprs.pop();
+            dynamic opn1= pilaExprs.pop();
+            try
             {
-                if (opn1 == opn2)
+                if (op.Equals("=="))
                 {
-                    pilaExprs.push(false);
+                    if (opn1 == opn2)
+                    {
+                        pilaExprs.push(false);
+                    }
+                    else
+                    {
+                        pilaExprs.push(true);   
+                    }
                 }
-                else
+                else if (op.Equals("!="))
                 {
-                    pilaExprs.push(true);   
+                    if (opn1 != opn2)
+                    {
+                        pilaExprs.push(false);
+                    }
+                    else
+                    {
+                        pilaExprs.push(true);   
+                    }
+                }
+                else if (op.Equals("<"))
+                {
+                    if (opn1 < opn2)
+                    {
+                        pilaExprs.push(false);
+                    }
+                    else
+                    {
+                        pilaExprs.push(true);   
+                    }
+                }
+                else if (op.Equals("<="))
+                {
+                    if (opn1 <= opn2)
+                    {
+                        pilaExprs.push(false);
+                    }
+                    else
+                    {
+                        pilaExprs.push(true);   
+                    }
+                }
+                else if (op.Equals(">"))
+                {
+                    if (opn1 > opn2)
+                    {
+                        pilaExprs.push(true);
+                    }
+                    else
+                    {
+                        pilaExprs.push(false);   
+                    }  
+                }
+                else if (op.Equals(">="))
+                {
+                    if (opn1 >= opn2)
+                    {
+                        pilaExprs.push(false);
+                    }
+                    else
+                    {
+                        pilaExprs.push(true);   
+                    }
                 }
             }
-            else if (op.Equals("!="))
+            catch (Exception e)
             {
-                if (opn1 != opn2)
-                {
-                    pilaExprs.push(false);
-                }
-                else
-                {
-                    pilaExprs.push(true);   
-                }
-            }
-            else if (op.Equals("<"))
-            {
-                if (opn1 < opn2)
-                {
-                    pilaExprs.push(false);
-                }
-                else
-                {
-                    pilaExprs.push(true);   
-                }
-            }
-            else if (op.Equals("<="))
-            {
-                if (opn1 <= opn2)
-                {
-                    pilaExprs.push(false);
-                }
-                else
-                {
-                    pilaExprs.push(true);   
-                }
-            }
-            else if (op.Equals(">"))
-            {
-                if (opn1 > opn2)
-                {
-                    pilaExprs.push(true);
-                }
-                else
-                {
-                    pilaExprs.push(false);   
-                }  
-            }
-            else if (op.Equals(">="))
-            {
-                if (opn1 >= opn2)
-                {
-                    pilaExprs.push(false);
-                }
-                else
-                {
-                    pilaExprs.push(true);   
-                }
-            }
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo COMPARE_OP, Imposible comparar ' "+opn1.ToString() +" con " +opn2.ToString() +"' :" + e.Message);
+            } 
         }
-        catch (Exception e)
-        {
-            Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo COMPARE_OP, Imposible comparar ' "+opn1.ToString() +" con " +opn2.ToString() +"' :" + e.Message);
-        }
-        }
-          
-    
-        
+
         private void runBINARY_SUBSTRACT(){
             try
             {
@@ -427,6 +399,7 @@ namespace InstructionsNameSpace{
                 throw;
             }
         }
+        
         private void runBINARY_ADD(){
             try
             {
@@ -442,6 +415,7 @@ namespace InstructionsNameSpace{
                 throw;
             }
         }
+        
         private void runBINARY_MULTIPLY(){
             try
             {
@@ -457,6 +431,7 @@ namespace InstructionsNameSpace{
                 throw;
             }
         }
+        
         private void runBINARY_DIVIDE(){
             try
             {
@@ -472,6 +447,7 @@ namespace InstructionsNameSpace{
                 throw;
             }
         }
+        
         private void runBINARY_AND(){
             try
             {
@@ -487,6 +463,7 @@ namespace InstructionsNameSpace{
                 throw;
             }
         }
+        
         private void runBINARY_OR(){
             try
             {
@@ -502,6 +479,7 @@ namespace InstructionsNameSpace{
                 throw;
             }
         }
+        
         private void runBINARY_MODULO(){
             try
             {
@@ -517,6 +495,7 @@ namespace InstructionsNameSpace{
                 throw;
             }
         }
+        
         private void runJUMP_ABSOLUTE(int target){
             try
             {
@@ -529,7 +508,7 @@ namespace InstructionsNameSpace{
                 throw;
             }
         }
-        
+
         private void runJUMP_IF_TRUE(int target){
             try
             {
@@ -547,7 +526,6 @@ namespace InstructionsNameSpace{
                         actualInstrIndex=target-1; //hay que restarle 1 por el incremento del ciclo posterior
                     }
                 }
-
             }
             catch (Exception e)
             {
@@ -557,6 +535,7 @@ namespace InstructionsNameSpace{
             //if(pilaExprs.pop()==true)
             //    actualInstrIndex=target-1; //hay que restarle 1 por el incremento del ciclo posterior
         }
+        
         private void runJUMP_IF_FALSE(int target){
             try
             {
@@ -582,8 +561,7 @@ namespace InstructionsNameSpace{
                 throw;
             }
         }
-        
-         
+
         // Hash
         private void runBUILD_CONST_KEY_MAP(int size)
         {
@@ -604,7 +582,6 @@ namespace InstructionsNameSpace{
                 throw;
             }
         }
-
 
         // Array
         private void runBUILD_LIST(int size){
@@ -844,7 +821,6 @@ namespace InstructionsNameSpace{
                             default:
                                 throw new Exception("Instrucción no conocida : (" +actualInstrIndex + " )");
                     }
-                    //Console.WriteLine("["+instSet[actualInstrIndex].Key + " " + instSet[actualInstrIndex].Value+"]"); 
                     actualInstrIndex++; 
                 }
             }
