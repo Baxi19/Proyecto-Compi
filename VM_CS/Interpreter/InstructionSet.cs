@@ -9,27 +9,14 @@ namespace InstructionsNameSpace{
         public int level;
         private List<KeyValuePair<string, dynamic>> instSet { get; set; }
 
-        private Almacen
-            almacenGlobal
-        {
-            get;
-            set;
-        } //se define un almacen global para manejo de variables globales y referencias a métodos
+        //se define un almacen global para manejo de variables globales y referencias a métodos
+        private Almacen almacenGlobal { get; set; } 
 
-        private List<Almacen>
-            almacenLocal
-        {
-            get;
-            set;
-        } //se define un almacén local para variables locales *** PUEDE QUE SE REQUIERA UNO POR CADA CONTEXTO PERO ESO DEBE DEFINIRSE ***
+        //se define un almacén local para variables locales *** PUEDE QUE SE REQUIERA UNO POR CADA CONTEXTO PERO ESO DEBE DEFINIRSE ***
+        private List<Almacen> almacenLocal { get; set; } 
 
         private Pila pilaExprs;
-
-        public Pila PilaExprs
-        {
-            get { return pilaExprs; }
-            set { }
-        }
+        public Pila PilaExprs { get { return pilaExprs; } set {} }
 
         private int actualInstrIndex { get; set; }
         private List<dynamic> actualParamList = new List<dynamic>();
@@ -70,7 +57,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo PUSH_LOCAL: " + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in method PUSH_LOCAL: " + e.Message);
                 throw;
             }
         }
@@ -84,7 +71,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo PUSH_GLOBAL: " + e.Message);
+                Console.WriteLine("( " + actualInstrIndex + " ) " + "instruction in method PUSH_GLOBAL: " + e.Message);
                 throw;
             }
         }
@@ -97,7 +84,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo DEF: " + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in method DEF: " + e.Message);
                 throw;
             }
         }
@@ -111,7 +98,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo LOAD_CONST: " + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in method LOAD_CONST: " + e.Message);
                 throw;
             }
         }
@@ -127,7 +114,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo LOAD_FAST: " + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in method LOAD_FAST: " + e.Message);
                 throw;
             }
         }
@@ -144,7 +131,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo STORE_FAST: " + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in method STORE_FAST: " + e.Message);
                 throw;
             }
         }
@@ -160,7 +147,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo STORE_GLOBAL: " + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in method STORE_GLOBAL: " + e.Message);
                 throw;
             }
 
@@ -177,7 +164,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo LOAD_GLOBAL: " + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in method LOAD_GLOBAL: " + e.Message);
                 throw;
             }
         }
@@ -272,7 +259,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo CALL_FUNCTION: " + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in method CALL_FUNCTION: " + e.Message);
                 throw;
             }
         }
@@ -290,7 +277,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo RETURN_VALUE: " + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in method RETURN_VALUE: " + e.Message);
                 throw;
             }
         }
@@ -307,7 +294,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo RETURN: " + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in method RETURN: " + e.Message);
                 throw;
             }
         }
@@ -373,11 +360,11 @@ namespace InstructionsNameSpace{
                 {
                     if (opn1 > opn2)
                     {
-                        pilaExprs.push(true);
+                        pilaExprs.push(false);
                     }
                     else
                     {
-                        pilaExprs.push(false);   
+                        pilaExprs.push(true);   
                     }  
                 }
                 else if (op.Equals(">="))
@@ -394,7 +381,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo COMPARE_OP, Imposible comparar ' "+opn1.ToString() +" con " +opn2.ToString() +"' :" + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in method COMPARE_OP, impossible to compare ' "+opn1.ToString() +" with " +opn2.ToString() +"' :" + e.Message);
             } 
         }
 
@@ -409,7 +396,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo BINARY_SUBSTRACT: " + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in method BINARY_SUBSTRACT: " + e.Message);
                 throw;
             }
         }
@@ -425,7 +412,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo BINARY_ADD: " + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in method BINARY_ADD: " + e.Message);
                 throw;
             }
         }
@@ -441,7 +428,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo BINARY_MULTIPLY: " + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in method BINARY_MULTIPLY: " + e.Message);
                 throw;
             }
         }
@@ -457,7 +444,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo BINARY_DIVIDE: " + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in method BINARY_DIVIDE: " + e.Message);
                 throw;
             }
         }
@@ -473,7 +460,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo BINARY_AND: " + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in method BINARY_AND: " + e.Message);
                 throw;
             }
         }
@@ -489,7 +476,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo BINARY_OR: " + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in method BINARY_OR: " + e.Message);
                 throw;
             }
         }
@@ -505,7 +492,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo BINARY_MODULO: " + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in method BINARY_MODULO: " + e.Message);
                 throw;
             }
         }
@@ -518,7 +505,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo JUMP_ABSOLUTE: " + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in method JUMP_ABSOLUTE: " + e.Message);
                 throw;
             }
         }
@@ -543,7 +530,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo JUMP_IF_TRUE: " + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in method JUMP_IF_TRUE: " + e.Message);
                 throw;
             }
             //if(pilaExprs.pop()==true)
@@ -571,7 +558,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo JUMP_IF_FALSE: " + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in method JUMP_IF_FALSE: " + e.Message);
                 throw;
             }
         }
@@ -592,7 +579,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo BUILD_CONST_KEY_MAP: " + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in method BUILD_CONST_KEY_MAP: " + e.Message);
                 throw;
             }
         }
@@ -610,7 +597,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo BUILD_LIST: " + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in method BUILD_LIST: " + e.Message);
                 throw;
             }
         }
@@ -627,7 +614,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo CALL_LEN: " + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in method CALL_LEN: " + e.Message);
                 throw;
             }
         }
@@ -644,7 +631,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo FIRST: " + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in method FIRST: " + e.Message);
                 throw;
             }
         }
@@ -659,7 +646,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo LAST: " + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in method LAST: " + e.Message);
                 throw;
             }
         }
@@ -677,7 +664,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo PUSH: " + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in method PUSH: " + e.Message);
                 throw;
             }
         }
@@ -694,7 +681,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el metodo REST: " + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in method REST: " + e.Message);
                 throw;
             }
         }
@@ -730,7 +717,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el ciclo RUN: " + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in loop RUN: " + e.Message);
                 throw;
             }
         }
@@ -840,7 +827,7 @@ namespace InstructionsNameSpace{
             }
             catch (Exception e)
             {
-                Console.WriteLine("( " + actualInstrIndex + " ) " + "Error en el ciclo MAIN: " + e.Message);
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in loop MAIN: " + e.Message);
                 throw;
             }
         }
