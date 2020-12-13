@@ -2,6 +2,7 @@ package backend;
 
 import codeGeneration.CodeVM;
 import codeGeneration.Funct;
+import contextualAnalysis.Function;
 import contextualAnalysis.SymbolTable;
 import contextualAnalysis.VisitorFuntion;
 import contextualAnalysis.VisitorVariable;
@@ -19,6 +20,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import org.fife.ui.rsyntaxtextarea.*;
 import org.fife.ui.rtextarea.RTextScrollPane;
 import tree.Visitor;
+import utils.TYPE;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -39,7 +41,7 @@ import java.util.stream.Collectors;
 
 //Singleton class will get all important methods
 public class IDLE {
-    //Port to conecte with virtual machine
+    //Port to conect with virtual machine
     private int PORT = 8888;
 
     //Instance used by singleton patern
@@ -469,6 +471,18 @@ public class IDLE {
             System.err.println("CLIENT> ERROR: " + e.getMessage());
             return false;
         }
+    }
+
+    public int checkParam(String ident){
+        for (int i = 0; i < tablaSimbolos.table.size(); i++) {
+            if(tablaSimbolos.table.get(i).getType() == TYPE.FUNCTION){
+                if(tablaSimbolos.table.get(i).getToken().getText().equals(ident)){
+                    Function f = ( Function ) tablaSimbolos.table.get(i);
+                    return f.getParameters().size();
+                }
+            }
+        }
+        return 1;
     }
 
 }

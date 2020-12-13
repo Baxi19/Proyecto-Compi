@@ -331,7 +331,12 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
             visit(ctx.elementAccess());
         }
         if(ctx.callExpression()!=null){
-            this.generate(index, "CALL_FUNCTION", IDLE.getInstance().parameterQuantity);
+            //TODO:
+            if(IDLE.getInstance().isFunct(ident)){
+                this.generate(index, "CALL_FUNCTION", IDLE.getInstance().checkParam(ident));
+            }else{
+                    this.generate(index, "CALL_FUNCTION", IDLE.getInstance().parameterQuantity);
+            }
         }
 
         return null;

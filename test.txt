@@ -18,7 +18,7 @@ let fibonacci_Fast = fn(number) {
 	if (number < 2) {
 	    	return number;
 	} else {
-	 	return (fibonacci(number-1) + fibonacci(number-2));
+	 	return (fibonacci_Fast(number-1) + fibonacci_Fast(number-2));
 	}
 };
 
@@ -35,8 +35,14 @@ let map = fn(n){
 };
 
 
+let sum = fn(a,b, c){
+	return (a + b + c + fibonacci_Fast(c));	//47
+};
+
 //Main App
 let main = fn(programName){
+
+	puts(sum(2,2,9));
 
 	puts("");
 	puts("Print List");
