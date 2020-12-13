@@ -4,7 +4,7 @@ using AlmacenNameSpace;
 using moduloPila;
 
 namespace InstructionsNameSpace{
-    class InstructionSet
+    public class InstructionSet
     {
         public int level;
         private List<KeyValuePair<string, dynamic>> instSet { get; set; }
@@ -33,9 +33,11 @@ namespace InstructionsNameSpace{
 
         private int actualInstrIndex { get; set; }
         private List<dynamic> actualParamList = new List<dynamic>();
-
+        public string output;
+        
         public InstructionSet()
         {
+            output = "";
             level = 0;
             instSet = new List<KeyValuePair<string, dynamic>>();
             almacenGlobal = new Almacen("Global");
@@ -192,26 +194,32 @@ namespace InstructionsNameSpace{
                     // if INT
                     if (data.GetType() == typeof(int))
                     {
+                        output += ("\n"+data.ToString());
                         Console.WriteLine(data.ToString());
                     }
                     //if String
                     else if (data.GetType() == typeof(string))
                     {
+                        output += ("\n"+data);
                         Console.WriteLine(data);
                     }
                     //if LIST
                     else if (data.GetType() == typeof(List<dynamic>))
                     {
                         data.Reverse();
+                        output += ("\n[ ");
                         Console.Write("[ ");
                         for (int i = 0; i < data.Count; i++)
                         {
                             Console.Write(" " + data[i].ToString());
+                            output += (" "+data[i].ToString());
                             if (i != data.Count - 1)
                             {
                                 Console.Write(", ");
+                                output += (", ");
                             }
                         }
+                        output += (" ]");
                         Console.WriteLine(" ]");
                         data.Reverse();
                     }
@@ -219,25 +227,31 @@ namespace InstructionsNameSpace{
                     else if (data.GetType() == typeof(Dictionary<dynamic, dynamic>))
                     {
                         Console.Write("{ ");
+                        output += ("\n{ ");
                         int index = 0;
                         foreach (KeyValuePair<dynamic, dynamic> kvp in data)
                         {
+                            output += (" Key = " + kvp.Key.ToString() + ": Value = " +  kvp.Value.ToString());
                             Console.Write(" Key = {0}: Value = {1} ", kvp.Key.ToString(), kvp.Value.ToString());
                             if (index != data.Count - 1)
                             {
                                 Console.Write(", ");
+                                output += (", ");
                             }
                             index++;
                         }
+                        output += (" }");
                         Console.WriteLine(" }");
                     }
                     //if bool
                     else if (data.GetType() == typeof(bool))
                     {
+                        output += ("\n"+data.ToString());
                         Console.WriteLine(data.ToString());
                     }
                     else
                     {
+                        output += ("\n"+data.ToString());
                         Console.WriteLine(data.ToString());
                     }
                 }
@@ -703,7 +717,7 @@ namespace InstructionsNameSpace{
                                 if (instSet[actualInstrIndex].Value.Equals("Main")){
                                     actualInstrIndex++; //se incrementa para que contenga la primera línea de código del Main
                                     runMain();
-                                    return; 
+                                    return ; 
                                 }
                                 else
                                     runDEF(instSet[actualInstrIndex].Value);
