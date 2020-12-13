@@ -29,10 +29,9 @@ import javax.swing.text.DefaultHighlighter;
 import javax.swing.text.Highlighter;
 import java.awt.*;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -59,7 +58,9 @@ public class IDLE {
     //IDLE interfaz vars
     public RSyntaxTextArea codeArea = new RSyntaxTextArea();
     public RSyntaxTextArea terminal = new RSyntaxTextArea();
+    public RSyntaxTextArea outPut = new RSyntaxTextArea();
     protected JSplitPane panel = new JSplitPane();
+    protected JSplitPane panelTerminal = new JSplitPane();
     public Boolean showTableSymbol = false;
     public Boolean showConsoleTree = false;
 
@@ -142,6 +143,7 @@ public class IDLE {
     //Execute app
     public void run(){
         try {
+            outPut.setText("Output!");
             codeArea.getHighlighter().removeAllHighlights();
             getParser();
             errorListener = new MonkeyErrorListener();
@@ -197,8 +199,15 @@ public class IDLE {
                     terminalPass();
                     //terminal.setText(terminalText += "\n\n=>COMPILATION: SUCCESSFUL" + "\n\n" + instructions);
                     terminal.setText(terminalText += instructions);
+                    //TODO:
                     if(sendData(instructions)){
                         System.out.println("Data Send to Virtual Machine!");
+                        Thread.sleep(3000);
+                        String outPutPath =  System.getProperty("user.dir") + "\\VM_CS\\output.txt";
+                        outPut.setText(CharStreams.fromFileName(outPutPath).toString());
+                        FileOutputStream writer = new FileOutputStream(outPutPath);
+                        writer.write(("").getBytes());
+                        writer.close();
                     }else{
                         System.err.println("Error to Send Data to Virtual Machine!");
                     }
@@ -305,18 +314,33 @@ public class IDLE {
         rScroll.setFoldIndicatorEnabled(true);
 
         //terminal
-        terminal  = new RSyntaxTextArea("Terminal");
+        terminal = new RSyntaxTextArea("Terminal");
         terminal.setEnabled(true);
         terminal.setEditable(false);
         terminal.setBackground(Color.black);
-        terminal.setForeground(Color.BLUE);
+        terminal.setForeground(Color.cyan);
         terminal.setMargin(new Insets(10,10,10,10));
 
         JScrollPane jScroll = new JScrollPane(terminal);
         jScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         jScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jScroll.setMinimumSize(new Dimension(400, 100));
 
-        panel = new JSplitPane(JSplitPane.VERTICAL_SPLIT,  rScroll, jScroll);
+        //output
+        outPut = new RSyntaxTextArea("Output");
+        outPut.setEnabled(true);
+        outPut.setEditable(false);
+        outPut.setBackground(Color.black);
+        outPut.setForeground(Color.cyan);
+        outPut.setMargin(new Insets(10,10,10,10));
+
+        JScrollPane jScroll2 = new JScrollPane(outPut);
+        jScroll2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        jScroll2.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jScroll2.setMinimumSize(new Dimension(400, 100));
+        JSplitPane auxTerminal =  new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,  jScroll, jScroll2);
+
+        panel = new JSplitPane(JSplitPane.VERTICAL_SPLIT,  rScroll, auxTerminal);
         return panel;
     }
 
@@ -433,7 +457,9 @@ public class IDLE {
             socket.send(datagramPacket);
             return true;
         }catch (Exception e){
+            System.err.println("Error in backend in Socket method sendData()");
             return false;
         }
     }
+
 }

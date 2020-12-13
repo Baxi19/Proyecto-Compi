@@ -15,16 +15,18 @@ namespace Minics.exe
     {
         public static void waitData()
         {
-            byte[] data = new byte[1073741824]; 
+            // Server
+            byte[] data = new byte[1073741824]; // 1 gigabyte 
             IPEndPoint endPoint = new IPEndPoint(IPAddress.Any, 8888);
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp); 
             socket.Bind(endPoint);
+            
             Console.WriteLine("\nWaiting for a client...");
             EndPoint remote = (EndPoint) endPoint;
             int recived = socket.ReceiveFrom(data, ref remote);
             if (recived > 0)
             {
-                string path = (System.IO.Directory.GetCurrentDirectory()+"\\desensamblador_codigo\\SocketData.txt");
+                string path = (Path.GetDirectoryName(Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()))+"\\desensamblador_codigo\\SocketData.txt");
                 string text = Encoding.ASCII.GetString(data, 0, recived);
                 using (FileStream fs = File.Create(path))
                 {
@@ -35,11 +37,18 @@ namespace Minics.exe
                 InstructionSet instructionSet = new InstructionSet();
                 Desensamblador desensamblador = new Desensamblador(ref instructionSet);
                 desensamblador.desensamblar(path);
+                
                 instructionSet.run();
+                string outPath = (Path.GetDirectoryName(Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()))+"\\output.txt");
+                using (FileStream fs = File.Create(outPath))
+                {
+                    byte[] info = new UTF8Encoding(true).GetBytes(instructionSet.output);
+                    // Add some information to the file.
+                    fs.Write(info, 0, info.Length);
+                }
             }
-            
         }
-
+        
         public static void Main(string[] args)
         {
             waitData();
