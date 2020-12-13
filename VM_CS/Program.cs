@@ -13,7 +13,7 @@ namespace Minics.exe
 {
     class Program
     {
-        public static void waitData()
+        public static Boolean waitData()
         {
             // Server
             byte[] data = new byte[1073741824]; // 1 gigabyte 
@@ -37,8 +37,8 @@ namespace Minics.exe
                 InstructionSet instructionSet = new InstructionSet();
                 Desensamblador desensamblador = new Desensamblador(ref instructionSet);
                 desensamblador.desensamblar(path);
-                
                 instructionSet.run();
+                
                 string outPath = (Path.GetDirectoryName(Path.GetDirectoryName(System.IO.Directory.GetCurrentDirectory()))+"\\output.txt");
                 using (FileStream fs = File.Create(outPath))
                 {
@@ -47,11 +47,17 @@ namespace Minics.exe
                     fs.Write(info, 0, info.Length);
                 }
             }
+
+            return true;
         }
         
         public static void Main(string[] args)
         {
-            waitData();
+            while (true)
+            {
+                waitData();    
+            }
+            
         }
     }
 }
