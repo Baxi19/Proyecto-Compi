@@ -172,25 +172,7 @@
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="desensamblador_codigo\alpha1.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="desensamblador_codigo\fact_iter.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="desensamblador_codigo\monkey_fact.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="desensamblador_codigo\new.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="desensamblador_codigo\prueba.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="desensamblador_codigo\test2.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="desensamblador_codigo\text.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Módulo_Almacen\notas.txt" />

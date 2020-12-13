@@ -39,6 +39,9 @@ import java.util.stream.Collectors;
 
 //Singleton class will get all important methods
 public class IDLE {
+    //Port to conecte with virtual machine
+    private int PORT = 8888;
+
     //Instance used by singleton patern
     private static IDLE instance = null;
 
@@ -143,7 +146,7 @@ public class IDLE {
     //Execute app
     public void run(){
         try {
-            outPut.setText("Output!");
+            outPut.setText("Please Start the Virtual Machine!!");
             codeArea.getHighlighter().removeAllHighlights();
             getParser();
             errorListener = new MonkeyErrorListener();
@@ -199,17 +202,13 @@ public class IDLE {
                     terminalPass();
                     //terminal.setText(terminalText += "\n\n=>COMPILATION: SUCCESSFUL" + "\n\n" + instructions);
                     terminal.setText(terminalText += instructions);
-                    //TODO:
                     if(sendData(instructions)){
-                        System.out.println("Data Send to Virtual Machine!");
-                        Thread.sleep(3000);
+                        Thread.sleep(1000);
                         String outPutPath =  System.getProperty("user.dir") + "\\VM_CS\\output.txt";
                         outPut.setText(CharStreams.fromFileName(outPutPath).toString());
                         FileOutputStream writer = new FileOutputStream(outPutPath);
                         writer.write(("").getBytes());
                         writer.close();
-                    }else{
-                        System.err.println("Error to Send Data to Virtual Machine!");
                     }
                 }else{
                     markContextErrors();
@@ -327,7 +326,7 @@ public class IDLE {
         jScroll.setMinimumSize(new Dimension(400, 100));
 
         //output
-        outPut = new RSyntaxTextArea("Output");
+        outPut = new RSyntaxTextArea("Don't Forget RUN The Virtual Machine!");
         outPut.setEnabled(true);
         outPut.setEditable(false);
         outPut.setBackground(Color.black);
@@ -434,7 +433,6 @@ public class IDLE {
         } catch (ScriptException e) {
             return "";
         }
-
     }
 
     //Method to get id from name
@@ -447,17 +445,28 @@ public class IDLE {
         return 0;
     }
 
+    //Method to check if name are declared as function
+    public Boolean isFunct(String name){
+        for (int i = 0; i < functions.size(); i++) {
+            if(functions.get(i).getName().equals(name)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     //Method to send data at virtual Machine
     public Boolean sendData(String data){
         try {
             byte[] buffer = data.getBytes();
             DatagramSocket socket = new DatagramSocket();
             InetAddress address = InetAddress.getByName("localhost");
-            DatagramPacket datagramPacket = new DatagramPacket(buffer,buffer.length, address, 8888);
+            DatagramPacket datagramPacket = new DatagramPacket(buffer,buffer.length, address, PORT);
             socket.send(datagramPacket);
+            System.out.println("CLIENT> SEND DATA ON PORT: " + PORT);
             return true;
         }catch (Exception e){
-            System.err.println("Error in backend in Socket method sendData()");
+            System.err.println("CLIENT> ERROR: " + e.getMessage());
             return false;
         }
     }

@@ -832,8 +832,8 @@ namespace InstructionsNameSpace{
                             case "BUILD_CONST_KEY_MAP":
                                 runBUILD_CONST_KEY_MAP(instSet[actualInstrIndex].Value); 
                                 break;
-                            default:
-                                throw new Exception("Instrucción no conocida : (" +actualInstrIndex + " )");
+                            //default:
+                                //throw new Exception("Instrucción no conocida : (" +actualInstrIndex + " )");
                     }
                     actualInstrIndex++; 
                 }
