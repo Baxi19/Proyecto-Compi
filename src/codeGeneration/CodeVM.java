@@ -20,6 +20,7 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
     private MonkeyParser.CallExpressionStatementASTContext ctxCall;
 
     private boolean isLet;
+    private String ident;
     private boolean isReturn;
     private boolean isCall;
 
@@ -42,6 +43,7 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
         this.code= new ArrayList<>();
         this.level = -1;
         this.isLet = false;
+        this.ident = "";
         this.isReturn = false;
         this.isCall = false;
         this.isVar = false;
@@ -117,6 +119,7 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
                 level ++;
                 tablaIDS.openScope();
                 if(this.tablaIDS.buscar(ctx.IDENT().getText()) != null){
+                    this.tablaIDS.eliminar(ctx.IDENT().getText());
                     this.tablaIDS.eliminar(ctx.IDENT().getText());
                 }
                 this.tablaIDS.insertar(ctx.IDENT().getSymbol(),0,ctx);
@@ -327,10 +330,15 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
         if(ctx.elementAccess()!=null){
             visit(ctx.elementAccess());
         }
-
         if(ctx.callExpression()!=null){
-            this.generate(index, "CALL_FUNCTION", IDLE.getInstance().parameterQuantity);
+            //TODO:
+            if(IDLE.getInstance().isFunct(ident)){
+                this.generate(index, "CALL_FUNCTION", IDLE.getInstance().checkParam(ident));
+            }else{
+                    this.generate(index, "CALL_FUNCTION", IDLE.getInstance().parameterQuantity);
+            }
         }
+
         return null;
     }
 
@@ -344,7 +352,9 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitCallExpressionAST(MonkeyParser.CallExpressionASTContext ctx) {
-        visit(ctx.expressionList());
+        if(ctx.expressionList() != null){
+            visit(ctx.expressionList());
+        }
         return null;
     }
 
@@ -365,8 +375,25 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
     @Override
     public Object visitPrimitiveExpression_identAST(MonkeyParser.PrimitiveExpression_identASTContext ctx) {
         // Ident
-        boolean isFunction = false;
+        ident = ctx.getText();
+        if(letmain){
+            this.generate(this.index,"LOAD_GLOBAL", ctx.IDENT().getText());
+        }else if(level == 0){
+            this.generate(this.index,"LOAD_GLOBAL", ctx.IDENT().getText());
+        }else if(IDLE.getInstance().isFunct(ctx.IDENT().getText())){
+            this.generate(this.index,"LOAD_GLOBAL", ctx.IDENT().getText());
+        }else{
+            this.generate(this.index,"LOAD_FAST", ctx.IDENT().getText());
+        }
+
+
+
+        /*boolean isFunction = false;
         if(letmain | level == 0){
+            if(isCall){
+                System.out.println(ctx.getText());
+            }
+
             this.generate(this.index,"LOAD_GLOBAL", ctx.IDENT().getText());
         }else{
             for(int i = 0; i < IDLE.getInstance().functions.size(); i++){
@@ -379,7 +406,9 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
             }else{
                 this.generate(this.index,"LOAD_FAST", ctx.IDENT().getText());
             }
-        }
+        }*/
+
+
         return null;
     }
 
@@ -506,6 +535,11 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
 
     @Override
     public Object visitFunctionParametersAST(MonkeyParser.FunctionParametersASTContext ctx) {
+
+        //if(isLet && !(isVar)){
+        //    System.out.println(ctx.getText() + ", Parameters = " + ctx.IDENT().size());
+        //}
+
         for (int i = 0; i < ctx.IDENT().size(); i++) {
             if(letmain | level == 0){
                 if(this.tablaIDS.buscar(ctx.IDENT(i).getText()) != null){
@@ -522,10 +556,12 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
                 this.generate(this.index,"PUSH_LOCAL", ctx.IDENT(i));
             }
         }
-        if(isParam){
-            IDLE.getInstance().parameterQuantity = ctx.IDENT().size();
-            System.out.println(ctx.getText() + " => "+IDLE.getInstance().parameterQuantity);
-        }
+
+        IDLE.getInstance().parameterQuantity = ctx.IDENT().size();
+
+        //if(isParam){
+        //    IDLE.getInstance().parameterQuantity = ctx.IDENT().size();
+        //}
         isParam = false;
         return null;
     }
