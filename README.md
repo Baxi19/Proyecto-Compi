@@ -4,7 +4,10 @@
 
 # Librerías
 
-**Tip: El primer paso será instalar las librerías necesarias que se adjuntan en la carpeta "libs" del proyecto, solo es necesario dar click derecho y en la opción de "Add as library"**
+**Tip: El primer paso será instalar las librerías necesarias que se adjuntan en la carpeta "libs" del proyecto, solo es necesario dar click derecho y en la opción de "Add as library", seguidamente se debe iniciar el servidor de la maquina virtual, para eso solo es necesario abrir el proyecto que se llama VM_CS que se encuentra en una carpeta en la raiz del proyecto y ejecutarlo para proceder a correr el IDLE**
+
+![Maquina Virtual inicializada](img/vm1.jpeg)
+
 
 ## ANTLR V4
 
@@ -37,5 +40,5 @@ Tip: Para la solución del Parser al igual que el Scanner, se utilizo la librer�
 
 Tip: Para la solución de la interfaz, se utilizo la librería Rsyntaxtextarea para poder visualizar de una mejor manera el código, .
 
-![Interfaz1](img/i1.jpeg)
+![Interfaz1](img/idle1.jpeg)
 
