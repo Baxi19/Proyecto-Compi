@@ -13,15 +13,6 @@ let fibonacci = fn(x) {
 	}
 };
 
-// fibonacci
-let fibonacci_Fast = fn(number) {
-	if (number < 2) {
-	    	return number;
-	} else {
-	 	return (fibonacci_Fast(number-1) + fibonacci_Fast(number-2));
-	}
-};
-
 
 // map list to print data recursive
 let map = fn(n){
@@ -34,6 +25,15 @@ let map = fn(n){
     }
 };
 
+// fibonacci
+let fibonacci_Fast = fn(number) {
+	if (number < 2) {
+	    	return number;
+	} else {
+	 	return (fibonacci_Fast(number-1) + fibonacci_Fast(number-2));
+	}
+};
+
 
 let sum = fn(a,b, c){
 	return (a + b + c + fibonacci_Fast(c));	//47
@@ -42,7 +42,20 @@ let sum = fn(a,b, c){
 //Main App
 let main = fn(programName){
 
-	puts(sum(2,2,9));
+
+
+
+	//puts(sum(2,2,9));
+	let lista = ["uno ","dos","tres",4,5];
+	puts(lista[2]);
+
+	let dic = {1+5: 24, "age": 300};
+	puts(dic["age"]);
+
+
+	puts(lista);
+
+
 
 	puts("");
 	puts("Print List");
@@ -146,9 +159,9 @@ let main = fn(programName){
 	puts("Mayor?");
 	puts(y);
 	if(x > y){
-		puts("=>Menor");
-	}else{
 		puts("=>Mayor");
+	}else{
+		puts("=>Menor");
 	}
 
 	puts("");
@@ -157,41 +170,41 @@ let main = fn(programName){
 	puts(y);
 
 	if(a > y){
-		puts("=>Menor");
-	}else{
 		puts("=>Mayor");
-	}
-
-
-	// ==
-	puts("");
-	let z = y+5;
-	puts(x);
-	puts("Igual?");
-	puts(z);
-
-	if(x == z){
-		puts("=>Igual");
 	}else{
-		puts("=>Diferente");
-	}
-
-	puts("");
-	puts(a);
-	puts("Igual?");
-	puts(b);
-
-	if(a == b){
-		puts("=>Igual");
-	}else{
-		puts("=>Diferente");
+		puts("=>Menor");
 	}
 
 
 	// !=
 	puts("");
+	let z = y+5;
 	puts(x);
 	puts("Diferente?");
+	puts(z);
+
+	if(x != z){
+		puts("=>Diferente");
+	}else{
+		puts("=>Igual");
+	}
+
+	puts("");
+	puts(a);
+	puts("Diferente?");
+	puts(b);
+
+	if(a != b){
+		puts("=>Diferente");
+	}else{
+		puts("=>Igual");
+	}
+
+
+	// ==
+	puts("");
+	puts(x);
+	puts("Igual?");
 	puts(z);
 
 	if(x == z){
@@ -202,7 +215,7 @@ let main = fn(programName){
 
 	puts("");
 	puts(a);
-	puts("Diferente?");
+	puts("Igual?");
 	puts(b);
 
 	if(a == b){
@@ -215,7 +228,7 @@ let main = fn(programName){
 	// <=
 	puts("");
 	puts(x);
-	puts("Menor_o_igual?");
+	puts("Menor o igual?");
 	puts(z);
 
 	if(x <= z){
