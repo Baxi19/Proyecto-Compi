@@ -346,6 +346,7 @@ public class CodeVM extends MonkeyParserBaseVisitor<Object> {
     public Object visitElementAccessAST(MonkeyParser.ElementAccessASTContext ctx) {
         if(ctx.expression()!=null){
             visit(ctx.expression());
+            this.generate(this.index, "BINARY_SUBSCR", null);
         }
         return null;
     }

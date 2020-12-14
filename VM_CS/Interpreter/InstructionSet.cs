@@ -563,6 +563,39 @@ namespace InstructionsNameSpace{
             }
         }
 
+        // Element access
+        private void runBINARY_SUBSCR()
+        {
+            try
+            {
+                dynamic index = pilaExprs.pop();
+                dynamic data = pilaExprs.pop();
+                if (data.GetType() == typeof(List<dynamic>))
+                {
+                    List<dynamic> list = data;
+                    pilaExprs.push(list[index]);
+                    
+                }
+                else
+                {
+                    Dictionary<dynamic, dynamic> hash = data;
+                    foreach (KeyValuePair<dynamic, dynamic> kvp in hash)
+                    {
+                        if (kvp.Key.ToString().Equals(index.ToString()))
+                        {
+                            pilaExprs.push(kvp.Value);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("SERVER> ERROR : ( " + actualInstrIndex + " ) " + "instruction in method BINARY_SUBSCR: " + e.Message);
+                throw;
+            }
+        }
+
+
         // Hash
         private void runBUILD_CONST_KEY_MAP(int size)
         {
@@ -818,6 +851,9 @@ namespace InstructionsNameSpace{
                                 break;
                             case "BUILD_CONST_KEY_MAP":
                                 runBUILD_CONST_KEY_MAP(instSet[actualInstrIndex].Value); 
+                                break;
+                            case "BINARY_SUBSCR":
+                                runBINARY_SUBSCR(); 
                                 break;
                             //default:
                                 //throw new Exception("Instrucción no conocida : (" +actualInstrIndex + " )");
